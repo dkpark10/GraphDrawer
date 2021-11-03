@@ -1,15 +1,19 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, JSXElementConstructor } from 'react';
 import Node from '../atoms/Node';
 import { useSelector, useStore } from 'react-redux';
 import { State } from '../../redux/index';
-import { CoordCalculator, Size, Point, CoordCalculatorBuilder } from '../../modules/CalculCoord';
+import { CoordCalculator, Point, CoordCalculatorBuilder, Vertex } from '../../modules/CalculCoord';
 
+const BOARDSIZE = 20 as const;
+
+export interface Size {
+  width: number;
+  height: number;
+}
 const Main = () => {
 
   const ref = useRef<any>(null);
-
   const [size, setSize] = useState<Size>({ width: 0, height: 0 });
-
   const { graphInfo } = useSelector((state: State) => ({
     graphInfo: state.graph
   }));
@@ -26,23 +30,34 @@ const Main = () => {
 
   }, [ref]);
 
-  console.log(graphInfo);
-
   const coordCalculator: CoordCalculator = new CoordCalculatorBuilder()
-  .setNodeCount(Number(graphInfo.nodeCount))
-  .setLeftTop(new Point(0, 0))
-  .setRightBottom(new Point(size.width, size.height))
-  .build();
+    .setGraphInfo(graphInfo)
+    .setLeftTop(new Point(0 + BOARDSIZE, 0 + BOARDSIZE))
+    .setRightBottom(new Point(size.width - BOARDSIZE, size.height - BOARDSIZE))
+    .build();
 
-  coordCalculator.calculRun();
+  const vertexInfo: Vertex[] = coordCalculator.run();
 
+  const nodeList: JSX.Element[] = vertexInfo.map((ele, idx) => {
+    
+    const { y, x } = ele.coord;
+    const value = ele.value;
+
+    return (
+      <Node
+        key={idx}
+        size={{ y: y, x: x }}
+        value={value}
+      />
+    )
+  })
+
+  
   return (
     <>
       <main ref={ref}>
-        <svg>
-          <Node
-            size={{ width: 23, height: 33 }}
-          />
+        <svg style={{ width: size.width, height: size.height }}>
+          {nodeList}
         </svg>
       </main>
     </>

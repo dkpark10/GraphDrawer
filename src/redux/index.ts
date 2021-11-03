@@ -1,7 +1,7 @@
 export const SETGRAPHINFO = 'SETGRAPHINFO' as const;
 
 export interface Graph {
-  nodeCount: string;
+  vertexCount: string;
   edgeCount: string;
   graph: { [key: string]: string[][] };
 }
@@ -17,7 +17,7 @@ interface Action {
 
 const initialState: State = {
   graph: {
-    nodeCount: '',
+    vertexCount: '',
     edgeCount: '',
     graph: {}
   }

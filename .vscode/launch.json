@@ -9,6 +9,13 @@
       "request": "launch",
       "name": "Launch MineSweeper",
       "program": "${workspaceFolder}/app.js"
-    }
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "run react debugger",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/src",
+    },
   ]
 }
