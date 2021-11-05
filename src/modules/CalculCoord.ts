@@ -103,8 +103,11 @@ export class CoordCalculator {
 
     console.log(vertexList);
     Object.entries(vertexList).forEach((ele, idx) => {
-      const [key, value] = ele;
-      this.vertexInfo.push({ coord: this.nodeCoord[idx], value: value });
+      const [_, value] = ele;
+
+      if(idx < this.nodeCoord.length){
+        this.vertexInfo.push({ coord: this.nodeCoord[idx], value: value });
+      }
     });
   }
 

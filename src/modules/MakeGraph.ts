@@ -5,14 +5,20 @@ interface EdgeInfo {
 const makeGraph = (graph: string[]) => {
 
   return graph.reduce((acc: EdgeInfo, ele, dix): EdgeInfo => {
-    const [a, b, c] = ele.split(' ');
-    acc[a] = acc[a] || [];
+    
+    const [vertex1, vertex2, cost] = ele.split(' ');
 
-    if(b === undefined && c === undefined){
+    if(vertex1 === ''){
+      return acc;
+    }
+
+    acc[vertex1] = acc[vertex1] || [];
+
+    if (vertex2 === undefined && cost === undefined) {
       return acc;
     }
     
-    acc[a].push([b, c]);
+    acc[vertex1].push([vertex2, cost]);
 
     return acc;
   }, {});
