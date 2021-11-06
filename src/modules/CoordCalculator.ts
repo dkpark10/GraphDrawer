@@ -1,8 +1,13 @@
-import { Graph } from '../redux/index';
+import { Graph } from '../redux/graph';
+
+const isEmptyObject = (obj: Object): boolean => {
+
+  return obj.constructor === Object && Object.keys(obj).length === 0 ? true : false;
+}
 
 export interface Vertex {
+  connectedList: string[];
   coord: Point;
-  value: string;
 }
 
 export class Point {
@@ -19,11 +24,10 @@ export class Point {
 export class CoordCalculator {
 
   private graphInfo: Graph;
-  private vertexCount: number;
+  private vertexCount: number = 0;
   private leftTop: Point;
   private rightBottom: Point;
   private nodeCoord: Point[] = [];
-  private vertexInfo: Vertex[] = [];
 
   constructor(builder: CoordCalculatorBuilder) {
 
@@ -40,9 +44,9 @@ export class CoordCalculator {
 
     this.BinarySpacePartitioning({ ...this.leftTop }, { ...this.rightBottom }, 0);
     this.extractNodeCoordList();
-    this.setVertexInfo();
 
-    return this.vertexInfo;
+    // return this.setVertexInfo(this.extractVertex());
+    return this.extractVertex();
   }
 
   public BinarySpacePartitioning(leftTop: Point, rightBottom: Point, depth: number) {
@@ -88,31 +92,54 @@ export class CoordCalculator {
     }
   }
 
-  public setVertexInfo() {
+  // 정점만 추출해낸다.
+  public extractVertex(init = { connectedList: [], coord: undefined }) {
 
-    const vertexList: { [key: string]: any } = {};
+    const vertexList: { [key: string]: Vertex } = {};
 
-    Object.entries(this.graphInfo.graph).forEach(ele => {
+    Object.entries(this.graphInfo.graph).forEach((ele, idx) => {
+
       const [key, value] = ele;
-      vertexList[key] = vertexList[key] || key;
 
-      value.forEach(vele => {
-        vertexList[vele[0]] = vertexList[vele[0]] || vele[0];
-      });
+      // 정점 객수를 넘어가면 리턴
+      if (idx >= this.vertexCount)
+        return;
+
+      vertexList[key] = vertexList[key] || { ...init };
+      if (!vertexList[key].coord) {
+        vertexList[key].coord = this.nodeCoord[0];
+        this.nodeCoord.shift();
+      }
+
+      vertexList[key].connectedList = this.connect(vertexList, value);
     })
 
-    console.log(vertexList);
-    Object.entries(vertexList).forEach((ele, idx) => {
-      const [_, value] = ele;
-
-      if(idx < this.nodeCoord.length){
-        this.vertexInfo.push({ coord: this.nodeCoord[idx], value: value });
-      }
-    });
+    return vertexList;
   }
 
-  public getNodeCoordList(): Point[] {
-    return this.nodeCoord;
+  public connect(vertexList: { [key: string]: Vertex }, connectedList: string[][]) {
+
+    const ret: string[] = [];
+    connectedList.forEach(vele => {
+
+      if (vele[0] === '' || vele[0] === undefined)
+        return;
+
+      // 키값 개수는 정점갯수를 넘고 새로운 정점키값일 경우 리턴
+      if (Object.keys(vertexList).length >= this.vertexCount
+      && vertexList[vele[0]] === undefined )
+        return;
+
+      ret.push(vele[0]);
+      vertexList[vele[0]] = vertexList[vele[0]] || { connectedList: [], coord: undefined };
+
+      if (!vertexList[vele[0]].coord) {
+        vertexList[vele[0]].coord = this.nodeCoord[0];
+        this.nodeCoord.shift();
+      }
+    })
+
+    return ret;
   }
 }
 

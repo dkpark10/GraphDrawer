@@ -1,11 +1,10 @@
 * {
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
 }
 
 body{
   margin: 0px;
-  background-color: #100e1a;
+  background-color: #1f2335;
 }
 
 header{
@@ -14,6 +13,7 @@ header{
   display: flex;
   align-items: center; /* 하위 요소들 수직 가운데정렬 */
   justify-content: center;
+  font-family: 'Roboto', sans-serif;
   color:white;
   margin-bottom: 40px;
 }
@@ -28,9 +28,9 @@ header{
 }
 
 .container main{
-  width: 700px;
-  height: 700px;
-  border: 2px solid #16afc0;
+  width: 600px;
+  height: 600px;
+  border: 1px solid #16afc0;
   border-radius: 15px;
 }
 
@@ -39,19 +39,83 @@ header{
   width:200px;
   height:40%;
   padding: 10px;
+  font-family: 'Noto Sans', sans-serif;
   border: none;
   color: white;
-  background-color: #010101;
+  background-color: #1d1c20;
+  border: 1px solid  #16afc0;
 }
 
 .container .config{
-  margin-top: 20px;
   transform: translateX(-20%);
+  margin-top: 20px;
   width: 200px;
-  height: 396px;
-  border: 2px solid  #16afc0;
+  height: 296px;
+  padding: 10px;
+  border: 1px solid  #16afc0;
+  font-family: 'Noto Sans', sans-serif;
+  color: #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 15px;
 }
 
-text {
-  z-index: 1;
+.direct-button {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 22px;
+}
+
+.onoff-switch {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius:20px;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.onoff-switch:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  bottom: 2px;
+  left: 4px;
+  background-color: #fff;
+  -webkit-transition: .5s;
+  transition: .4s;
+  border-radius:20px;
+}
+
+.direct-button input:checked + .onoff-switch {
+  background-color:  #16afc0;
+}
+
+.direct-button input:checked + .onoff-switch:before {
+  -webkit-transform: translateX(31px);
+  -ms-transform: translateX(31px);
+  transform: translateX(31px);
+}
+
+.config button{
+  background-color: #1033e3;
+  display:block;
+  width: 90%;
+  height:32px;
+  font-size: 15px;
+  border-radius: 7px;
+  border: none;
+  color:white;
+  margin-top: 30px;
+}
+
+.config button:hover{
+  background: linear-gradient(70deg,#1033e3, #f74bf7);
 }

@@ -2,19 +2,17 @@ import './css/App.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import * as reducer from './redux/index';
-import Aside from './components/molecules/Aside';
+import Aside from './components/templates/Aside';
+import Header from './components/templates/Header';
 import Main from './components/molecules/Main';
-import Nav from './components/molecules/Nav';
 
 const App = () => {
 
-  const title = "Graph Painter";
+  console.log('App render');
 
   return (
     <>
-      <header>
-        <h1>{title}</h1>
-      </header>
+      <Header />
       <div className='container'>
         <Aside />
         <Main />

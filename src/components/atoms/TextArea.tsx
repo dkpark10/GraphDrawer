@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import makeGraph from '../../modules/MakeGraph';
 import { useDispatch } from 'react-redux';
-import { setGraphInfo, Graph } from '../../redux/index';
-import { debounce, throttle } from 'lodash';
-
-const NODELIMITCOUNT = 20 as const;
+import { setGraphInfo, Graph } from '../../redux/graph';
 
 const debounceIDinputCheck = (e: React.ChangeEvent<HTMLTextAreaElement>): Graph | undefined => {
 
@@ -24,7 +21,7 @@ const debounceIDinputCheck = (e: React.ChangeEvent<HTMLTextAreaElement>): Graph 
   };
 }
 
-const TextArea = () => {
+const Textarea = () => {
 
   const dispatch = useDispatch();
   const [value, setValue] = useState<string>('');
@@ -41,25 +38,9 @@ const TextArea = () => {
 
   return (
     <>
-      <aside>
-        <textarea style={{ resize: 'none' }} value={value} onChange={handleChange}></textarea>
-        <div className='config'>
-          <div>
-            <input type="checkbox" name="xxx" value="yyy" />
-          </div>
-          <div>
-            <input type="checkbox" name="xxx" value="yyy" />
-          </div>
-          <div>
-            <input type="checkbox" name="xxx" value="yyy" />
-          </div>
-          <div>
-            <input type="checkbox" name="xxx" value="yyy" />
-          </div>
-        </div>
-      </aside>
+      <textarea style={{ resize: 'none' }} value={value} onChange={handleChange}></textarea>
     </>
   )
 }
 
-export default TextArea;
+export default Textarea;

@@ -1,43 +1,14 @@
-export const SETGRAPHINFO = 'SETGRAPHINFO' as const;
+import { combineReducers } from 'redux';
+import graphReducer, { GraphState } from './graph';
+import directReducer, { DirectState } from './direct';
 
-export interface Graph {
-  vertexCount: string;
-  edgeCount: string;
-  graph: { [key: string]: string[][] };
+export interface RootState {
+  graph : GraphState,
+  direct : DirectState
 }
 
-export interface State {
-  graph: Graph;
-};
-
-interface Action {
-  type: string;
-  payload: Graph;
-}
-
-const initialState: State = {
-  graph: {
-    vertexCount: '',
-    edgeCount: '',
-    graph: {}
-  }
-};
-
-// action creator
-export const setGraphInfo = (diff: Graph) => ({
-  type: SETGRAPHINFO,
-  payload: diff
+export default combineReducers<RootState>({
+  graph: graphReducer,
+  direct: directReducer
 });
 
-// 리듀서
-export default function gameReducer(state: State = initialState, action: Action): State {
-  switch (action.type) {
-    case SETGRAPHINFO:
-      return {
-        ...state,
-        graph: action.payload
-      }
-    default:
-      return state;
-  }
-}
