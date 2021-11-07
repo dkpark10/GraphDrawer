@@ -29,6 +29,10 @@ const Config = () => {
 
   const toggleOnChange = (e: changeEventInput) => dispatch(setDirected(e.target.checked));
 
+  const run = () => {
+    
+  }
+
   return (
     <>
       <div className='config'>
@@ -40,7 +44,7 @@ const Config = () => {
         <div>
           <Input text='root node' />
         </div>
-        <button>Run</button>
+        <button onClick={run}>Run</button>
       </div>
     </>
   )

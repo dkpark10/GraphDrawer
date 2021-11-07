@@ -1,12 +1,7 @@
 import { Graph } from '../redux/graph';
 
-const isEmptyObject = (obj: Object): boolean => {
-
-  return obj.constructor === Object && Object.keys(obj).length === 0 ? true : false;
-}
-
 export interface Vertex {
-  connectedList: string[];
+  connectedList: string[][];
   coord: Point;
 }
 
@@ -119,7 +114,7 @@ export class CoordCalculator {
 
   public connect(vertexList: { [key: string]: Vertex }, connectedList: string[][]) {
 
-    const ret: string[] = [];
+    const ret: string[][] = [];
     connectedList.forEach(vele => {
 
       if (vele[0] === '' || vele[0] === undefined)
@@ -130,7 +125,7 @@ export class CoordCalculator {
       && vertexList[vele[0]] === undefined )
         return;
 
-      ret.push(vele[0]);
+      ret.push(vele);
       vertexList[vele[0]] = vertexList[vele[0]] || { connectedList: [], coord: undefined };
 
       if (!vertexList[vele[0]].coord) {

@@ -10,8 +10,18 @@ const Node = ({ size, value }: NodeProp) => {
   return (
     <>
       <g>
-        <circle cy={x} cx={y} r="20" fill='#8638eb' stroke='white' strokeWidth='2'></circle>
-        <text y={x} x={y} dy='.35em' fontSize="17" fill="white" textAnchor='middle'>{value}</text>
+        <circle cy={x}
+          cx={y}
+          r="20"
+          fill='#8638eb'
+          stroke="#cfcfcf"
+          strokeWidth='2'></circle>
+        <text y={x}
+          x={y}
+          dy='.35em'
+          fontSize="17"
+          fill="#cfcfcf"
+          textAnchor='middle'>{value}</text>
       </g>
     </>
   )

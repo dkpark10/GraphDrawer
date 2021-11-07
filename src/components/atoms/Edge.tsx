@@ -4,9 +4,27 @@ import { RootState } from '../../redux/index';
 interface EdgeProp {
   from: number[];
   to: number[];
+  cost: string;
 };
 
-const Edge = ({ from, to }: EdgeProp) => {
+const calculCostCoord = (from: number[], to: number[]) => {
+
+  const maxY = Math.max(from[0], to[0]);
+  const maxX = Math.max(from[1], to[1]);
+  const minY = Math.min(from[0], to[0]);
+  const minX = Math.min(from[1], to[1]);
+
+  // cost 위치 미세조정
+  let gap = 0;
+  if (to[0] > from[0] && to[1] > from[1])
+    gap += 13;
+  else if (to[0] < from[0] && to[1] < from[1])
+    gap += 13;
+
+  return [((maxY - minY) / 2) + minY - gap, ((maxX - minX) / 2) + minX + gap];
+}
+
+const Edge = ({ from, to, cost }: EdgeProp) => {
 
   const { direct } = useSelector((state: RootState) => ({
     direct: state.direct.directed
@@ -14,6 +32,7 @@ const Edge = ({ from, to }: EdgeProp) => {
 
   const [fromY, fromX] = from;
   const [toY, toX] = to;
+  const [costY, costX] = calculCostCoord(from, to);
 
   const coord = `M ${fromY} ${fromX} L ${toY} ${toX}`;
   const arrowMark = direct === true ? "url(#arrow)" : "";
@@ -36,8 +55,15 @@ const Edge = ({ from, to }: EdgeProp) => {
         <path d={coord}
           strokeWidth="2"
           stroke="#cfcfcf"
-          markerEnd={arrowMark} 
+          markerEnd={arrowMark}
         />
+        <text y={costX}
+          x={costY}
+          dx='.3em'
+          dy='.9em'
+          fontSize="17"
+          fill="#cfcfcf"
+          textAnchor='right'>{cost}</text>
       </g>
     </>
   )

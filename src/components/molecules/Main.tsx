@@ -44,8 +44,6 @@ const Main = () => {
 
   }, [ref, graphInfo, size.width, size.height]);
 
-  console.log('main render');
-
   const nodeList: JSX.Element[] = Object.entries(vertexInfo).map((ele, idx) => {
 
     const [key, value] = ele;
@@ -69,12 +67,15 @@ const Main = () => {
 
     return value.connectedList.map((connectedVertex, idx2) => {
 
-      const p2: Point = vertexInfo[connectedVertex].coord;
+      const [nextVertex, cost] = connectedVertex;
+      const p2: Point = vertexInfo[nextVertex].coord;
+
       return (
         <Edge
           key={idx1 * self.length + idx2}
           from={[p1.y, p1.x]}
           to={[p2.y, p2.x]}
+          cost={cost}
         />
       )
     })
