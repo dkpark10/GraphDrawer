@@ -1,9 +1,10 @@
 interface NodeProp {
-  size: { y: number, x: number }
-  value: string;
+  size: { y: number, x: number },
+  value: string,
+  color?: string
 };
 
-const Node = ({ size, value }: NodeProp) => {
+const Node = ({ size, value, color = '#cfcfcf' }: NodeProp) => {
 
   const { y, x } = size;
 
@@ -14,7 +15,7 @@ const Node = ({ size, value }: NodeProp) => {
           cx={y}
           r="20"
           fill='#8638eb'
-          stroke="#cfcfcf"
+          stroke={color}
           strokeWidth='2'></circle>
         <text y={x}
           x={y}

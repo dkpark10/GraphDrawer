@@ -5,6 +5,7 @@ interface EdgeProp {
   from: number[];
   to: number[];
   cost: string;
+  color? : string;
 };
 
 const calculCostCoord = (from: number[], to: number[]) => {
@@ -17,14 +18,14 @@ const calculCostCoord = (from: number[], to: number[]) => {
   // cost 위치 미세조정
   let gap = 0;
   if (to[0] > from[0] && to[1] > from[1])
-    gap += 13;
+    gap += 15;
   else if (to[0] < from[0] && to[1] < from[1])
-    gap += 13;
+    gap += 12;
 
   return [((maxY - minY) / 2) + minY - gap, ((maxX - minX) / 2) + minX + gap];
 }
 
-const Edge = ({ from, to, cost }: EdgeProp) => {
+const Edge = ({ from, to, cost, color = '#cfcfcf'}: EdgeProp) => {
 
   const { direct } = useSelector((state: RootState) => ({
     direct: state.direct.directed
@@ -36,6 +37,7 @@ const Edge = ({ from, to, cost }: EdgeProp) => {
 
   const coord = `M ${fromY} ${fromX} L ${toY} ${toX}`;
   const arrowMark = direct === true ? "url(#arrow)" : "";
+  console.log(color);
 
   return (
     <>
@@ -49,12 +51,12 @@ const Edge = ({ from, to, cost }: EdgeProp) => {
             markerWidth="8"
             markerHeight="8"
             orient="auto-start-reverse">
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="#cfcfcf" />
+            <path d="M 0 0 L 10 5 L 0 10 z" fill='#cfcfcf' />
           </marker>
         </defs>
         <path d={coord}
           strokeWidth="2"
-          stroke="#cfcfcf"
+          stroke={color}
           markerEnd={arrowMark}
         />
         <text y={costX}
@@ -62,7 +64,7 @@ const Edge = ({ from, to, cost }: EdgeProp) => {
           dx='.3em'
           dy='.9em'
           fontSize="17"
-          fill="#cfcfcf"
+          fill={color}
           textAnchor='right'>{cost}</text>
       </g>
     </>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import makeGraph from '../../modules/MakeGraph';
 import { useDispatch } from 'react-redux';
+import { setShortestPath, initialState } from '../../redux/shortestpath';
 import { setGraphInfo, Graph } from '../../redux/graph';
 
 const debounceIDinputCheck = (e: React.ChangeEvent<HTMLTextAreaElement>): Graph | undefined => {
@@ -31,6 +32,7 @@ const Textarea = () => {
     const ng: Graph | undefined = debounceIDinputCheck(e);
     if (ng !== undefined) {
       dispatch(setGraphInfo(ng as Graph));
+      dispatch(setShortestPath(initialState));
     }
 
     setValue(prev => e.target.value);

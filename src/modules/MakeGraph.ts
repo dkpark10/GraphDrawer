@@ -8,9 +8,8 @@ const makeGraph = (graph: string[]) => {
     
     const [vertex1, vertex2, cost] = ele.split(' ');
 
-    if(vertex1 === ''){
+    if(vertex1 === '')
       return acc;
-    }
 
     acc[vertex1] = acc[vertex1] || [];
 
