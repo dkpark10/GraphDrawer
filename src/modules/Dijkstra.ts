@@ -41,7 +41,7 @@ export class Dijkstra {
 
       const [currentVertex, value] = ele;
 
-      if (this.isExceedVertexCount(this.graph))
+      if (this.isExceedVertexCount(this.graph) && value.length <= 0)
         return;
 
       this.graph[currentVertex] = this.graph[currentVertex] || {};

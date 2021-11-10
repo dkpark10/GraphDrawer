@@ -4,6 +4,7 @@ import Edge from '../atoms/Edge';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/index';
 import { GraphState } from '../../redux/graph';
+import { debounce, throttle } from 'lodash';
 import { CoordCalculator, Point, CoordCalculatorBuilder, Vertex } from '../../modules/CoordCalculator';
 
 const BOARDSIZE = 20 as const;
@@ -17,15 +18,27 @@ const isShortestEdge = (shortestPath: { [key: string]: string }, vertex: string,
   return Object.keys(shortestPath).includes(vertex) && Object.keys(shortestPath).includes(nextVertex);
 }
 
+const outofRange = (value: number, size: Size): number => {
+
+  if (value <= BOARDSIZE)
+    value = BOARDSIZE * 2;
+  if (value >= size.height - BOARDSIZE)
+    value = size.height - BOARDSIZE * 2;
+
+  return value;
+}
+
+
 const Main = () => {
 
   const ref = useRef<any>(null);
   const [size, setSize] = useState<Size>({ width: 0, height: 0 });
   const [vertexInfo, setVertexInfo] = useState<{ [key: string]: Vertex }>({});
+  const [dragActive, setdragActive] = useState<boolean>(false);
 
-  const { graphInfo, shortestPath} = useSelector((state: RootState) => ({
+  const { graphInfo, shortestPath } = useSelector((state: RootState) => ({
     graphInfo: state.graph.graph,
-    shortestPath : state.path
+    shortestPath: state.path
   }));
 
   useEffect(() => {
@@ -48,10 +61,31 @@ const Main = () => {
 
   }, [ref, graphInfo, size.width, size.height]);
 
+  const handlePointerDown = () => setdragActive(true);
+
+  const handlePointerUp = () => setdragActive(false);
+
+  const handlePointerMove = debounce((e: React.PointerEvent<SVGCircleElement>, data: [string, Vertex]) => {
+
+    const [vertex, value] = data;
+
+    const y = outofRange(value.coord.y + e.movementX, size);
+    const x = outofRange(value.coord.x + e.movementY, size);
+
+    if (dragActive) {
+      setVertexInfo(prev => ({
+        ...prev,
+        [vertex]: {
+          ...vertexInfo[vertex],
+          coord: new Point(y, x)
+        }
+      }))
+    }
+  }, 10);
+
   const nodeList: JSX.Element[] = Object.entries(vertexInfo).map((ele, idx) => {
 
     const [vertex, value] = ele;
-    const color = vertex === shortestPath.from || vertex === shortestPath.to ? '#ebe534' : undefined;
 
     return (
       <Node
@@ -61,7 +95,9 @@ const Main = () => {
           x: value.coord.x
         }}
         value={vertex}
-        color={color}
+        onPointerMove={(e: React.PointerEvent<SVGCircleElement>) => handlePointerMove(e, ele)}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
       />
     )
   })
@@ -93,7 +129,7 @@ const Main = () => {
 
   return (
     <>
-      <main ref={ref}>
+      <main ref={ref} onClick={() => setdragActive(false)}>
         <svg style={{ width: size.width, height: size.height }}>
           {edgeList}
           {nodeList}

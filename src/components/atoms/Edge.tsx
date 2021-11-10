@@ -37,7 +37,6 @@ const Edge = ({ from, to, cost, color = '#cfcfcf'}: EdgeProp) => {
 
   const coord = `M ${fromY} ${fromX} L ${toY} ${toX}`;
   const arrowMark = direct === true ? "url(#arrow)" : "";
-  console.log(color);
 
   return (
     <>

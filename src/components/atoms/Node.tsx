@@ -1,10 +1,20 @@
+import React from 'react';
+
 interface NodeProp {
   size: { y: number, x: number },
   value: string,
+  onPointerDown: React.PointerEventHandler<SVGCircleElement>,
+  onPointerUp: React.PointerEventHandler<SVGCircleElement>,
+  onPointerMove: React.PointerEventHandler<SVGCircleElement>,
   color?: string
 };
 
-const Node = ({ size, value, color = '#cfcfcf' }: NodeProp) => {
+const Node = ({ size,
+  value,
+  onPointerDown,
+  onPointerUp,
+  onPointerMove,
+  color = '#cfcfcf' }: NodeProp) => {
 
   const { y, x } = size;
 
@@ -16,12 +26,16 @@ const Node = ({ size, value, color = '#cfcfcf' }: NodeProp) => {
           r="20"
           fill='#8638eb'
           stroke={color}
-          strokeWidth='2'></circle>
+          strokeWidth='2'
+          onPointerDown={onPointerDown}
+          onPointerUp={onPointerUp}
+          onPointerMove={onPointerMove}
+        />
         <text y={x}
           x={y}
           dy='.35em'
           fontSize="17"
-          fill="#cfcfcf"
+          fill='white'
           textAnchor='middle'>{value}</text>
       </g>
     </>
