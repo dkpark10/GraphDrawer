@@ -110,15 +110,18 @@ export class Dijkstra {
   // 최단경로 역추적
   public backtracking(path: { [key: string]: string }) {
 
-    const ret: { [key: string]: string } = {};
+    const ret: { [key: string]: boolean } = {};
     let x = this.to;
 
     while (x !== path[x]) {
-      ret[x] = ret[x] || x;
+      ret[x] = ret[x] || false;
       x = path[x];
     }
 
-    ret[x] = ret[x] || x;
+    ret[x] = ret[x] || false;
+    ret[this.to] = true;
+    ret[this.from] = true;
+    
     return ret;
   }
 

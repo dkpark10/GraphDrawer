@@ -8,7 +8,7 @@ import { Dijkstra, DijkstraBuilder } from '../../modules/Dijkstra';
 import { RootState } from '../../redux/index';
 
 const LabelStyle = {
-  margin: '10px',
+  margin: '12px',
   fontSize: '15px',
 }
 
@@ -17,7 +17,6 @@ type changeEventInput = React.ChangeEvent<HTMLInputElement>;
 interface InputList {
   from: string;
   to: string;
-  tree: string;
 };
 
 const Config = () => {
@@ -26,7 +25,6 @@ const Config = () => {
   const [inputList, setInputList] = useState<InputList>({
     from: '',
     to: '',
-    tree: ''
   });
   const { graphInfo } = useSelector((state: RootState) => ({
     graphInfo: state.graph.graph
@@ -36,28 +34,20 @@ const Config = () => {
 
   const run = () => {
 
-    // 다익스트라를 돌려 최단경로를 뽑아낸다.
-    if (inputList.tree === '') {
+    const dijkstra: Dijkstra = new DijkstraBuilder()
+      .setGraphInfo(graphInfo)
+      .setFromVertex(inputList.from)
+      .setToVertex(inputList.to)
+      .build();
 
-      const dijkstra: Dijkstra = new DijkstraBuilder()
-        .setGraphInfo(graphInfo)
-        .setFromVertex(inputList.from)
-        .setToVertex(inputList.to)
-        .build();
+    const ret = dijkstra.run();
 
-        const ret = dijkstra.run();
-
-        if(ret !== false){
-          dispatch(setShortestPath({
-            from: inputList.from,
-            to: inputList.to,
-            path: ret
-          }));
-        }
-
-    // 트리로 돌린다.
-    } else {
-
+    if (ret !== false) {
+      dispatch(setShortestPath({
+        from: inputList.from,
+        to: inputList.to,
+        path: ret
+      }));
     }
   }
 
@@ -65,25 +55,16 @@ const Config = () => {
 
     const { name, value } = e.target;
 
-    if (name === 'tree-root') {
-      setInputList(prev => ({
-        ...prev,
-        from: '', to: '',
-        tree: value
-      }))
-
-    } else if (name === 'path-from') {
+    if (name === 'path-from') {
       setInputList(prev => ({
         ...prev,
         from: value,
-        tree: ''
       }))
 
     } else {
       setInputList(prev => ({
         ...prev,
         to: value,
-        tree: ''
       }))
     }
   }
@@ -94,16 +75,18 @@ const Config = () => {
       <div className='config'>
         <label style={LabelStyle}>Undirected : Directed</label>
         <Toggle onChange={toggleOnChange} />
-        <label style={LabelStyle}>Shortest Path</label>
+        <label style={LabelStyle}>Shortest Path Find</label>
         <div>
           <Input text='from' name='path-from' onChange={onChange} value={inputList.from} />
           <Input text='to' name='path-to' onChange={onChange} value={inputList.to} />
         </div>
-        <label style={LabelStyle}>Set Tree</label>
-        <div>
-          <Input text='root node' name='tree-root' onChange={onChange} value={inputList.tree} />
-        </div>
-        <button onClick={run}>Run</button>
+        <button onClick={run}>Find</button>
+        <img
+          onClick={() => window.open('https://github.com/dkpark10/graphpainter', '_blank')}
+          style={{ width: '45px', height: '45px', cursor: 'pointer' }}
+          alt='my github'
+          src='https://media.cdnandroid.com/item_images/1097581/imagen-github-0thumb.jpeg'>
+        </img>
       </div>
     </>
   )

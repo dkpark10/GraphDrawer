@@ -14,7 +14,15 @@ export interface Size {
   height: number;
 }
 
-const isShortestEdge = (shortestPath: { [key: string]: string }, vertex: string, nextVertex: string) => {
+const isShortestEdge = (
+  shortestPath: { [key: string]: boolean },
+  vertex: string,
+  nextVertex: string): boolean => {
+  
+  const vertexCount = Object.keys(shortestPath).length;
+
+  if (shortestPath[vertex] && shortestPath[nextVertex] && vertexCount > 2)
+    return false;
   return Object.keys(shortestPath).includes(vertex) && Object.keys(shortestPath).includes(nextVertex);
 }
 
@@ -43,8 +51,6 @@ const Main = () => {
 
   useEffect(() => {
 
-    console.log(`width == ${ref.current.offsetWidth} height == ${ref.current.offsetHeight}`);
-
     setSize(prev => ({
       ...prev,
       width: ref.current.offsetWidth,
@@ -53,7 +59,7 @@ const Main = () => {
 
     const coordCalculator: CoordCalculator = new CoordCalculatorBuilder()
       .setGraphInfo(graphInfo)
-      .setLeftTop(new Point(0 + BOARDSIZE, 0 + BOARDSIZE))
+      .setLeftTop(new Point(0 + BOARDSIZE * 2, 0 + BOARDSIZE * 2))
       .setRightBottom(new Point(size.width - BOARDSIZE * 2, size.height - BOARDSIZE * 2))
       .build();
 
@@ -62,9 +68,7 @@ const Main = () => {
   }, [ref, graphInfo, size.width, size.height]);
 
   const handlePointerDown = () => setdragActive(true);
-
   const handlePointerUp = () => setdragActive(false);
-
   const handlePointerMove = debounce((e: React.PointerEvent<SVGCircleElement>, data: [string, Vertex]) => {
 
     const [vertex, value] = data;
@@ -113,7 +117,6 @@ const Main = () => {
       const p2: Point = vertexInfo[nextVertex].coord;
 
       const color = isShortestEdge(shortestPath.path, vertex, nextVertex) ? '#ebe534' : undefined;
-      console.log(color);
 
       return (
         <Edge
@@ -129,8 +132,10 @@ const Main = () => {
 
   return (
     <>
-      <main ref={ref} onClick={() => setdragActive(false)}>
-        <svg style={{ width: size.width, height: size.height }}>
+      <main ref={ref}>
+        <svg
+          style={{ width: size.width, height: size.height }}
+          onClick={() => setdragActive(false)}>
           {edgeList}
           {nodeList}
         </svg>

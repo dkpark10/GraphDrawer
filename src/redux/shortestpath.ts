@@ -3,7 +3,7 @@ export const SETSHORTESTPATH = 'SETSHORTESTPATH' as const;
 export interface ShortestPathState {
   from : string;
   to: string;
-  path: { [key: string]: string };
+  path: { [key: string]: boolean };
 }
 
 interface Action {

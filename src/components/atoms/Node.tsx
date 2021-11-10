@@ -23,10 +23,10 @@ const Node = ({ size,
       <g>
         <circle cy={x}
           cx={y}
-          r="20"
-          fill='#8638eb'
+          r='22'
+          fill='#16afc0'
           stroke={color}
-          strokeWidth='2'
+          strokeWidth='2.5'
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
           onPointerMove={onPointerMove}
