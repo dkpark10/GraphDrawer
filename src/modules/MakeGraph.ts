@@ -13,9 +13,11 @@ const makeGraph = (graph: string[]) => {
 
     acc[vertex1] = acc[vertex1] || [];
 
-    if (vertex2 === undefined && cost === undefined) {
+    if (vertex2 === undefined && cost === undefined) 
       return acc;
-    }
+
+    if (vertex2 === '')
+      return acc;
     
     acc[vertex1].push([vertex2, cost]);
 

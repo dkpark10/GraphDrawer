@@ -97,7 +97,8 @@ export class CoordCalculator {
       const [key, value] = ele;
 
       // 정점 객수를 넘어가면 리턴
-      if (Object.keys(vertexList).length >= this.vertexCount && value.length <= 0)
+      if (Object.keys(vertexList).length >= this.vertexCount
+        && Object.keys(vertexList).includes(key) === false)
         return;
 
       vertexList[key] = vertexList[key] || { ...init };
