@@ -21,7 +21,9 @@ const Node = ({ size,
   return (
     <>
       <g>
-        <circle cy={x}
+        <circle
+          style={{ cursor: 'pointer' }}
+          cy={x}
           cx={y}
           r='22'
           fill='#16afc0'
@@ -31,7 +33,9 @@ const Node = ({ size,
           onPointerUp={onPointerUp}
           onPointerMove={onPointerMove}
         />
-        <text y={x}
+        <text
+          style={{ cursor: 'pointer' }}
+          y={x}
           x={y}
           dy='.35em'
           fontSize="17"

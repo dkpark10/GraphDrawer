@@ -71,6 +71,7 @@ const Main = () => {
   const handlePointerUp = () => setdragActive(false);
   const handlePointerMove = debounce((e: React.PointerEvent<SVGCircleElement>, data: [string, Vertex]) => {
 
+    e.stopPropagation();    
     const [vertex, value] = data;
 
     const y = outofRange(value.coord.y + e.movementX, size);
@@ -85,7 +86,7 @@ const Main = () => {
         }
       }))
     }
-  }, 10);
+  }, 0);
 
   const nodeList: JSX.Element[] = Object.entries(vertexInfo).map((ele, idx) => {
 
