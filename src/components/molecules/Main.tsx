@@ -3,8 +3,6 @@ import Node from '../atoms/Node';
 import Edge from '../atoms/Edge';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/index';
-import { GraphState } from '../../redux/graph';
-import { debounce, throttle } from 'lodash';
 import { CoordCalculator, Point, CoordCalculatorBuilder, Vertex } from '../../modules/CoordCalculator';
 
 const BOARDSIZE = 20 as const;
@@ -36,13 +34,18 @@ const outofRange = (value: number, size: Size): number => {
   return value;
 }
 
+export interface IDragNode{
+  dragActive: boolean;
+  currentNode: any;
+};
 
 const Main = () => {
 
   const ref = useRef<any>(null);
   const [size, setSize] = useState<Size>({ width: 0, height: 0 });
   const [vertexInfo, setVertexInfo] = useState<{ [key: string]: Vertex }>({});
-  const [dragActive, setdragActive] = useState<boolean>(false);
+  const [dragActive, setdragActive] = useState<IDragNode>({dragActive: false, currentNode: null});
+  const [off, setOff] = useState<number[]>([0, 0]);
 
   const { graphInfo, shortestPath } = useSelector((state: RootState) => ({
     graphInfo: state.graph.graph,
@@ -67,30 +70,57 @@ const Main = () => {
 
   }, [ref, graphInfo, size.width, size.height]);
 
-  const handlePointerDown = () => setdragActive(true);
-  const handlePointerUp = () => setdragActive(false);
-  const handlePointerMove = debounce((e: React.PointerEvent<SVGCircleElement>, data: [string, Vertex]) => {
+  const handlePointerDown = (e: React.PointerEvent<SVGCircleElement>) =>{ 
 
-    e.stopPropagation();    
+    const box = e.currentTarget.getBoundingClientRect();
+    const offX = e.clientX - box.left;
+    const offY = e.clientY - box.top;
+    e.currentTarget.setPointerCapture(e.pointerId);
+
+    setOff(prev => [offX, offY]);
+    setdragActive(({
+      ...dragActive,
+      dragActive: true,
+      currentNode: e.currentTarget
+    }));
+  }
+
+  const handlePointerUp = () => {
+    setdragActive(prev => ({
+      ...prev,
+      dragActive: false,
+      currentNode: null
+    }));
+  }
+
+  const handlePointerMove = ((e: React.PointerEvent<SVGCircleElement>, data: [string, Vertex]) => {
+
+    e.preventDefault();
     const [vertex, value] = data;
 
-    const y = outofRange(value.coord.y + e.movementX, size);
-    const x = outofRange(value.coord.x + e.movementY, size);
+    const bbox = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - bbox.left;
+    const y = e.clientY - bbox.top;
 
-    if (dragActive) {
+    if (dragActive.dragActive) {
+
+      const toff = [...off];
+      const moveY = outofRange(value.coord.y - (toff[1] - x), size);
+      const moveX = outofRange(value.coord.x - (toff[0] - y), size);
+
       setVertexInfo(prev => ({
         ...prev,
         [vertex]: {
           ...vertexInfo[vertex],
-          coord: new Point(y, x)
+          coord: new Point(moveY, moveX)
         }
       }))
     }
-  }, 0);
+  });
 
   const nodeList: JSX.Element[] = Object.entries(vertexInfo).map((ele, idx) => {
 
-    const [vertex, value] = ele;
+  const [vertex, value] = ele;
 
     return (
       <Node
@@ -103,6 +133,7 @@ const Main = () => {
         onPointerMove={(e: React.PointerEvent<SVGCircleElement>) => handlePointerMove(e, ele)}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
+        isDraged={dragActive}
       />
     )
   })
@@ -136,7 +167,7 @@ const Main = () => {
       <main ref={ref}>
         <svg
           style={{ width: size.width, height: size.height }}
-          onClick={() => setdragActive(false)}>
+        >
           {edgeList}
           {nodeList}
         </svg>
