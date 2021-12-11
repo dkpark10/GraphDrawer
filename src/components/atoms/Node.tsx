@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { IDragNode } from '../molecules/Main';
 
 interface NodeProp {
@@ -20,9 +20,15 @@ const Node = ({ size,
   color = '#cfcfcf' }: NodeProp) => {
 
   const { y, x } = size;
-  const ref = useRef(null);
+  const ref = useRef<any>(null);
 
   const isDraggedNode = isDraged.dragActive && isDraged.currentNode === ref.current;
+
+  useEffect(() => {
+    return(() => {
+      ref.current = null;
+    })
+  }, []);
 
   return (
     <>

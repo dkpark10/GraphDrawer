@@ -4,6 +4,7 @@ import Edge from '../atoms/Edge';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/index';
 import { CoordCalculator, Point, CoordCalculatorBuilder, Vertex } from '../../modules/CoordCalculator';
+import { debounce } from 'lodash';
 
 const BOARDSIZE = 20 as const;
 
@@ -16,7 +17,7 @@ const isShortestEdge = (
   shortestPath: { [key: string]: boolean },
   vertex: string,
   nextVertex: string): boolean => {
-  
+
   const vertexCount = Object.keys(shortestPath).length;
 
   if (shortestPath[vertex] && shortestPath[nextVertex] && vertexCount > 2)
@@ -34,7 +35,7 @@ const outofRange = (value: number, size: Size): number => {
   return value;
 }
 
-export interface IDragNode{
+export interface IDragNode {
   dragActive: boolean;
   currentNode: any;
 };
@@ -44,7 +45,7 @@ const Main = () => {
   const ref = useRef<any>(null);
   const [size, setSize] = useState<Size>({ width: 0, height: 0 });
   const [vertexInfo, setVertexInfo] = useState<{ [key: string]: Vertex }>({});
-  const [dragActive, setdragActive] = useState<IDragNode>({dragActive: false, currentNode: null});
+  const [dragActive, setdragActive] = useState<IDragNode>({ dragActive: false, currentNode: null });
   const [off, setOff] = useState<number[]>([0, 0]);
 
   const { graphInfo, shortestPath } = useSelector((state: RootState) => ({
@@ -70,7 +71,7 @@ const Main = () => {
 
   }, [ref, graphInfo, size.width, size.height]);
 
-  const handlePointerDown = (e: React.PointerEvent<SVGCircleElement>) =>{ 
+  const handlePointerDown = (e: React.PointerEvent<SVGCircleElement>) => {
 
     const box = e.currentTarget.getBoundingClientRect();
     const offX = e.clientX - box.left;
@@ -98,15 +99,14 @@ const Main = () => {
     e.preventDefault();
     const [vertex, value] = data;
 
-    const bbox = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - bbox.left;
-    const y = e.clientY - bbox.top;
+    const xx = e.movementX + off[1];
+    const yy = e.movementY + off[0];
 
     if (dragActive.dragActive) {
 
       const toff = [...off];
-      const moveY = outofRange(value.coord.y - (toff[1] - x), size);
-      const moveX = outofRange(value.coord.x - (toff[0] - y), size);
+      const moveY = outofRange(value.coord.y - (toff[1] - xx), size);
+      const moveX = outofRange(value.coord.x - (toff[0] - yy), size);
 
       setVertexInfo(prev => ({
         ...prev,
@@ -120,7 +120,7 @@ const Main = () => {
 
   const nodeList: JSX.Element[] = Object.entries(vertexInfo).map((ele, idx) => {
 
-  const [vertex, value] = ele;
+    const [vertex, value] = ele;
 
     return (
       <Node
