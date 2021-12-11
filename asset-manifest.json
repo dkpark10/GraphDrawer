@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/graphpainter/static/css/main.22b7bafa.chunk.css",
-    "main.js": "/graphpainter/static/js/main.bc8ac8b1.chunk.js",
-    "main.js.map": "/graphpainter/static/js/main.bc8ac8b1.chunk.js.map",
+    "main.js": "/graphpainter/static/js/main.29a5bdaa.chunk.js",
+    "main.js.map": "/graphpainter/static/js/main.29a5bdaa.chunk.js.map",
     "runtime-main.js": "/graphpainter/static/js/runtime-main.1a8c491e.js",
     "runtime-main.js.map": "/graphpainter/static/js/runtime-main.1a8c491e.js.map",
     "static/js/2.359c8a18.chunk.js": "/graphpainter/static/js/2.359c8a18.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.1a8c491e.js",
     "static/js/2.359c8a18.chunk.js",
     "static/css/main.22b7bafa.chunk.css",
-    "static/js/main.bc8ac8b1.chunk.js"
+    "static/js/main.29a5bdaa.chunk.js"
   ]
 }
