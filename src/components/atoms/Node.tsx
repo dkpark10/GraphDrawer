@@ -25,17 +25,18 @@ const Node = ({ size,
   const isDraggedNode = isDraged.dragActive && isDraged.currentNode === ref.current;
 
   useEffect(() => {
-    return(() => {
+    return (() => {
       ref.current = null;
     })
   }, []);
 
   return (
     <>
-      <g>
+      <g
+        style={{ cursor: 'pointer' }}
+      >
         <circle
           ref={ref}
-          style={{ cursor: 'pointer' }}
           cy={x}
           cx={y}
           r='22'
@@ -47,7 +48,7 @@ const Node = ({ size,
           onPointerMove={onPointerMove}
         />
         <text
-          style={{ cursor: 'pointer' }}
+          style={{ fontWeight: 'bold' }}
           y={x}
           x={y}
           dy='.35em'
