@@ -105,6 +105,7 @@ header{
 }
 
 .config button{
+  cursor: pointer;
   background-color: #1033e3;
   display:block;
   width: 90%;
