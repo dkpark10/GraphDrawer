@@ -21,14 +21,26 @@ const Node = ({ size,
 
   const { y, x } = size;
   const ref = useRef<any>(null);
+  const textRef = useRef<any>(null);
 
   const isDraggedNode = isDraged.dragActive && isDraged.currentNode === ref.current;
 
   useEffect(() => {
     return (() => {
       ref.current = null;
+      textRef.current = null;
     })
   }, []);
+
+  const onNodeMouseOver = (e: React.PointerEvent<SVGCircleElement>) => {
+    e.currentTarget.setAttribute('fill', '#ebe534');
+    textRef.current.setAttribute('fill', 'black');
+  }
+
+  const onNodeMouseOut = (e: React.PointerEvent<SVGCircleElement>) => {
+    e.currentTarget.setAttribute('fill', '#16afc0');
+    textRef.current.setAttribute('fill', 'white');
+  }
 
   return (
     <>
@@ -46,8 +58,11 @@ const Node = ({ size,
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
           onPointerMove={onPointerMove}
+          onMouseOver={onNodeMouseOver}
+          onMouseOut={onNodeMouseOut}
         />
         <text
+          ref={textRef}
           style={{ fontWeight: 'bold' }}
           y={x}
           x={y}
@@ -55,6 +70,7 @@ const Node = ({ size,
           fontSize="17"
           fill={isDraggedNode ? 'black' : 'white'}
           textAnchor='middle'>{value}</text>
+        
       </g>
     </>
   )
