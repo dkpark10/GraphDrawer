@@ -60,4 +60,4 @@ const Node = ({ size,
   )
 };
 
-export default Node;
+export default React.memo(Node);

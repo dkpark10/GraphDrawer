@@ -4,7 +4,6 @@ import Edge from '../atoms/Edge';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/index';
 import { CoordCalculator, Point, CoordCalculatorBuilder, Vertex } from '../../modules/CoordCalculator';
-import { debounce } from 'lodash';
 
 const BOARDSIZE = 20 as const;
 
@@ -18,11 +17,21 @@ const isShortestEdge = (
   vertex: string,
   nextVertex: string): boolean => {
 
-  const vertexCount = Object.keys(shortestPath).length;
+  const listShortestPath = Object.keys(shortestPath);
+  const vertexCount = listShortestPath.length;
 
-  if (shortestPath[vertex] && shortestPath[nextVertex] && vertexCount > 2)
+  if(vertexCount === 0){
     return false;
-  return Object.keys(shortestPath).includes(vertex) && Object.keys(shortestPath).includes(nextVertex);
+  }
+
+  const indexOfCurrentVertex = listShortestPath.indexOf(vertex);
+  const indexOfNextVertex = listShortestPath.indexOf(nextVertex);
+
+  if(indexOfCurrentVertex === -1 || indexOfNextVertex === -1){
+    return false;
+  }
+
+  return Math.abs(indexOfCurrentVertex - indexOfNextVertex) <= 1 ? true : false;
 }
 
 const outofRange = (value: number, size: Size): number => {
