@@ -20,14 +20,14 @@ const isShortestEdge = (
   const listShortestPath = Object.keys(shortestPath);
   const vertexCount = listShortestPath.length;
 
-  if(vertexCount === 0){
+  if (vertexCount === 0) {
     return false;
   }
 
   const indexOfCurrentVertex = listShortestPath.indexOf(vertex);
   const indexOfNextVertex = listShortestPath.indexOf(nextVertex);
 
-  if(indexOfCurrentVertex === -1 || indexOfNextVertex === -1){
+  if (indexOfCurrentVertex === -1 || indexOfNextVertex === -1) {
     return false;
   }
 
@@ -88,8 +88,8 @@ const Main = () => {
     e.currentTarget.setPointerCapture(e.pointerId);
 
     setOff(prev => [offX, offY]);
-    setdragActive(({
-      ...dragActive,
+    setdragActive(prev => ({
+      ...prev,
       dragActive: true,
       currentNode: e.currentTarget
     }));
@@ -130,7 +130,6 @@ const Main = () => {
   const nodeList: JSX.Element[] = Object.entries(vertexInfo).map((ele, idx) => {
 
     const [vertex, value] = ele;
-
     return (
       <Node
         key={idx}

@@ -24,7 +24,7 @@ const Node = ({ size,
   const textRef = useRef<any>(null);
 
   const isDraggedNode = isDraged.dragActive && isDraged.currentNode === ref.current;
-
+  
   useEffect(() => {
     return (() => {
       ref.current = null;
@@ -70,10 +70,15 @@ const Node = ({ size,
           fontSize="17"
           fill={isDraggedNode ? 'black' : 'white'}
           textAnchor='middle'>{value}</text>
-        
+
       </g>
     </>
   )
 };
 
-export default React.memo(Node);
+export default React.memo(Node, (prev, next) => {
+
+  return prev.isDraged.dragActive === next.isDraged.dragActive &&
+    prev.size.y === next.size.y &&
+    prev.size.x === next.size.x;
+});
