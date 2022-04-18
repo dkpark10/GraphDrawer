@@ -4,7 +4,7 @@ interface EdgeInfo {
 
 const makeGraph = (graph: string[]) => {
 
-  return graph.reduce((acc: EdgeInfo, ele, dix): EdgeInfo => {
+  return graph.reduce((acc: EdgeInfo, ele): EdgeInfo => {
     
     const [vertex1, vertex2, cost] = ele.split(' ');
 

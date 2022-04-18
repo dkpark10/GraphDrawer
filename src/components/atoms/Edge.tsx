@@ -27,16 +27,10 @@ const calculCostCoord = (from: number[], to: number[]) => {
 
 const Edge = ({ from, to, cost, color = '#cfcfcf'}: EdgeProp) => {
 
-  const { direct } = useSelector((state: RootState) => ({
-    direct: state.direct.directed
-  }));
-
+  const direct = useSelector((state: RootState) => state.direct.directed);
   const [fromY, fromX] = from;
   const [toY, toX] = to;
   const [costY, costX] = calculCostCoord(from, to);
-
-  const coord = `M ${fromY} ${fromX} L ${toY} ${toX}`;
-  const arrowMark = direct === true ? "url(#arrow)" : "";
 
   return (
     <>
@@ -45,7 +39,7 @@ const Edge = ({ from, to, cost, color = '#cfcfcf'}: EdgeProp) => {
           <marker
             id="arrow"
             viewBox="0 0 10 10"
-            refX="23"
+            refX="24"
             refY="5"
             markerWidth="8"
             markerHeight="8"
@@ -53,16 +47,16 @@ const Edge = ({ from, to, cost, color = '#cfcfcf'}: EdgeProp) => {
             <path d="M 0 0 L 10 5 L 0 10 z" fill='#cfcfcf' />
           </marker>
         </defs>
-        <path d={coord}
+        <path d={`M ${fromY} ${fromX} L ${toY} ${toX}`}
           strokeWidth="2"
           stroke={color}
-          markerEnd={arrowMark}
+          markerEnd={direct === true ? "url(#arrow)" : ""}
         />
         <text y={costX}
           x={costY}
           dx='.3em'
           dy='.9em'
-          fontSize="17"
+          fontSize="14"
           fill={color}
           textAnchor='right'>{cost}</text>
       </g>

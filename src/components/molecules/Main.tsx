@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Node from '../atoms/Node';
 import Edge from '../atoms/Edge';
-import { useSelector } from 'react-redux';
+import { useSelector, shallowEqual } from 'react-redux';
 import { RootState } from '../../redux/index';
 import { CoordCalculator, Point, CoordCalculatorBuilder, Vertex } from '../../modules/CoordCalculator';
 
@@ -49,7 +49,7 @@ export interface IDragNode {
   currentNode: any;
 };
 
-const Main = () => {
+export default function Main(): JSX.Element {
 
   const ref = useRef<any>(null);
   const [size, setSize] = useState<Size>({ width: 0, height: 0 });
@@ -60,7 +60,7 @@ const Main = () => {
   const { graphInfo, shortestPath } = useSelector((state: RootState) => ({
     graphInfo: state.graph.graph,
     shortestPath: state.path
-  }));
+  }), shallowEqual);
 
   useEffect(() => {
 
@@ -183,5 +183,3 @@ const Main = () => {
     </>
   );
 }
-
-export default Main;
