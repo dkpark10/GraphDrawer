@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useMemo, useEffect, useState } from "react";
 import makeGraph from '../../modules/MakeGraph';
 import { useDispatch } from 'react-redux';
 import { setShortestPath, initialState } from '../../redux/shortestpath';
 import { setGraphInfo, Graph } from '../../redux/graph';
+import { debounce } from "lodash";
 
 export default function TextArea(): JSX.Element {
 
@@ -27,17 +28,22 @@ export default function TextArea(): JSX.Element {
     };
   }
 
-  useEffect(() => {
-    const ng: Graph | undefined = inputValueParsing(value);
+  const debounceSetGraph = useMemo(() => debounce((arg) => {
+    const ng: Graph | undefined = inputValueParsing(arg);
     if (ng !== undefined) {
       dispatch(setGraphInfo(ng as Graph));
       dispatch(setShortestPath(initialState));
     }
-  }, [value, dispatch]);
+  }, 550), [dispatch]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
-  }
+    debounceSetGraph(e.target.value);
+  }, [debounceSetGraph]);
+
+  useEffect(() => {
+    debounceSetGraph(value);
+  });
 
   return (
     <>
