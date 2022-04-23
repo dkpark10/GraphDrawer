@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/graphpainter/static/css/main.aaae5711.chunk.css",
-    "main.js": "/graphpainter/static/js/main.30e2d5d7.chunk.js",
-    "main.js.map": "/graphpainter/static/js/main.30e2d5d7.chunk.js.map",
+    "main.js": "/graphpainter/static/js/main.c608f669.chunk.js",
+    "main.js.map": "/graphpainter/static/js/main.c608f669.chunk.js.map",
     "runtime-main.js": "/graphpainter/static/js/runtime-main.f70191dc.js",
     "runtime-main.js.map": "/graphpainter/static/js/runtime-main.f70191dc.js.map",
-    "static/js/2.72790a90.chunk.js": "/graphpainter/static/js/2.72790a90.chunk.js",
-    "static/js/2.72790a90.chunk.js.map": "/graphpainter/static/js/2.72790a90.chunk.js.map",
+    "static/js/2.3df91365.chunk.js": "/graphpainter/static/js/2.3df91365.chunk.js",
+    "static/js/2.3df91365.chunk.js.map": "/graphpainter/static/js/2.3df91365.chunk.js.map",
     "static/js/3.483ca6b2.chunk.js": "/graphpainter/static/js/3.483ca6b2.chunk.js",
     "static/js/3.483ca6b2.chunk.js.map": "/graphpainter/static/js/3.483ca6b2.chunk.js.map",
     "index.html": "/graphpainter/index.html",
     "static/css/main.aaae5711.chunk.css.map": "/graphpainter/static/css/main.aaae5711.chunk.css.map",
-    "static/js/2.72790a90.chunk.js.LICENSE.txt": "/graphpainter/static/js/2.72790a90.chunk.js.LICENSE.txt"
+    "static/js/2.3df91365.chunk.js.LICENSE.txt": "/graphpainter/static/js/2.3df91365.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.f70191dc.js",
-    "static/js/2.72790a90.chunk.js",
+    "static/js/2.3df91365.chunk.js",
     "static/css/main.aaae5711.chunk.css",
-    "static/js/main.30e2d5d7.chunk.js"
+    "static/js/main.c608f669.chunk.js"
   ]
 }
