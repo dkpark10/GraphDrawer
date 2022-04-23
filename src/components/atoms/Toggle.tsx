@@ -8,8 +8,8 @@ const Toggle = ({ onChange }: ToggleProps) => {
 
   return (
     <>
-      <label className='direct-button'>
-        <input type='checkbox' onChange={onChange}/>
+      <label className='direct-button' htmlFor='direction'>
+        <input type='checkbox' onChange={onChange} id='direction' />
         <span className='onoff-switch' />
       </label>
     </>

@@ -10,8 +10,18 @@ const Input = ({ text, name, onChange, value }: InputProps) => {
 
   return (
     <>
-      <label style={{ fontSize: '13px' }}> {text} </label>
-      <input type='text' name={name} onChange={onChange} value={value} style={{ width: '40px', height: '25px' }}>
+      <label style={{ fontSize: '13px' }}
+        htmlFor={text}
+      >
+        {text}
+      </label>
+      <input
+        type='text'
+        name={name}
+        onChange={onChange}
+        value={value}
+        id={text}
+        style={{ width: '40px', height: '25px' }}>
       </input>
     </>
   )

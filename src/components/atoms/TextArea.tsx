@@ -51,7 +51,9 @@ export default function TextArea(): JSX.Element {
         style={{ resize: 'none' }}
         value={value}
         onChange={handleChange}
+        id='input'
       />
+      <label htmlFor='input'/>
     </>
   )
 }

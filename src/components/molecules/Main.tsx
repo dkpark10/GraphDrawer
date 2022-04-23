@@ -130,6 +130,8 @@ export default function Main(): JSX.Element {
   const nodeList: JSX.Element[] = Object.entries(vertexInfo).map((ele, idx) => {
 
     const [vertex, value] = ele;
+    const fromTo = shortestPath.from === vertex || shortestPath.to === vertex;
+
     return (
       <Node
         key={idx}
@@ -142,6 +144,7 @@ export default function Main(): JSX.Element {
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
         isDraged={dragActive}
+        fromOrTo={fromTo}
       />
     )
   })
