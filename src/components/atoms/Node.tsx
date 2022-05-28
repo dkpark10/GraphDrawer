@@ -48,7 +48,6 @@ const Node = ({
     textRef.current.setAttribute('fill', 'white');
   }
 
-  console.log('render', value);
   return (
     <>
       <g

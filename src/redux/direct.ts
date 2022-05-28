@@ -13,7 +13,6 @@ const initialState: DirectState = {
   directed: false
 };
 
-// action creator
 export const setDirected = (diff: boolean) => ({
   type: SETDIRECT,
   payload: diff
