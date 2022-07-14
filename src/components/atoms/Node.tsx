@@ -20,7 +20,6 @@ const Node = ({
   onPointerMove,
   fromOrTo,
   color = '#cfcfcf' }: Props) => {
-
   const { y, x } = size;
   const ref = useRef<any>(null);
   const textRef = useRef<any>(null);
@@ -49,44 +48,39 @@ const Node = ({
   }
 
   return (
-    <>
-      <g
-        style={{ cursor: 'pointer' }}
+    <g
+      style={{ cursor: 'pointer' }}
+    >
+      <circle
+        ref={ref}
+        cy={x}
+        cx={y}
+        r='22'
+        fill={fromOrTo === true ? '#ebe534' : '#16afc0'}
+        stroke={color}
+        strokeWidth='2.5'
+        onPointerDown={onPointerDown}
+        onPointerUp={onPointerUp}
+        onPointerMove={onPointerMove}
+        onMouseOver={onNodeMouseOver}
+        onMouseOut={onNodeMouseOut}
+      />
+      <text
+        ref={textRef}
+        y={x}
+        x={y}
+        dy='.35em'
+        fontSize="15"
+        fill={fromOrTo ? 'black' : 'white'}
+        textAnchor='middle'
       >
-        <circle
-          ref={ref}
-          cy={x}
-          cx={y}
-          r='22'
-          fill={fromOrTo === true ? '#ebe534' : '#16afc0'}
-          stroke={color}
-          strokeWidth='2.5'
-          onPointerDown={onPointerDown}
-          onPointerUp={onPointerUp}
-          onPointerMove={onPointerMove}
-          onMouseOver={onNodeMouseOver}
-          onMouseOut={onNodeMouseOut}
-        >
-        </circle>
-        <text
-          ref={textRef}
-          style={{ fontWeight: 'bold' }}
-          y={x}
-          x={y}
-          dy='.35em'
-          fontSize="14"
-          fill={fromOrTo? 'black' : 'white'}
-          textAnchor='middle'
-        >
-          {value}
-        </text>
-      </g>
-    </>
+        {value}
+      </text>
+    </g>
   )
 };
 
 export default React.memo(Node, (prev, next) => {
-
   return prev.isDraged.dragActive === next.isDraged.dragActive &&
     prev.size.y === next.size.y &&
     prev.size.x === next.size.x &&

@@ -50,7 +50,6 @@ export interface IDragNode {
 };
 
 export default function Main(): JSX.Element {
-
   const ref = useRef<any>(null);
   const [size, setSize] = useState<Size>({ width: 0, height: 0 });
   const [vertexInfo, setVertexInfo] = useState<{ [key: string]: Vertex }>({});
@@ -63,7 +62,6 @@ export default function Main(): JSX.Element {
   }), shallowEqual);
 
   useEffect(() => {
-
     setSize(prev => ({
       ...prev,
       width: ref.current.offsetWidth,
@@ -104,7 +102,6 @@ export default function Main(): JSX.Element {
   }
 
   const handlePointerMove = ((e: React.PointerEvent<SVGCircleElement>, data: [string, Vertex]) => {
-
     e.preventDefault();
     const [vertex, value] = data;
 
@@ -128,7 +125,6 @@ export default function Main(): JSX.Element {
   });
 
   const nodeList: JSX.Element[] = Object.entries(vertexInfo).map((ele, idx) => {
-
     const [vertex, value] = ele;
     const fromTo = shortestPath.from === vertex || shortestPath.to === vertex;
 
@@ -150,15 +146,12 @@ export default function Main(): JSX.Element {
   })
 
   const edgeList: JSX.Element[][] = Object.entries(vertexInfo).map((ele, idx1, self) => {
-
     const [vertex, value] = ele;
     const p1: Point = value.coord;
 
     return value.connectedList.map((connectedVertex, idx2) => {
-
       const [nextVertex, cost] = connectedVertex;
       const p2: Point = vertexInfo[nextVertex].coord;
-
       const color = isShortestEdge(shortestPath.path, vertex, nextVertex) ? '#ebe534' : undefined;
 
       return (
@@ -174,15 +167,13 @@ export default function Main(): JSX.Element {
   });
 
   return (
-    <>
-      <main ref={ref}>
-        <svg
-          style={{ width: size.width, height: size.height }}
-        >
-          {edgeList}
-          {nodeList}
-        </svg>
-      </main>
-    </>
+    <main ref={ref}>
+      <svg
+        style={{ width: size.width, height: size.height }}
+      >
+        {edgeList}
+        {nodeList}
+      </svg>
+    </main>
   );
 }
