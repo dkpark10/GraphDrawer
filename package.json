@@ -8,6 +8,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "@vanilla-extract/css": "^1.9.5",
     "js-priority-queue": "^0.1.5",
     "lodash": "^4.17.21",
     "react": "^17.0.2",
@@ -23,13 +24,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "deploy": "gh-pages -d build",
+    "vite:dev": "vite",
+    "vite:build": "tsc && vite build",
+    "vite:preview": "vite preview"
   },
   "browserslist": {
     "production": [
@@ -48,6 +46,7 @@
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
     "@types/react-redux": "^7.1.18",
+    "@vitejs/plugin-react": "^3.1.0",
     "eslint": "^8.2.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
@@ -56,7 +55,6 @@
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "gh-pages": "^3.2.3",
-    "ts-priority-queue": "^0.1.1",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^8.0.0",
     "identity-obj-proxy": "^3.0.0",
@@ -65,7 +63,9 @@
     "rimraf": "^3.0.2",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.2.6",
+    "ts-priority-queue": "^0.1.1",
     "typescript": "^4.4.3",
+    "vite": "^4.2.0",
     "webpack": "^5.65.0",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.7.1",
