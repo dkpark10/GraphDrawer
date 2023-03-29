@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setDirected } from '../../redux/direct';
 import { setShortestPath } from '../../redux/shortestpath';
 import React, { useState } from 'react';
-import { Dijkstra, DijkstraBuilder } from '../../modules/Dijkstra';
+import { Dijkstra, DijkstraBuilder } from '../../utils/dijkstra';
 import { RootState } from '../../redux/index';
 
 const LabelStyle = {
