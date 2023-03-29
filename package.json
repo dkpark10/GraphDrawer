@@ -5,9 +5,6 @@
   "homepage": "https://dkpark10.github.io/graphpainter",
   "author": "dkpark10",
   "dependencies": {
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.8.3",
     "@vanilla-extract/css": "^1.9.5",
     "js-priority-queue": "^0.1.5",
     "lodash": "^4.17.21",
@@ -42,6 +39,9 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
     "@types/lodash": "^4.14.175",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",

@@ -5,25 +5,32 @@
     "strict": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "noImplicitAny": true,
     "outDir": "./dist",
     "rootDir": "./src",
     "jsx": "react-jsx",
     "sourceMap": true,
+    "allowJs": false, // js 파일들 import 할 지 여부 
+    "noImplicitReturns": true, // 함수내 모든 경로에서 리턴하지 않을경우 에러
+    "noImplicitAny": true,  // any 타입 발생시 에러
+    "strictFunctionTypes": true, //엄격한 함수 파라미터 체크
+    "strictNullChecks": true, // 엄격하게 null check
+    "strictPropertyInitialization": true, // 클래스 생성자에서 타입체크 엄격하게
+    "noImplicitThis": true, //this 가 any 여부에 따라 에러
     "lib": [
       "es2015",
       "dom",
       "DOM.Iterable"
     ],
-    "allowJs": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "strictPropertyInitialization": false,
     "resolveJsonModule": true,
     "noEmit": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "exclude": [
     "node_modules"
