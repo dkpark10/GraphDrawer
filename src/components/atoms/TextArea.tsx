@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useEffect, useState } from "react";
 import { inputValueParsing } from '../../utils/make-graph';
 import { useDispatch } from 'react-redux';
-import { setShortestPath, initialState } from '../../redux/shortestpath';
-import { setGraphInfo, Graph } from '../../redux/graph';
+import { setShortestPath, initialState } from '../../store/shortestpath';
+import { setGraphInfo, Graph } from '../../store/graph';
 import { debounce } from "../../utils";
 
 export default function TextArea(): JSX.Element {

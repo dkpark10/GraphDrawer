@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import Node from '../atoms/Node';
 import Edge from '../atoms/Edge';
 import { useSelector, shallowEqual } from 'react-redux';
-import { RootState } from '../../redux/index';
+import { RootState } from '../../store/index';
 import { CoordCalculator, Point, CoordCalculatorBuilder, Vertex } from '../../utils/coord-calculator';
 
 const BOARDSIZE = 20 as const;

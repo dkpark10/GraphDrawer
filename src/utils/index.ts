@@ -1,4 +1,4 @@
 export * from './debounce';
-export * from './CoordCalculator'
-export * from './Dijkstra'
-export * from './MakeGraph';
+export * from './coord-calculator'
+export * from './djkstra'
+export * from './make-graph';

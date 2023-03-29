@@ -1,11 +1,11 @@
 import Toggle from '../atoms/Toggle';
 import Input from '../atoms/Input';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDirected } from '../../redux/direct';
-import { setShortestPath } from '../../redux/shortestpath';
+import { setDirected } from '../../store/node-arrow';
+import { setShortestPath } from '../../store/shortestpath';
 import React, { useState } from 'react';
-import { Dijkstra, DijkstraBuilder } from '../../utils/dijkstra';
-import { RootState } from '../../redux/index';
+import { Dijkstra, DijkstraBuilder } from '../../utils/djkstra';
+import { RootState } from '../../store/index';
 
 const LabelStyle = {
   margin: '12px',

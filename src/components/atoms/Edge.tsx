@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/index';
+import { RootState } from '../../store/index';
 
 interface EdgeProp {
   from: number[];

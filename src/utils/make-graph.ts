@@ -1,4 +1,4 @@
-import { Graph } from '../redux/graph';
+import { Graph } from '../store/graph';
 
 interface EdgeInfo {
   [key: string]: string[][];
