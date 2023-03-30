@@ -1,13 +1,11 @@
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-// Typescript(타입스크립트)를 빌드할 때 성능을 향상시키기 위한 플러그인를 불러오기
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-// 정적 파일 복사 플러그인
-import CopyWebpackPlugin from 'copy-webpack-plugin';
-import { resolve } from 'path';
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { resolve } = require('path');
 
 const rootPath = resolve();
 
-export default {
+const webpackCommonConfig = {
   entry: './src/index.tsx',
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
@@ -22,7 +20,6 @@ export default {
         use: [
           'style-loader',
           'css-loader',
-          'postcss-loader',
         ],
       },
       // Webpack(웹팩)에서 Typescript(타입스크립트)를 사용하기 위해 js|jsx를 ts|tsx로 수정 후 ts-loader를 추가
@@ -59,7 +56,10 @@ export default {
       template: './src/index.html',
       filename: 'index.html',
     }),
-    // Typescript(타입스크립트)의 컴파일 속도 향상을 위한 플러그인을 설정
+    /**
+     * @description 컴파일과 타입 체크를 코드의 양이 많아질수록 빌드 속도도 느려진다.
+     * 다음 플러그인은 타입검사를 별도로 실행하는 웹팩 플러그인
+     */
     new ForkTsCheckerWebpackPlugin(),
     // 파일, 폴더 복사 플러그인
     new CopyWebpackPlugin({
@@ -70,4 +70,8 @@ export default {
       ],
     }),
   ],
+};
+
+module.exports = {
+  webpackCommonConfig,
 };
