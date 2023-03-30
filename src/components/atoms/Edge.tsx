@@ -27,6 +27,9 @@ const calculCostCoord = (from: number[], to: number[]) => {
 
 const Edge = ({ from, to, cost, color = '#cfcfcf'}: EdgeProp) => {
 
+
+
+
   const direct = useSelector((state: RootState) => state.direct.directed);
   const [fromY, fromX] = from;
   const [toY, toX] = to;
