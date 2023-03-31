@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import PriorityQueue from 'ts-priority-queue';
+// import HeapQueue from './heap-queue';
 import { GraphState, initialState } from '../store/graph';
 
 interface EdgeInfo {
