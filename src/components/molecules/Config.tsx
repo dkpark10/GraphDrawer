@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useState } from 'react';
-import Toggle from '../atoms/Toggle';
 import Input from '../atoms/Input';
 import { setArrowDirect } from '../../store/node-arrow';
 import { setShortestPath } from '../../store/shortestpath';
@@ -69,11 +68,34 @@ export default function Config() {
   return (
     <div className="config">
       <div style={LabelStyle}>Undirected : Directed</div>
-      <Toggle onChange={toggleOnChange} />
+      <label className="direct-button" htmlFor="direction">
+        <input type="checkbox" onChange={toggleOnChange} id="direction" />
+        <span className="onoff-switch" />
+      </label>
       <div style={LabelStyle}>Shortest Path Find</div>
       <div>
-        <Input text="from" name="path-from" onChange={onChange} value={inputList.from} />
-        <Input text="to" name="path-to" onChange={onChange} value={inputList.to} />
+        <label style={{ fontSize: '13px' }} htmlFor="from">
+          from
+          <input
+            type="text"
+            name="path-from"
+            onChange={onChange}
+            value={inputList.from}
+            id="from"
+            style={{ width: '40px', height: '25px' }}
+          />
+        </label>
+        <label style={{ fontSize: '13px' }} htmlFor="to">
+          from
+          <input
+            type="text"
+            name="path-to"
+            onChange={onChange}
+            value={inputList.to}
+            id="to"
+            style={{ width: '40px', height: '25px' }}
+          />
+        </label>
       </div>
       <button type="button" onClick={run}>
         Find
