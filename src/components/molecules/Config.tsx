@@ -4,7 +4,7 @@ import Toggle from '../atoms/Toggle';
 import Input from '../atoms/Input';
 import { setArrowDirect } from '../../store/node-arrow';
 import { setShortestPath } from '../../store/shortestpath';
-import { Dijkstra, DijkstraBuilder } from '../../utils/djkstra';
+import { Dijkstra, DijkstraBuilder } from '../../utils/dijkstra';
 import { RootState } from '../../store/index';
 
 const LabelStyle = {
