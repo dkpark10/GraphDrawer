@@ -22,6 +22,8 @@ export class CoordCalculator {
 
   private nodeCoord: Point[] = [];
 
+  private readonly HORIZONTAL_AXIS = 0;
+
   constructor(builder: CoordCalculatorBuilder) {
     this.graphInfo = builder.getGraphInfo();
     this.leftTop = builder.getLeftTop();
@@ -54,7 +56,7 @@ export class CoordCalculator {
     const ratio = Math.floor(Math.random() * (6 - 3) + 4);
 
     // 가로로 나눔
-    if (axis === 0) {
+    if (axis === this.HORIZONTAL_AXIS) {
       const height = ((rightBottom.y - leftTop.y) * ratio) / 10 + leftTop.y;
       this.BinarySpacePartitioning({ ...leftTop }, { y: height, x: rightBottom.x }, depth + 1);
       this.BinarySpacePartitioning({ y: height + 1, x: leftTop.x }, { ...rightBottom }, depth + 1);
