@@ -31,9 +31,9 @@ export class CoordCalculator {
     this.vertexCount = Number(this.graphInfo.vertexCount);
   }
 
-  // 1. 이진분할로 좌표 배치 셋팅
-  // 2. 노드갯수만큼 추출
-
+  /**
+   * @description 이진분할로 좌표를 랜덤 배치한다.
+   */
   public run() {
     this.BinarySpacePartitioning({ ...this.leftTop }, { ...this.rightBottom }, 0);
     this.extractNodeCoordList();
@@ -55,14 +55,11 @@ export class CoordCalculator {
     const axis = Math.floor(Math.floor(Math.random() * 2));
     const ratio = Math.floor(Math.random() * (6 - 3) + 4);
 
-    // 가로로 나눔
     if (axis === this.HORIZONTAL_AXIS) {
       const height = ((rightBottom.y - leftTop.y) * ratio) / 10 + leftTop.y;
       this.BinarySpacePartitioning({ ...leftTop }, { y: height, x: rightBottom.x }, depth + 1);
       this.BinarySpacePartitioning({ y: height + 1, x: leftTop.x }, { ...rightBottom }, depth + 1);
-    }
-    // 세로로 나눔
-    else {
+    } else {
       const width = ((rightBottom.x - leftTop.x) * ratio) / 10 + leftTop.x;
       this.BinarySpacePartitioning({ ...leftTop }, { y: rightBottom.y, x: width }, depth + 1);
       this.BinarySpacePartitioning({ y: leftTop.y, x: width + 1 }, { ...rightBottom }, depth + 1);

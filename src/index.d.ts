@@ -1,8 +1,11 @@
 declare module 'global-type' {
-  export interface GameProps {
-    id: string;
-    record: string;
-    ranking: number;
-    totalItemCount: number;
+  export interface Point {
+    y: number;
+    x: number;
+  }
+
+  export interface Vertex {
+    connectedList: string[][];
+    coord: Point;
   }
 }

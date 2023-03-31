@@ -1,5 +1,3 @@
-import { GraphState } from '../store/graph';
-
 interface EdgeInfo {
   [key: string]: string[][];
 }

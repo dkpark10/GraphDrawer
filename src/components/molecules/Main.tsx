@@ -4,7 +4,7 @@ import { useSelector, shallowEqual } from 'react-redux';
 import Node from '../atoms/Node';
 import Edge from '../atoms/Edge';
 import { RootState } from '../../store/index';
-import { CoordCalculator, Point, CoordCalculatorBuilder, Vertex } from '../../utils/coord-calculator';
+import { CoordCalculator, Point, CoordCalculatorBuilder, Vertex } from '../../services/coord-calculator';
 
 const BOARDSIZE = 20 as const;
 
@@ -78,9 +78,10 @@ export default function Main(): JSX.Element {
     const box = e.currentTarget.getBoundingClientRect();
     const offX = e.clientX - box.left;
     const offY = e.clientY - box.top;
+
     e.currentTarget.setPointerCapture(e.pointerId);
 
-    setOff((prev) => [offX, offY]);
+    setOff([offX, offY]);
     setdragActive((prev) => ({
       ...prev,
       dragActive: true,
