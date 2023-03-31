@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit'
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
 
 interface State {
   isArrow: boolean;
@@ -13,9 +14,9 @@ export const arrowDirectReducer = createSlice({
   initialState,
   reducers: {
     setArrowDirect: (state) => {
-      state.isArrow = !state.isArrow
-    },   
-  }
-})
+      state.isArrow = !state.isArrow;
+    },
+  },
+});
 
 export const { setArrowDirect } = arrowDirectReducer.actions;

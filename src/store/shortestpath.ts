@@ -1,39 +1,28 @@
-export const SETSHORTESTPATH = 'SETSHORTESTPATH' as const;
+/* eslint-disable no-param-reassign */
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface ShortestPathState {
-  from : string;
+interface State {
+  from: string;
   to: string;
   path: { [key: string]: boolean };
 }
 
-interface Action {
-  type: string;
-  payload: ShortestPathState;
-}
-
-export const initialState: ShortestPathState = {
+const initialState: State = {
   from: '',
   to: '',
-  path: {}
+  path: {},
 };
 
-// action creator
-export const setShortestPath = (diff: ShortestPathState) => ({
-  type: SETSHORTESTPATH,
-  payload: diff
+export const shortestPathReducer = createSlice({
+  name: 'shortest-path-reducer',
+  initialState,
+  reducers: {
+    setShortestPath: (state, { payload: { from, to, path } }: PayloadAction<State>) => {
+      state.from = from;
+      state.to = to;
+      state.path = path;
+    },
+  },
 });
 
-// 리듀서
-export default function shortestPathReducer(state: ShortestPathState = initialState, action: Action): ShortestPathState {
-  switch (action.type) {
-    case SETSHORTESTPATH:
-      return {
-        ...state,
-        from : action.payload.from,
-        to : action.payload.to,
-        path: action.payload.path
-      }
-    default:
-      return state;
-  }
-}
+export const { setShortestPath } = shortestPathReducer.actions;

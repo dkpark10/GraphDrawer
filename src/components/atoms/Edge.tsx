@@ -1,15 +1,14 @@
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store/index';
+import { RootState } from '@/store';
 
-interface EdgeProp {
+interface Props {
   from: number[];
   to: number[];
   cost: string;
-  color? : string;
-};
+  color: string;
+}
 
 const calculCostCoord = (from: number[], to: number[]) => {
-
   const maxY = Math.max(from[0], to[0]);
   const maxX = Math.max(from[1], to[1]);
   const minY = Math.min(from[0], to[0]);
@@ -17,54 +16,43 @@ const calculCostCoord = (from: number[], to: number[]) => {
 
   // cost 위치 미세조정
   let gap = 0;
-  if (to[0] > from[0] && to[1] > from[1])
-    gap += 15;
-  else if (to[0] < from[0] && to[1] < from[1])
-    gap += 12;
+  if (to[0] > from[0] && to[1] > from[1]) gap += 15;
+  else if (to[0] < from[0] && to[1] < from[1]) gap += 12;
 
-  return [((maxY - minY) / 2) + minY - gap, ((maxX - minX) / 2) + minX + gap];
-}
+  return [(maxY - minY) / 2 + minY - gap, (maxX - minX) / 2 + minX + gap];
+};
 
-const Edge = ({ from, to, cost, color = '#cfcfcf'}: EdgeProp) => {
+export default function Edge({ from, to, cost, color = '#cfcfcf' }: Props) {
+  const arrow = useSelector((state: RootState) => state.arrowDirect.isArrow);
 
-
-
-
-  const direct = useSelector((state: RootState) => state.direct.directed);
   const [fromY, fromX] = from;
   const [toY, toX] = to;
   const [costY, costX] = calculCostCoord(from, to);
 
   return (
-    <>
-      <g>
-        <defs>
-          <marker
-            id="arrow"
-            viewBox="0 0 10 10"
-            refX="24"
-            refY="5"
-            markerWidth="8"
-            markerHeight="8"
-            orient="auto-start-reverse">
-            <path d="M 0 0 L 10 5 L 0 10 z" fill='#cfcfcf' />
-          </marker>
-        </defs>
-        <path d={`M ${fromY} ${fromX} L ${toY} ${toX}`}
-          strokeWidth="2"
-          stroke={color}
-          markerEnd={direct === true ? "url(#arrow)" : ""}
-        />
-        <text y={costX}
-          x={costY}
-          dx='.3em'
-          dy='.9em'
-          fontSize="14"
-          fill={color}
-          textAnchor='right'>{cost}</text>
-      </g>
-    </>
-  )
-};
-
-export default Edge;
+    <g>
+      <defs>
+        <marker
+          id="arrow"
+          viewBox="0 0 10 10"
+          refX="24"
+          refY="5"
+          markerWidth="8"
+          markerHeight="8"
+          orient="auto-start-reverse"
+        >
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#cfcfcf" />
+        </marker>
+      </defs>
+      <path
+        d={`M ${fromY} ${fromX} L ${toY} ${toX}`}
+        strokeWidth="2"
+        stroke={color}
+        markerEnd={arrow === true ? 'url(#arrow)' : ''}
+      />
+      <text y={costX} x={costY} dx=".3em" dy=".9em" fontSize="14" fill={color} textAnchor="right">
+        {cost}
+      </text>
+    </g>
+  );
+}

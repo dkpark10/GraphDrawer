@@ -1,17 +1,17 @@
 import './styles/App.css';
 import Aside from './components/templates/Aside';
-import Header from './components/templates/Header';
 import Main from './components/molecules/Main';
 
 export default function App() {
   return (
     <>
-      {/* <Header />
-      <div className='container'>
+      <header>
+        <h1>Graph Painter</h1>
+      </header>
+      <div className="container">
         <Aside />
         <Main />
-      </div> */}
-      <div>test</div>
+      </div>
     </>
   );
 }

@@ -1,4 +1,3 @@
-import React from "react";
 import Textarea from '../atoms/TextArea';
 import Config from '../molecules/Config';
 
@@ -8,5 +7,5 @@ export default function Aside() {
       <Textarea />
       <Config />
     </aside>
-  )
+  );
 }

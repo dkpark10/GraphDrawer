@@ -1,43 +1,30 @@
-export const SETGRAPHINFO = 'SETGRAPHINFO' as const;
+/* eslint-disable no-param-reassign */
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface Graph {
-  vertexCount: string;
-  edgeCount: string;
-  graph: { [key: string]: string[][] };
+interface State {
+  graph: {
+    vertexCount: string;
+    edgeCount: string;
+    graph: { [key: string]: string[][] };
+  };
 }
 
-export interface GraphState {
-  graph: Graph;
-};
-
-interface Action {
-  type: string;
-  payload: Graph;
-}
-
-const initialState: GraphState = {
+const initialState: State = {
   graph: {
     vertexCount: '0',
     edgeCount: '',
-    graph: {}
-  }
+    graph: {},
+  },
 };
 
-// action creator
-export const setGraphInfo = (diff: Graph) => ({
-  type: SETGRAPHINFO,
-  payload: diff
+export const graphReducer = createSlice({
+  name: 'graph-reducer',
+  initialState,
+  reducers: {
+    setGraph(state, action: PayloadAction<State>) {
+      state.graph = action.payload.graph;
+    },
+  },
 });
 
-// 리듀서
-export default function graphReducer(state: GraphState = initialState, action: Action): GraphState {
-  switch (action.type) {
-    case SETGRAPHINFO:
-      return {
-        ...state,
-        graph: action.payload
-      }
-    default:
-      return state;
-  }
-}
+export const { setGraph } = graphReducer.actions;
