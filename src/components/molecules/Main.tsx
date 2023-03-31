@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { useRef, useEffect, useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import Node from '../atoms/Node';
@@ -39,11 +40,11 @@ const outofRange = (value: number, size: Size): number => {
 
 export interface IDragNode {
   dragActive: boolean;
-  currentNode: any;
+  currentNode: (EventTarget & SVGCircleElement) | null;
 }
 
 export default function Main(): JSX.Element {
-  const ref = useRef<any>(null);
+  const ref = useRef<HTMLElement>(null);
   const [size, setSize] = useState<Size>({ width: 0, height: 0 });
   const [vertexInfo, setVertexInfo] = useState<{ [key: string]: Vertex }>({});
   const [dragActive, setdragActive] = useState<IDragNode>({ dragActive: false, currentNode: null });
@@ -60,8 +61,8 @@ export default function Main(): JSX.Element {
   useEffect(() => {
     setSize((prev) => ({
       ...prev,
-      width: ref.current.offsetWidth,
-      height: ref.current.offsetHeight,
+      width: (ref.current as HTMLElement).offsetWidth,
+      height: (ref.current as HTMLElement).offsetHeight,
     }));
 
     const coordCalculator: CoordCalculator = new CoordCalculatorBuilder()
@@ -145,7 +146,7 @@ export default function Main(): JSX.Element {
     return value.connectedList.map((connectedVertex, idx2) => {
       const [nextVertex, cost] = connectedVertex;
       const p2: Point = vertexInfo[nextVertex].coord;
-      const color = isShortestEdge(shortestPath.path, vertex, nextVertex) ? '#ebe534' : '';
+      const color = isShortestEdge(shortestPath.path, vertex, nextVertex) ? '#ebe534' : '#cfcfcf';
 
       return <Edge key={idx1 * self.length + idx2} from={[p1.y, p1.x]} to={[p2.y, p2.x]} cost={cost} color={color} />;
     });

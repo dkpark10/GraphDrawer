@@ -1,5 +1,6 @@
-import { GraphState, initialState } from '../store/graph';
+/* eslint-disable max-classes-per-file */
 import PriorityQueue from 'ts-priority-queue';
+import { GraphState, initialState } from '../store/graph';
 
 interface EdgeInfo {
   [key: string]: { [key: string]: string };
@@ -12,13 +13,13 @@ const INF = Math.floor(Number.MAX_SAFE_INTEGER / 987);
 export class Dijkstra {
   private initGraph: GraphState = initialState;
 
-  private from: string = '';
+  private from = '';
 
-  private to: string = '';
+  private to = '';
 
   private graph: EdgeInfo = {};
 
-  private vertexCount: number = 0;
+  private vertexCount = 0;
 
   constructor(builder: DijkstraBuilder) {
     this.initGraph = builder.getGraphInfo();
@@ -39,7 +40,7 @@ export class Dijkstra {
     Object.entries(this.initGraph.graph).forEach((ele) => {
       const [currentVertex, value] = ele;
 
-      if (this.isExceedVertexCount(this.graph) && value.length <= 0) return;
+      if (this.isExceedVertexCount() && value.length <= 0) return;
 
       this.graph[currentVertex] = this.graph[currentVertex] || {};
 
@@ -47,7 +48,7 @@ export class Dijkstra {
         const [nextVertex, cost] = ele2;
         if (nextVertex === undefined && cost === undefined) return;
 
-        if (this.isExceedVertexCount(this.graph) && !this.graph[nextVertex]) return;
+        if (this.isExceedVertexCount() && !this.graph[nextVertex]) return;
 
         this.graph[nextVertex] = this.graph[nextVertex] || {};
 
@@ -81,6 +82,7 @@ export class Dijkstra {
       const [cost, curVertex] = pq.peek();
       pq.dequeue();
 
+      // eslint-disable-next-line no-continue
       if (dist[curVertex] < cost) continue;
 
       Object.entries(this.graph[curVertex]).forEach((ele) => {
@@ -120,18 +122,17 @@ export class Dijkstra {
   }
 
   // 객체 키값 개수가 정점 개수를 초과하는가?
-  public isExceedVertexCount(edg: EdgeInfo) {
+  public isExceedVertexCount() {
     return Object.keys(this.graph).length >= this.vertexCount;
   }
 }
 
 export class DijkstraBuilder {
-
   private graphInfo: GraphState = initialState;
 
-  private from: string = '';
+  private from = '';
 
-  private to: string = '';
+  private to = '';
 
   public setGraphInfo(graphInfo: GraphState) {
     this.graphInfo = graphInfo;

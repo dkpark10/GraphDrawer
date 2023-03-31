@@ -17,7 +17,8 @@
   "ignorePatterns": [
     "*.config.js",
     "jest.*",
-    "webpack.*"
+    "webpack.*",
+    "*.d.ts"
   ],
   "extends": [
     "prettier",

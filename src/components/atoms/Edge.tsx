@@ -22,7 +22,7 @@ const calculCostCoord = (from: number[], to: number[]) => {
   return [(maxY - minY) / 2 + minY - gap, (maxX - minX) / 2 + minX + gap];
 };
 
-export default function Edge({ from, to, cost, color = '#cfcfcf' }: Props) {
+export default function Edge({ from, to, cost, color }: Props) {
   const isArrow = useSelector(({ arrowDirect }: RootState) => arrowDirect.isArrow);
 
   const [fromY, fromX] = from;

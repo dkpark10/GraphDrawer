@@ -23,6 +23,7 @@ export default function Config() {
     from: '',
     to: '',
   });
+
   const { graphInfo } = useSelector((state: RootState) => ({
     graphInfo: state.graph,
   }));
@@ -67,9 +68,9 @@ export default function Config() {
 
   return (
     <div className="config">
-      <label style={LabelStyle}>Undirected : Directed</label>
+      <div style={LabelStyle}>Undirected : Directed</div>
       <Toggle onChange={toggleOnChange} />
-      <label style={LabelStyle}>Shortest Path Find</label>
+      <div style={LabelStyle}>Shortest Path Find</div>
       <div>
         <Input text="from" name="path-from" onChange={onChange} value={inputList.from} />
         <Input text="to" name="path-to" onChange={onChange} value={inputList.to} />
@@ -77,12 +78,13 @@ export default function Config() {
       <button type="button" onClick={run}>
         Find
       </button>
-      <img
-        onClick={() => window.open('https://github.com/dkpark10/graphpainter', '_blank')}
-        style={{ width: '45px', height: '45px', cursor: 'pointer' }}
-        alt="my github"
-        src="https://media.cdnandroid.com/item_images/1097581/imagen-github-0thumb.jpeg"
-      />
+      <a href="https://github.com/dkpark10/graphpainter" target="_blank" rel="noreferrer">
+        <img
+          style={{ width: '45px', height: '45px', cursor: 'pointer' }}
+          alt="my github"
+          src="https://media.cdnandroid.com/item_images/1097581/imagen-github-0thumb.jpeg"
+        />
+      </a>
     </div>
   );
 }

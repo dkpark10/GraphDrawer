@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from 'react';
-import { IDragNode } from '../molecules/Main';
+import React, { useRef } from 'react';
 
 interface Props {
   size: { y: number; x: number };
@@ -7,28 +6,25 @@ interface Props {
   onPointerDown: React.PointerEventHandler<SVGCircleElement>;
   onPointerUp: React.PointerEventHandler<SVGCircleElement>;
   onPointerMove: React.PointerEventHandler<SVGCircleElement>;
-  isDraged: IDragNode;
+  isDraged: {
+    dragActive: boolean;
+    currentNode: (EventTarget & SVGCircleElement) | null;
+  };
   fromOrTo: boolean;
 }
 
-function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo }: Props) {
+function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo, isDraged }: Props) {
   const { y, x } = size;
-  const ref = useRef<any>(null);
-  const textRef = useRef<any>(null);
 
-  useEffect(() => {
-    return () => {
-      ref.current = null;
-      textRef.current = null;
-    };
-  }, []);
+  const ref = useRef<SVGCircleElement>(null);
+  const textRef = useRef<SVGTextElement>(null);
 
   const onNodeMouseOver = (e: React.PointerEvent<SVGCircleElement>) => {
     if (fromOrTo === true) {
       return;
     }
     e.currentTarget.setAttribute('fill', '#ebe534');
-    textRef.current.setAttribute('fill', 'black');
+    textRef.current?.setAttribute('fill', 'black');
   };
 
   const onNodeMouseOut = (e: React.PointerEvent<SVGCircleElement>) => {
@@ -36,7 +32,7 @@ function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo
       return;
     }
     e.currentTarget.setAttribute('fill', '#16afc0');
-    textRef.current.setAttribute('fill', 'white');
+    textRef.current?.setAttribute('fill', 'white');
   };
 
   return (
