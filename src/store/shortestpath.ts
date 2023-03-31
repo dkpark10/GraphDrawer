@@ -1,13 +1,13 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface State {
+export interface State {
   from: string;
   to: string;
   path: { [key: string]: boolean };
 }
 
-const initialState: State = {
+export const initialState: State = {
   from: '',
   to: '',
   path: {},

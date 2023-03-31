@@ -14,7 +14,7 @@
     "noImplicitAny": true,  // any 타입 발생시 에러
     "strictFunctionTypes": true, //엄격한 함수 파라미터 체크
     "strictNullChecks": true, // 엄격하게 null check
-    "strictPropertyInitialization": true, // 클래스 생성자에서 타입체크 엄격하게
+    "strictPropertyInitialization": true, // 클래스 생성자에서 초기 값 설정 강제
     "noImplicitThis": true, //this 가 any 여부에 따라 에러
     "lib": [
       "es2015",

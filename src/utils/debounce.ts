@@ -8,5 +8,5 @@ export const debounce = (callback: CallBack, delay: number) => {
     timer = setTimeout(() => {
       callback(rest);
     }, delay);
-  }
-}
+  };
+};

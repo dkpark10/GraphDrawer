@@ -1,43 +1,40 @@
-import { Graph } from '../store/graph';
+import { GraphState } from '../store/graph';
 
 interface EdgeInfo {
   [key: string]: string[][];
+}
+
+const makeGraph = (graph: string[]): EdgeInfo => {
+  return graph.reduce((acc: EdgeInfo, ele) => {
+    const [vertex1, vertex2, cost] = ele.split(' ');
+
+    if (vertex1 === '') return acc;
+
+    acc[vertex1] = acc[vertex1] || [];
+
+    if (vertex2 === undefined && cost === undefined) return acc;
+
+    if (vertex2 === '') return acc;
+
+    acc[vertex1].push([vertex2, cost]);
+
+    return acc;
+  }, {});
 };
 
-export const inputValueParsing = (value: string): Graph | undefined => {
+export const inputValueParsing = (value: string) => {
   const inputValue: string[] = value.split('\n');
-  const [vertexCount, edgecnt]: string[] = inputValue[0].split(" ");
+  const [vertexCount, edgecnt]: string[] = inputValue[0].split(' ');
 
-  if (isNaN(Number(vertexCount)) === true && isNaN(Number(edgecnt)) === true) {
+  if (Number.isNaN(Number(vertexCount)) === true && Number.isNaN(Number(edgecnt)) === true) {
     return undefined;
   }
 
   const graph = makeGraph(inputValue.splice(1));
 
   return {
-    vertexCount: vertexCount,
+    vertexCount,
     edgeCount: edgecnt,
-    graph: graph
+    graph,
   };
-}
-
-const makeGraph = (graph: string[]) => {
-  return graph.reduce((acc: EdgeInfo, ele): EdgeInfo => {
-    const [vertex1, vertex2, cost] = ele.split(' ');
-
-    if(vertex1 === '')
-      return acc;
-
-    acc[vertex1] = acc[vertex1] || [];
-
-    if (vertex2 === undefined && cost === undefined) 
-      return acc;
-
-    if (vertex2 === '')
-      return acc;
-    
-    acc[vertex1].push([vertex2, cost]);
-
-    return acc;
-  }, {});
-}
+};

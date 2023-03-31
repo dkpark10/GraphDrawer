@@ -1,4 +1,4 @@
-import { Graph } from '../store/graph';
+import { GraphState, initialState } from '../store/graph';
 import PriorityQueue from 'ts-priority-queue';
 
 interface EdgeInfo {
@@ -10,15 +10,17 @@ type Pair = [number, string];
 const INF = Math.floor(Number.MAX_SAFE_INTEGER / 987);
 
 export class Dijkstra {
+  private initGraph: GraphState = initialState;
 
-  private initGraph: Graph;
-  private from: string;
-  private to: string;
+  private from: string = '';
+
+  private to: string = '';
+
   private graph: EdgeInfo = {};
+
   private vertexCount: number = 0;
 
   constructor(builder: DijkstraBuilder) {
-
     this.initGraph = builder.getGraphInfo();
     this.from = builder.getFromVertex();
     this.to = builder.getToVertex();
@@ -26,34 +28,26 @@ export class Dijkstra {
   }
 
   public run() {
-
     this.mapping();
 
-    if (this.isExistVertex() === false)
-      return false;
+    if (this.isExistVertex() === false) return false;
 
     return this.backtracking(this.dijkstra());
   }
 
   public mapping() {
-
-    Object.entries(this.initGraph.graph).forEach(ele => {
-
+    Object.entries(this.initGraph.graph).forEach((ele) => {
       const [currentVertex, value] = ele;
 
-      if (this.isExceedVertexCount(this.graph) && value.length <= 0)
-        return;
+      if (this.isExceedVertexCount(this.graph) && value.length <= 0) return;
 
       this.graph[currentVertex] = this.graph[currentVertex] || {};
 
-      value.forEach(ele2 => {
-
+      value.forEach((ele2) => {
         const [nextVertex, cost] = ele2;
-        if (nextVertex === undefined && cost === undefined)
-          return;
+        if (nextVertex === undefined && cost === undefined) return;
 
-        if (this.isExceedVertexCount(this.graph) && !this.graph[nextVertex])
-          return;
+        if (this.isExceedVertexCount(this.graph) && !this.graph[nextVertex]) return;
 
         this.graph[nextVertex] = this.graph[nextVertex] || {};
 
@@ -65,17 +59,16 @@ export class Dijkstra {
         if (Object.keys(this.graph[nextVertex]).includes(currentVertex) === false) {
           this.graph[nextVertex][currentVertex] = cost;
         }
-      })
+      });
     });
   }
 
   public dijkstra() {
-
     const dist: { [key: string]: number } = {};
     const path: { [key: string]: string } = {};
 
-    Object.keys(this.graph).forEach(ele => {
-      dist[ele] = dist[ele] || INF
+    Object.keys(this.graph).forEach((ele) => {
+      dist[ele] = dist[ele] || INF;
       path[ele] = path[ele] || ele;
     });
 
@@ -85,15 +78,12 @@ export class Dijkstra {
     pq.queue([0, this.from]);
 
     while (pq.length) {
-
       const [cost, curVertex] = pq.peek();
       pq.dequeue();
 
-      if (dist[curVertex] < cost)
-        continue;
+      if (dist[curVertex] < cost) continue;
 
-      Object.entries(this.graph[curVertex]).forEach(ele => {
-
+      Object.entries(this.graph[curVertex]).forEach((ele) => {
         const [nextVertex, tmpcost] = ele;
         const nextCost = Number(tmpcost) + cost;
 
@@ -109,7 +99,6 @@ export class Dijkstra {
 
   // 최단경로 역추적
   public backtracking(path: { [key: string]: string }) {
-
     const ret: { [key: string]: boolean } = {};
     let x = this.to;
 
@@ -121,7 +110,7 @@ export class Dijkstra {
     ret[x] = ret[x] || false;
     ret[this.to] = true;
     ret[this.from] = true;
-    
+
     return ret;
   }
 
@@ -136,14 +125,15 @@ export class Dijkstra {
   }
 }
 
-
 export class DijkstraBuilder {
 
-  private graphInfo: Graph;
-  private from: string;
-  private to: string;
+  private graphInfo: GraphState = initialState;
 
-  public setGraphInfo(graphInfo: Graph) {
+  private from: string = '';
+
+  private to: string = '';
+
+  public setGraphInfo(graphInfo: GraphState) {
     this.graphInfo = graphInfo;
     return this;
   }

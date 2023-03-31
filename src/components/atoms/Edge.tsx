@@ -23,7 +23,7 @@ const calculCostCoord = (from: number[], to: number[]) => {
 };
 
 export default function Edge({ from, to, cost, color = '#cfcfcf' }: Props) {
-  const arrow = useSelector((state: RootState) => state.arrowDirect.isArrow);
+  const isArrow = useSelector(({ arrowDirect }: RootState) => arrowDirect.isArrow);
 
   const [fromY, fromX] = from;
   const [toY, toX] = to;
@@ -48,7 +48,7 @@ export default function Edge({ from, to, cost, color = '#cfcfcf' }: Props) {
         d={`M ${fromY} ${fromX} L ${toY} ${toX}`}
         strokeWidth="2"
         stroke={color}
-        markerEnd={arrow === true ? 'url(#arrow)' : ''}
+        markerEnd={isArrow === true ? 'url(#arrow)' : ''}
       />
       <text y={costX} x={costY} dx=".3em" dy=".9em" fontSize="14" fill={color} textAnchor="right">
         {cost}
