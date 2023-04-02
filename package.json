@@ -38,9 +38,14 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
+    "@babel/preset-react": "^7.16.5",
+    "@babel/preset-typescript": "^7.16.5",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "@types/jest": "^29.2.5",
     "@types/lodash": "^4.14.175",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
@@ -48,6 +53,7 @@
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
     "@vanilla-extract/webpack-plugin": "^2.2.0",
+    "babel-jest": "^29.5.0",
     "babel-loader": "^9.1.2",
     "copy-webpack-plugin": "^10.2.4",
     "css-loader": "^6.7.3",

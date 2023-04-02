@@ -20,6 +20,8 @@ const makeGraph = (graph: string[]): EdgeInfo => {
   }, {});
 };
 
+export const add = (a: number, b: number) => a + b;
+
 export const inputValueParsing = (value: string) => {
   const inputValue = value.split('\n');
   const [vertexCount, edgecnt] = inputValue[0].split(' ');
