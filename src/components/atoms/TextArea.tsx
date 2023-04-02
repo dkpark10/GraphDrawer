@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { inputValueParsing } from '../../services/create-graph';
+import { createGraph } from '../../services/create-graph';
 import { setShortestPath, initialState } from '../../store/shortestpath';
 import { setGraph, GraphState } from '../../store/graph';
 import { debounce } from '../../utils';
@@ -12,7 +12,7 @@ export default function TextArea(): JSX.Element {
   const debounceSetGraph = useMemo(
     () =>
       debounce((arg: string) => {
-        const ng: GraphState | undefined = inputValueParsing(arg[0]);
+        const ng: GraphState | undefined = createGraph(arg[0]);
         if (ng !== undefined) {
           dispatch(setGraph(ng));
           dispatch(setShortestPath(initialState));

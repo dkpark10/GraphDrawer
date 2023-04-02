@@ -1,9 +1,10 @@
 /* eslint-disable no-param-reassign */
+import { ConnectedInfo } from 'global-type';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface GraphState {
   vertexCount: string;
-  graph: { [key: string]: string[][] };
+  graph: ConnectedInfo;
 }
 
 export const initialState: GraphState = {

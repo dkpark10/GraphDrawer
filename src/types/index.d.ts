@@ -9,7 +9,7 @@ declare module 'global-type' {
     coord: Point;
   };
 
-  export interface EdgeInfo {
-    [key: string]: string[][];
+  export interface ConnectedInfo {
+    [key: string]: Array<{ vertex: string; cost: string }>;
   };
 }

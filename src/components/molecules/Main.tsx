@@ -4,7 +4,7 @@ import { useSelector, shallowEqual } from 'react-redux';
 import Node from '../atoms/Node';
 import Edge from '../atoms/Edge';
 import { RootState } from '../../store/index';
-import { CoordCalculator, Point, CoordCalculatorBuilder, Vertex } from '../../services/coord-calculator';
+import { VertexCoordCalculator, Point, VertexCoordCalculatorBuilder, Vertex } from '../../services/coord-calculator';
 
 const BOARDSIZE = 20 as const;
 
@@ -65,13 +65,13 @@ export default function Main(): JSX.Element {
       height: (ref.current as HTMLElement).offsetHeight,
     }));
 
-    const coordCalculator: CoordCalculator = new CoordCalculatorBuilder()
+    const vertexCoordCalculator: VertexCoordCalculator = new VertexCoordCalculatorBuilder()
       .setGraphInfo(graphInfo)
       .setLeftTop({ y: 0 + BOARDSIZE * 2, x: 0 + BOARDSIZE * 2 })
       .setRightBottom({ y: size.width - BOARDSIZE * 2, x: size.height - BOARDSIZE * 2 })
       .build();
 
-    setVertexInfo((prev) => ({ ...coordCalculator.run() }));
+    setVertexInfo((prev) => ({ ...vertexCoordCalculator.run() }));
   }, [ref, graphInfo, size.width, size.height]);
 
   const handlePointerDown = (e: React.PointerEvent<SVGCircleElement>) => {

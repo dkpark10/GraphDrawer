@@ -11,7 +11,10 @@ export interface Point {
   x: number;
 }
 
-export class CoordCalculator {
+/**
+ * @description 정점의 좌표를 배치하는 클래스
+ */
+export class VertexCoordCalculator {
   private graphInfo: GraphState;
 
   private vertexCount = 0;
@@ -24,7 +27,7 @@ export class CoordCalculator {
 
   private readonly HORIZONTAL_AXIS = 0;
 
-  constructor(builder: CoordCalculatorBuilder) {
+  constructor(builder: VertexCoordCalculatorBuilder) {
     this.graphInfo = builder.getGraphInfo();
     this.leftTop = builder.getLeftTop();
     this.rightBottom = builder.getRightBottom();
@@ -38,7 +41,6 @@ export class CoordCalculator {
     this.BinarySpacePartitioning({ ...this.leftTop }, { ...this.rightBottom }, 0);
     this.extractNodeCoordList();
 
-    // return this.setVertexInfo(this.extractVertex());
     return this.extractVertex();
   }
 
@@ -82,7 +84,7 @@ export class CoordCalculator {
   public extractVertex(init = { connectedList: [], coord: undefined }) {
     const vertexList: { [key: string]: Vertex } = {};
 
-    Object.entries(this.graphInfo.graph).forEach((ele, idx) => {
+    Object.entries(this.graphInfo.graph).forEach((ele) => {
       const [key, value] = ele;
 
       // 정점 객수를 넘어가면 리턴
@@ -121,7 +123,7 @@ export class CoordCalculator {
   }
 }
 
-export class CoordCalculatorBuilder {
+export class VertexCoordCalculatorBuilder {
   private graphInfo: GraphState = {} as GraphState;
 
   private leftTop: Point = { y: 0, x: 0 };
@@ -156,6 +158,6 @@ export class CoordCalculatorBuilder {
   }
 
   public build() {
-    return new CoordCalculator(this);
+    return new VertexCoordCalculator(this);
   }
 }
