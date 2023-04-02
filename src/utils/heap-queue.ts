@@ -1,6 +1,6 @@
 export type Comparator<T> = boolean | ((a: T, b: T) => number);
 
-export default class HeapQueue<T> {
+export class ProirityQueue<T> {
   private readonly list: T[] = [];
 
   private readonly comparator: Comparator<T>;
@@ -8,7 +8,7 @@ export default class HeapQueue<T> {
   private readonly ascending = false;
 
   constructor(comparator?: Comparator<T>) {
-    this.comparator = comparator || false;
+    this.comparator = comparator || this.ascending;
   }
 
   private swap(idx1: number, idx2: number) {
@@ -86,7 +86,7 @@ export default class HeapQueue<T> {
   }
 
   public size(): number {
-    return this.list.length - 1;
+    return this.list.length;
   }
 
   public isEmpty(): boolean {

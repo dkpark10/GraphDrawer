@@ -1,8 +1,4 @@
-export interface ConnectedInfo {
-  [key: string]: Array<{ vertex: string; cost: string }>;
-}
-
-export const LIMIT_VERTEX_COUNT = 100;
+import { ConnectedInfo } from 'global-type';
 
 /**
  * @description 중복 및 정점 갯수를 정리하는 함수
@@ -33,7 +29,7 @@ export const getVertexList = (inputValue: string[]) => {
     }, [] as string[]);
 };
 
-export const createGraph = (textAreaContent: string) => {
+export const createGraph = (textAreaContent: string, LIMIT_INPUT_VALUE_LINE = 100) => {
   const inputValue = textAreaContent.split('\n');
   const [vertexCount] = inputValue[0].split(' ');
 
@@ -42,11 +38,12 @@ export const createGraph = (textAreaContent: string) => {
   }
 
   const restInputValue = inputValue.splice(1);
-
   const vertexList = getVertexList(restInputValue);
 
-  const graph = vertexList.reduce((acc: ConnectedInfo, item) => {
+  const graph = vertexList.reduce((acc, item, idx) => {
     const [vertex1, vertex2, cost] = item.split(' ');
+
+    if (idx >= LIMIT_INPUT_VALUE_LINE) return acc;
 
     if (vertex1 === '') return acc;
 
@@ -59,7 +56,7 @@ export const createGraph = (textAreaContent: string) => {
     acc[vertex1].push({ vertex: vertex2, cost });
 
     return acc;
-  }, {});
+  }, {} as ConnectedInfo);
 
   return {
     vertexCount,

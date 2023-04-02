@@ -4,12 +4,14 @@ declare module 'global-type' {
     x: number;
   };
 
+  export type Connected = Array<{ vertex: string; cost: string }>;
+
+  export interface ConnectedInfo {
+    [key: string]: Connected;
+  };
+
   export interface Vertex {
     connectedList: string[][];
     coord: Point;
-  };
-
-  export interface ConnectedInfo {
-    [key: string]: Array<{ vertex: string; cost: string }>;
   };
 }
