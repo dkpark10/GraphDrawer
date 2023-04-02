@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { inputValueParsing } from '../../services/make-graph';
+import { inputValueParsing } from '../../services/create-graph';
 import { setShortestPath, initialState } from '../../store/shortestpath';
 import { setGraph, GraphState } from '../../store/graph';
 import { debounce } from '../../utils';

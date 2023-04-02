@@ -3,4 +3,4 @@
  */
 
 export * from './coord-calculator';
-export * from './make-graph';
+export * from './create-graph';

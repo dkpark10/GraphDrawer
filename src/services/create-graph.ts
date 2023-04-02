@@ -1,8 +1,8 @@
-interface EdgeInfo {
+export interface EdgeInfo {
   [key: string]: string[][];
 }
 
-const makeGraph = (graph: string[]): EdgeInfo => {
+const createGraph = (graph: string[]): EdgeInfo => {
   return graph.reduce((acc: EdgeInfo, ele) => {
     const [vertex1, vertex2, cost] = ele.split(' ');
 
@@ -20,21 +20,18 @@ const makeGraph = (graph: string[]): EdgeInfo => {
   }, {});
 };
 
-export const add = (a: number, b: number) => a + b;
-
 export const inputValueParsing = (value: string) => {
   const inputValue = value.split('\n');
-  const [vertexCount, edgecnt] = inputValue[0].split(' ');
+  const [vertexCount] = inputValue[0].split(' ');
 
-  if (Number.isNaN(Number(vertexCount)) === true && Number.isNaN(Number(edgecnt)) === true) {
+  if (Number.isNaN(Number(vertexCount)) === true) {
     return undefined;
   }
 
-  const graph = makeGraph(inputValue.splice(1));
+  const graph = createGraph(inputValue.splice(1));
 
   return {
     vertexCount,
-    edgeCount: edgecnt,
     graph,
   };
 };
