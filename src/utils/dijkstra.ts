@@ -46,20 +46,20 @@ export class Dijkstra {
       this.graph[currentVertex] = this.graph[currentVertex] || {};
 
       value.forEach((ele2) => {
-        const [nextVertex, cost] = ele2;
-        if (nextVertex === undefined && cost === undefined) return;
+        const { vertex, cost } = ele2;
+        if (vertex === undefined && cost === undefined) return;
 
-        if (this.isExceedVertexCount() && !this.graph[nextVertex]) return;
+        if (this.isExceedVertexCount() && !this.graph[vertex]) return;
 
-        this.graph[nextVertex] = this.graph[nextVertex] || {};
+        this.graph[vertex] = this.graph[vertex] || {};
 
         // 현재 정점과 연결된 정점 객체가 존재하지 않는다면
-        if (Object.keys(this.graph[currentVertex]).includes(nextVertex) === false) {
-          this.graph[currentVertex][nextVertex] = cost;
+        if (Object.keys(this.graph[currentVertex]).includes(vertex) === false) {
+          this.graph[currentVertex][vertex] = cost;
         }
         // 양방향으로 연결한다.
-        if (Object.keys(this.graph[nextVertex]).includes(currentVertex) === false) {
-          this.graph[nextVertex][currentVertex] = cost;
+        if (Object.keys(this.graph[vertex]).includes(currentVertex) === false) {
+          this.graph[vertex][currentVertex] = cost;
         }
       });
     });

@@ -1,15 +1,7 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable max-classes-per-file */
+import { Point, Vertex, Connected } from 'global-type';
 import { GraphState } from '../store/graph';
-
-export interface Vertex {
-  connectedList: string[][];
-  coord: Point;
-}
-
-export interface Point {
-  y: number;
-  x: number;
-}
 
 /**
  * @description 정점의 좌표를 배치하는 클래스
@@ -68,7 +60,9 @@ export class VertexCoordCalculator {
     }
   }
 
-  // 랜덤한 노드 좌표 중 노드갯수만큼 뽑아낸다.
+  /**
+   * @description 랜덤한 노드 좌표 중 노드갯수만큼 뽑아낸다.
+   */
   public extractNodeCoordList() {
     let cnt = this.nodeCoord.length - this.vertexCount;
 
@@ -80,7 +74,6 @@ export class VertexCoordCalculator {
     }
   }
 
-  // 정점만 추출해낸다.
   public extractVertex(init = { connectedList: [], coord: undefined }) {
     const vertexList: { [key: string]: Vertex } = {};
 
@@ -92,7 +85,8 @@ export class VertexCoordCalculator {
 
       vertexList[key] = vertexList[key] || { ...init };
       if (!vertexList[key].coord) {
-        vertexList[key].coord = this.nodeCoord[0];
+        [vertexList[key].coord] = this.nodeCoord;
+
         this.nodeCoord.shift();
       }
 
@@ -102,19 +96,22 @@ export class VertexCoordCalculator {
     return vertexList;
   }
 
-  public connect(vertexList: { [key: string]: Vertex }, connectedList: string[][]) {
-    const ret: string[][] = [];
+  public connect(vertexList: { [key: string]: Vertex }, connectedList: Connected) {
+    const ret: Connected = [];
+
     connectedList.forEach((vele) => {
-      if (vele[0] === '' || vele[0] === undefined) return;
+      const { vertex, cost } = vele;
+      if (vertex === '' || cost === undefined) return;
 
       // 키값 개수는 정점갯수를 넘고 새로운 정점키값일 경우 리턴
-      if (Object.keys(vertexList).length >= this.vertexCount && vertexList[vele[0]] === undefined) return;
+      if (Object.keys(vertexList).length >= this.vertexCount && vertexList[vertex] === undefined) return;
 
       ret.push(vele);
-      vertexList[vele[0]] = vertexList[vele[0]] || { connectedList: [], coord: undefined };
+      vertexList[vertex] = vertexList[vertex] || { connectedList: [], coord: undefined };
 
-      if (!vertexList[vele[0]].coord) {
-        vertexList[vele[0]].coord = this.nodeCoord[0];
+      if (!vertexList[vertex].coord) {
+        [vertexList[vertex].coord] = this.nodeCoord;
+
         this.nodeCoord.shift();
       }
     });

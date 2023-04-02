@@ -4,3 +4,4 @@
 
 export * from './coord-calculator';
 export * from './create-graph';
+export * from './is-shortest-path';

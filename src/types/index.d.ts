@@ -11,7 +11,12 @@ declare module 'global-type' {
   };
 
   export interface Vertex {
-    connectedList: string[][];
+    connectedList: Connected;
     coord: Point;
+  };
+
+  export interface Size {
+    width: number;
+    height: number;
   };
 }

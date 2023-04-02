@@ -1,35 +1,13 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useRef, useEffect, useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
+import { Point, Vertex, Size } from 'global-type';
 import Node from '../atoms/Node';
 import Edge from '../atoms/Edge';
 import { RootState } from '../../store/index';
-import { VertexCoordCalculator, Point, VertexCoordCalculatorBuilder, Vertex } from '../../services/coord-calculator';
+import { VertexCoordCalculator, VertexCoordCalculatorBuilder, isShortestEdge } from '../../services';
 
 const BOARDSIZE = 20 as const;
-
-export interface Size {
-  width: number;
-  height: number;
-}
-
-const isShortestEdge = (shortestPath: { [key: string]: boolean }, vertex: string, nextVertex: string): boolean => {
-  const listShortestPath = Object.keys(shortestPath);
-  const vertexCount = listShortestPath.length;
-
-  if (vertexCount === 0) {
-    return false;
-  }
-
-  const indexOfCurrentVertex = listShortestPath.indexOf(vertex);
-  const indexOfNextVertex = listShortestPath.indexOf(nextVertex);
-
-  if (indexOfCurrentVertex === -1 || indexOfNextVertex === -1) {
-    return false;
-  }
-
-  return Math.abs(indexOfCurrentVertex - indexOfNextVertex) <= 1;
-};
 
 const outofRange = (value: number, size: Size): number => {
   if (value <= BOARDSIZE) return BOARDSIZE * 2;
@@ -145,11 +123,18 @@ export default function Main(): JSX.Element {
     const p1: Point = value.coord;
 
     return value.connectedList.map((connectedVertex, idx2) => {
-      const [nextVertex, cost] = connectedVertex;
-      const p2: Point = vertexInfo[nextVertex].coord;
-      const color = isShortestEdge(shortestPath.path, vertex, nextVertex) ? '#ebe534' : '#cfcfcf';
+      const p2: Point = vertexInfo[connectedVertex.vertex].coord;
+      const color = isShortestEdge(shortestPath.path, vertex, connectedVertex.vertex) ? '#ebe534' : '#cfcfcf';
 
-      return <Edge key={idx1 * self.length + idx2} from={[p1.y, p1.x]} to={[p2.y, p2.x]} cost={cost} color={color} />;
+      return (
+        <Edge
+          key={idx1 * self.length + idx2}
+          from={[p1.y, p1.x]}
+          to={[p2.y, p2.x]}
+          cost={connectedVertex.cost}
+          color={color}
+        />
+      );
     });
   });
 
