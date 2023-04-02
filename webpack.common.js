@@ -1,6 +1,10 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const {
+  VanillaExtractPlugin
+} = require('@vanilla-extract/webpack-plugin');
+
 const { resolve } = require('path');
 
 const rootPath = resolve();
@@ -52,6 +56,7 @@ const webpackCommonConfig = {
     ],
   },
   plugins: [
+    new VanillaExtractPlugin(),
     new HtmlWebpackPlugin({
       template: './src/index.html',
       filename: 'index.html',

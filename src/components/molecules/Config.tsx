@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useState } from 'react';
-import Input from '../atoms/Input';
 import { setArrowDirect } from '../../store/node-arrow';
 import { setShortestPath } from '../../store/shortestpath';
 import { Dijkstra, DijkstraBuilder } from '../../utils/dijkstra';
@@ -86,7 +85,7 @@ export default function Config() {
           />
         </label>
         <label style={{ fontSize: '13px' }} htmlFor="to">
-          from
+          to
           <input
             type="text"
             name="path-to"

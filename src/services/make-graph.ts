@@ -21,8 +21,8 @@ const makeGraph = (graph: string[]): EdgeInfo => {
 };
 
 export const inputValueParsing = (value: string) => {
-  const inputValue: string[] = value.split('\n');
-  const [vertexCount, edgecnt]: string[] = inputValue[0].split(' ');
+  const inputValue = value.split('\n');
+  const [vertexCount, edgecnt] = inputValue[0].split(' ');
 
   if (Number.isNaN(Number(vertexCount)) === true && Number.isNaN(Number(edgecnt)) === true) {
     return undefined;
