@@ -7,7 +7,7 @@ import Edge from '../atoms/Edge';
 import { RootState } from '../../store/index';
 import { VertexCoordCalculator, VertexCoordCalculatorBuilder, isShortestEdge } from '../../services';
 
-const BOARDSIZE = 20 as const;
+const BOARDSIZE = 20;
 
 const outofRange = (value: number, size: Size): number => {
   if (value <= BOARDSIZE) return BOARDSIZE * 2;
