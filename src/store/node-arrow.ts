@@ -1,11 +1,11 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
-interface State {
+export interface State {
   isArrow: boolean;
 }
 
-const initialState: State = {
+export const initialState: State = {
   isArrow: false,
 };
 

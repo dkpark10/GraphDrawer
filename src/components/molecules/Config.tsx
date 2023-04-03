@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import React, { useState } from 'react';
 import { setArrowDirect } from '../../store/node-arrow';
 import { setShortestPath } from '../../store/shortestpath';
-import { Dijkstra, DijkstraBuilder } from '../../utils/dijkstra';
+import { DijkstraBuilder } from '../../utils/dijkstra';
 import { RootState } from '../../store/index';
 
 const LabelStyle = {
@@ -29,7 +29,7 @@ export default function Config() {
   const toggleOnChange = () => dispatch(setArrowDirect());
 
   const run = () => {
-    const dijkstra: Dijkstra = new DijkstraBuilder()
+    const dijkstra = new DijkstraBuilder()
       .setGraphInfo(graphInfo)
       .setFromVertex(inputList.from)
       .setToVertex(inputList.to)

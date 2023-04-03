@@ -9,7 +9,7 @@ interface EdgeInfo {
 
 type Pair = [number, string];
 
-const INF = Math.floor(Number.MAX_SAFE_INTEGER / 987);
+export const INFINITY = Math.floor(Number.MAX_SAFE_INTEGER / 987);
 
 export class Dijkstra {
   private initGraph: GraphState = initialState;
@@ -21,6 +21,8 @@ export class Dijkstra {
   private graph: EdgeInfo = {};
 
   private vertexCount = 0;
+
+  private dist: { [key: string]: number } = {};
 
   constructor(builder: DijkstraBuilder) {
     this.initGraph = builder.getGraphInfo();
@@ -66,15 +68,14 @@ export class Dijkstra {
   }
 
   public dijkstra() {
-    const dist: { [key: string]: number } = {};
     const path: { [key: string]: string } = {};
 
     Object.keys(this.graph).forEach((ele) => {
-      dist[ele] = dist[ele] || INF;
+      this.dist[ele] = this.dist[ele] || INFINITY;
       path[ele] = path[ele] || ele;
     });
 
-    dist[this.from] = 0;
+    this.dist[this.from] = 0;
 
     const pq = new PriorityQueue({ comparator: (a: Pair, b: Pair) => a[0] - b[0] });
     pq.queue([0, this.from]);
@@ -84,19 +85,20 @@ export class Dijkstra {
       pq.dequeue();
 
       // eslint-disable-next-line no-continue
-      if (dist[curVertex] < cost) continue;
+      if (this.dist[curVertex] < cost) continue;
 
       Object.entries(this.graph[curVertex]).forEach((ele) => {
         const [nextVertex, tmpcost] = ele;
         const nextCost = Number(tmpcost) + cost;
 
-        if (nextCost < dist[nextVertex]) {
+        if (nextCost < this.dist[nextVertex]) {
           path[nextVertex] = curVertex;
-          dist[nextVertex] = nextCost;
+          this.dist[nextVertex] = nextCost;
           pq.queue([nextCost, nextVertex]);
         }
       });
     }
+
     return path;
   }
 
@@ -131,6 +133,10 @@ export class Dijkstra {
    */
   public isExceedVertexCount() {
     return Object.keys(this.graph).length >= this.vertexCount;
+  }
+
+  public getDist() {
+    return this.dist;
   }
 }
 
