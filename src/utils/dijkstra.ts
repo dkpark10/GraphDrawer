@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import PriorityQueue from 'ts-priority-queue';
-// import HeapQueue from './heap-queue';
+import { ProirityQueue } from './heap-queue';
 import { GraphState, initialState } from '../store/graph';
 
 interface EdgeInfo {
@@ -36,7 +35,7 @@ export class Dijkstra {
 
     if (this.isExistVertex() === false) return false;
 
-    return this.backtracking(this.dijkstra());
+    return this.backTracking(this.dijkstra());
   }
 
   public mapping() {
@@ -77,12 +76,12 @@ export class Dijkstra {
 
     this.dist[this.from] = 0;
 
-    const pq = new PriorityQueue({ comparator: (a: Pair, b: Pair) => a[0] - b[0] });
-    pq.queue([0, this.from]);
+    const pq = new ProirityQueue<Pair>((a, b) => a[0] - b[0]);
+    pq.push([0, this.from]);
 
-    while (pq.length) {
-      const [cost, curVertex] = pq.peek();
-      pq.dequeue();
+    while (!pq.isEmpty()) {
+      const [cost, curVertex] = pq.top();
+      pq.pop();
 
       // eslint-disable-next-line no-continue
       if (this.dist[curVertex] < cost) continue;
@@ -94,7 +93,7 @@ export class Dijkstra {
         if (nextCost < this.dist[nextVertex]) {
           path[nextVertex] = curVertex;
           this.dist[nextVertex] = nextCost;
-          pq.queue([nextCost, nextVertex]);
+          pq.push([nextCost, nextVertex]);
         }
       });
     }
@@ -105,7 +104,7 @@ export class Dijkstra {
   /**
    * @description 최단경로 역추적하는 함수
    */
-  public backtracking(path: { [key: string]: string }) {
+  public backTracking(path: { [key: string]: string }) {
     const ret: { [key: string]: boolean } = {};
     let x = this.to;
 
