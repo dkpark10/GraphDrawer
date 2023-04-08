@@ -9,7 +9,7 @@ declare module 'global-type' {
   export interface ConnectedInfo {
     [key: string]: Connected;
   };
-
+  
   export interface Vertex {
     connectedList: Connected;
     coord: Point;

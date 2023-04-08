@@ -1,13 +1,15 @@
 import { ConnectedInfo } from 'global-type';
 
+type VertexString = `${string} ${string} ${string}`;
+
 /**
  * @description 중복 및 정점 갯수를 정리하는 함수
    1. 중복되는 정점 연결이 있는지 확인하기 위해 정점을 추출해 정렬한다.
    2. 중복 정점을 찾아낸다.
  */
-export const getVertexList = (inputValue: string[]) => {
+export const getVertexList = (inputValue: string[]): Array<VertexString> => {
   return inputValue
-    .map((item) => {
+    .map((item): VertexString => {
       const [vertex1, vertex2, cost] = item.split(' ');
       return vertex1 < vertex2 ? `${vertex1} ${vertex2} ${cost}` : `${vertex2} ${vertex1} ${cost}`;
     })
@@ -26,7 +28,7 @@ export const getVertexList = (inputValue: string[]) => {
       }
 
       return acc;
-    }, [] as string[]);
+    }, [] as Array<VertexString>);
 };
 
 export const createGraph = (textAreaContent: string, LIMIT_INPUT_VALUE_LINE = 100) => {
