@@ -14,12 +14,6 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "ignorePatterns": [
-    "*.config.js",
-    "jest.*",
-    "webpack.*",
-    "*.d.ts"
-  ],
   "extends": [
     "prettier",
     "airbnb",

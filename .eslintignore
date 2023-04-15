@@ -1,0 +1,4 @@
+*.config.*
+jest.*"
+webpack.*
+*.d.ts
