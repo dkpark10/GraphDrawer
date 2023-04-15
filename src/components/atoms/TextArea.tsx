@@ -31,5 +31,12 @@ export default function TextArea(): JSX.Element {
     debounceSetGraph(value);
   });
 
-  return <textarea style={{ resize: 'none' }} value={value} onChange={handleChange} id="input" />;
+  return (
+    <textarea
+      className="resize-none w-[200px] h-[40%] p-2.5 text-white bg-slate-950"
+      value={value}
+      onChange={handleChange}
+      id="input"
+    />
+  );
 }

@@ -41,7 +41,7 @@ export default function Edge({ from, to, cost, color }: Props) {
           markerHeight="8"
           orient="auto-start-reverse"
         >
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="#cfcfcf" />
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#020617" />
         </marker>
       </defs>
       <path
@@ -50,7 +50,16 @@ export default function Edge({ from, to, cost, color }: Props) {
         stroke={color}
         markerEnd={isArrow === true ? 'url(#arrow)' : ''}
       />
-      <text y={costX} x={costY} dx=".3em" dy=".9em" fontSize="14" fill={color} textAnchor="right">
+      <text
+        className="pointer-events-none"
+        y={costX}
+        x={costY}
+        dx=".3em"
+        dy=".9em"
+        fontSize="14"
+        fill={color}
+        textAnchor="right"
+      >
         {cost}
       </text>
     </g>

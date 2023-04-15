@@ -8,10 +8,10 @@ export default function App() {
       <header className="flex items-center justify-center font-mono py-4">
         <h1 className="text-4xl">Graph Painter</h1>
       </header>
-      <div className="container">
+      <section className="w-full space-x-7 flex justify-center min-w-[1520px] h-[700px] m-auto">
         <Aside />
         <Main />
-      </div>
+      </section>
     </>
   );
 }

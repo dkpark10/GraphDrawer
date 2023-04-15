@@ -56,16 +56,17 @@ export default function Config() {
         ...prev,
         from: value,
       }));
-    } else {
-      setInputList((prev) => ({
-        ...prev,
-        to: value,
-      }));
+
+      return;
     }
+    setInputList((prev) => ({
+      ...prev,
+      to: value,
+    }));
   };
 
   return (
-    <div className="config">
+    <div className="mt-[20px] w-[200px] h-[292px] p-2.5 flex items-center border-2 border-indigo-600 flex-col tarnslate-x-[-20%]">
       <div style={LabelStyle}>Undirected : Directed</div>
       <label className="direct-button" htmlFor="direction">
         <input type="checkbox" onChange={toggleOnChange} id="direction" />
@@ -96,7 +97,11 @@ export default function Config() {
           />
         </label>
       </div>
-      <button type="button" onClick={run}>
+      <button
+        className="bg-indigo-600 text-white w-[90%] h-8 rounded-md my-5 hover:bg-pink-600"
+        type="button"
+        onClick={run}
+      >
         Find
       </button>
       <a href="https://github.com/dkpark10/graphpainter" target="_blank" rel="noreferrer">

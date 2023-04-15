@@ -129,7 +129,7 @@ export default function Main(): JSX.Element {
 
     return value.connectedList.map((connectedVertex, idx2) => {
       const p2: Point = vertexInfo[connectedVertex.vertex].coord;
-      const color = isShortestEdge(shortestPath.path, vertex, connectedVertex.vertex) ? '#ebe534' : '#cfcfcf';
+      const color = isShortestEdge(shortestPath.path, vertex, connectedVertex.vertex) ? '#ebe534' : '#020617';
 
       return (
         <Edge
@@ -144,7 +144,7 @@ export default function Main(): JSX.Element {
   });
 
   return (
-    <main ref={mainRef}>
+    <main ref={mainRef} className="w-[600px] h-[600px] border-2 border-indigo-600 rounded-xl">
       <svg width={mainSize.width} height={mainSize.height}>
         {edgeList}
         {nodeList}

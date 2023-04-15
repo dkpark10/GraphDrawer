@@ -31,7 +31,7 @@ function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo
     if (fromOrTo === true) {
       return;
     }
-    e.currentTarget.setAttribute('fill', '#16afc0');
+    e.currentTarget.setAttribute('fill', '#4f46e5');
     textRef.current?.setAttribute('fill', 'white');
   };
 
@@ -42,8 +42,8 @@ function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo
         cy={x}
         cx={y}
         r="22"
-        fill={fromOrTo === true ? '#ebe534' : '#16afc0'}
-        stroke="#cfcfcf"
+        fill={fromOrTo === true ? '#ebe534' : '#4f46e5'}
+        stroke="#020617"
         strokeWidth="2.5"
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
@@ -51,7 +51,16 @@ function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo
         onMouseOver={onNodeMouseOver}
         onMouseOut={onNodeMouseOut}
       />
-      <text ref={textRef} y={x} x={y} dy=".35em" fontSize="15" fill={fromOrTo ? 'black' : 'white'} textAnchor="middle">
+      <text
+        className="pointer-events-none"
+        ref={textRef}
+        y={x}
+        x={y}
+        dy=".35em"
+        fontSize="15"
+        fill={fromOrTo ? 'black' : 'white'}
+        textAnchor="middle"
+      >
         {value}
       </text>
     </g>
