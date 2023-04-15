@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createGraph } from '../../services/create-graph';
-import { setShortestPath, initialState } from '../../store/shortestpath';
 import { setGraph, GraphState } from '../../store/graph';
 import { debounce } from '../../utils';
 
@@ -15,7 +14,6 @@ export default function TextArea(): JSX.Element {
         const ng: GraphState | undefined = createGraph(arg[0]);
         if (ng !== undefined) {
           dispatch(setGraph(ng));
-          dispatch(setShortestPath(initialState));
         }
       }, 550),
     [dispatch],

@@ -1,4 +1,4 @@
-import { getVertexList } from '@/services';
+import { getVertexList, type VertexString } from '@/services';
 
 describe('정점의 입력을 검증하는 테스트', () => {
   test('노말한 입력값이 들어왔을 때', () => {
@@ -6,7 +6,7 @@ describe('정점의 입력을 검증하는 테스트', () => {
     const restText = textAreaContent.split('\n').splice(1);
     const s = getVertexList(restText);
 
-    const ex = ['1 2 2', '2 3 8', '3 4 1', '1 4 9', '4 5 7', '5 6 2', '4 6 6', '3 6 9'];
+    const ex: VertexString[] = ['1 2 2', '2 3 8', '3 4 1', '1 4 9', '4 5 7', '5 6 2', '4 6 6', '3 6 9'];
     expect(s).toEqual(ex);
   });
 
@@ -15,7 +15,7 @@ describe('정점의 입력을 검증하는 테스트', () => {
     const restText = textAreaContent.split('\n').splice(1);
     const s = getVertexList(restText);
 
-    const ex = ['1 2 2', '2 3 8', '3 4 1', '1 4 9'];
+    const ex: VertexString[] = ['1 2 2', '2 3 8', '3 4 1', '1 4 9'];
     expect(s).toEqual(ex);
   });
 
@@ -24,7 +24,7 @@ describe('정점의 입력을 검증하는 테스트', () => {
     const restText = textAreaContent.split('\n').splice(1);
     const s = getVertexList(restText);
 
-    const ex = ['aa bb 2', 'cc dd 8', 'ee ff 1', 'xx zz 7'];
+    const ex: VertexString[] = ['aa bb 2', 'cc dd 8', 'ee ff 1', 'xx zz 7'];
     expect(s).toEqual(ex);
   });
 });

@@ -1,6 +1,6 @@
 import { ConnectedInfo } from 'global-type';
 
-type VertexString = `${string} ${string} ${string}`;
+export type VertexString = `${string} ${string} ${string}`;
 
 /**
  * @description 중복 및 정점 갯수를 정리하는 함수
