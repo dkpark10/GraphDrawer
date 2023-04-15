@@ -24,6 +24,7 @@ const webpackCommonConfig = {
         use: [
           'style-loader',
           'css-loader',
+          'postcss-loader',
         ],
       },
       // Webpack(웹팩)에서 Typescript(타입스크립트)를 사용하기 위해 js|jsx를 ts|tsx로 수정 후 ts-loader를 추가

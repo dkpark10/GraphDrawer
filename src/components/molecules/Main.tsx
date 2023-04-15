@@ -12,7 +12,6 @@ const BOARDSIZE = 20;
 const outofRange = (value: number, size: Size): number => {
   if (value <= BOARDSIZE) return BOARDSIZE * 2;
   if (value >= size.height - BOARDSIZE) return size.height - BOARDSIZE * 2;
-
   return value;
 };
 
@@ -22,10 +21,14 @@ export interface IDragNode {
 }
 
 export default function Main(): JSX.Element {
-  const ref = useRef<HTMLElement>(null);
-  const [size, setSize] = useState<Size>({ width: 0, height: 0 });
+  const mainRef = useRef<HTMLElement>(null);
+
+  const [mainSize, setMainSize] = useState<Size>({ width: 0, height: 0 });
+
   const [vertexInfo, setVertexInfo] = useState<{ [key: string]: Vertex }>({});
+
   const [dragActive, setdragActive] = useState<IDragNode>({ dragActive: false, currentNode: null });
+
   const [off, setOff] = useState<number[]>([0, 0]);
 
   const { graphInfo, shortestPath } = useSelector(
@@ -37,20 +40,22 @@ export default function Main(): JSX.Element {
   );
 
   useEffect(() => {
-    setSize((prev) => ({
+    setMainSize((prev) => ({
       ...prev,
-      width: (ref.current as HTMLElement).offsetWidth,
-      height: (ref.current as HTMLElement).offsetHeight,
+      width: (mainRef.current as HTMLElement).offsetWidth,
+      height: (mainRef.current as HTMLElement).offsetHeight,
     }));
+  }, []);
 
+  useEffect(() => {
     const vertexCoordCalculator: VertexCoordCalculator = new VertexCoordCalculatorBuilder()
       .setGraphInfo(graphInfo)
       .setLeftTop({ y: 0 + BOARDSIZE * 2, x: 0 + BOARDSIZE * 2 })
-      .setRightBottom({ y: size.width - BOARDSIZE * 2, x: size.height - BOARDSIZE * 2 })
+      .setRightBottom({ y: mainSize.width - BOARDSIZE * 2, x: mainSize.height - BOARDSIZE * 2 })
       .build();
 
-    setVertexInfo((prev) => ({ ...vertexCoordCalculator.run() }));
-  }, [ref, graphInfo, size.width, size.height]);
+    setVertexInfo((prev) => ({ ...prev, ...vertexCoordCalculator.run() }));
+  }, [graphInfo, mainSize.width, mainSize.height]);
 
   const handlePointerDown = (e: React.PointerEvent<SVGCircleElement>) => {
     const box = e.currentTarget.getBoundingClientRect();
@@ -84,8 +89,8 @@ export default function Main(): JSX.Element {
 
     if (dragActive.dragActive) {
       const toff = [...off];
-      const moveY = outofRange(value.coord.y - (toff[1] - xx), size);
-      const moveX = outofRange(value.coord.x - (toff[0] - yy), size);
+      const moveY = outofRange(value.coord.y - (toff[1] - xx), mainSize);
+      const moveX = outofRange(value.coord.x - (toff[0] - yy), mainSize);
 
       setVertexInfo((prev) => ({
         ...prev,
@@ -139,8 +144,8 @@ export default function Main(): JSX.Element {
   });
 
   return (
-    <main ref={ref}>
-      <svg style={{ width: size.width, height: size.height }}>
+    <main ref={mainRef}>
+      <svg width={mainSize.width} height={mainSize.height}>
         {edgeList}
         {nodeList}
       </svg>
