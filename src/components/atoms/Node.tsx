@@ -1,19 +1,18 @@
 import React, { useRef } from 'react';
+import { MAINCOLOR } from '@/constants';
 
-interface Props {
+interface NodeProps {
   size: { y: number; x: number };
   value: string;
   onPointerDown: React.PointerEventHandler<SVGCircleElement>;
   onPointerUp: React.PointerEventHandler<SVGCircleElement>;
   onPointerMove: React.PointerEventHandler<SVGCircleElement>;
-  isDraged: {
-    dragActive: boolean;
-    currentNode: (EventTarget & SVGCircleElement) | null;
-  };
+  isDraged: boolean;
+  currentNode: (EventTarget & SVGCircleElement) | null;
   fromOrTo: boolean;
 }
 
-function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo, isDraged }: Props) {
+function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo, isDraged, currentNode }: NodeProps) {
   const { y, x } = size;
 
   const ref = useRef<SVGCircleElement>(null);
@@ -31,7 +30,7 @@ function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo
     if (fromOrTo === true) {
       return;
     }
-    e.currentTarget.setAttribute('fill', '#4f46e5');
+    e.currentTarget.setAttribute('fill', MAINCOLOR);
     textRef.current?.setAttribute('fill', 'white');
   };
 
@@ -42,7 +41,7 @@ function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo
         cy={x}
         cx={y}
         r="22"
-        fill={fromOrTo === true ? '#ebe534' : '#4f46e5'}
+        fill={fromOrTo === true ? '#ebe534' : MAINCOLOR}
         stroke="#020617"
         strokeWidth="2.5"
         onPointerDown={onPointerDown}
@@ -69,7 +68,7 @@ function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo
 
 export default React.memo(Node, (prev, next) => {
   return (
-    prev.isDraged.dragActive === next.isDraged.dragActive &&
+    prev.isDraged === next.isDraged &&
     prev.size.y === next.size.y &&
     prev.size.x === next.size.x &&
     prev.fromOrTo === next.fromOrTo

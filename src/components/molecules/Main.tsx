@@ -6,8 +6,7 @@ import Node from '../atoms/Node';
 import Edge from '../atoms/Edge';
 import { RootState } from '../../store/index';
 import { VertexCoordCalculator, VertexCoordCalculatorBuilder, isShortestEdge } from '../../services';
-
-const BOARDSIZE = 20;
+import { BOARDSIZE } from '@/constants';
 
 const outofRange = (value: number, size: Size): number => {
   if (value <= BOARDSIZE) return BOARDSIZE * 2;
@@ -117,7 +116,8 @@ export default function Main(): JSX.Element {
         onPointerMove={(e: React.PointerEvent<SVGCircleElement>) => handlePointerMove(e, ele)}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
-        isDraged={dragActive}
+        isDraged={dragActive.dragActive}
+        currentNode={dragActive.currentNode}
         fromOrTo={fromTo}
       />
     );

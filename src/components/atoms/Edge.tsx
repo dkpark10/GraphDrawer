@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 
-interface Props {
+interface EdgeProps {
   from: number[];
   to: number[];
   cost: string;
@@ -22,7 +22,7 @@ const calculCostCoord = (from: number[], to: number[]) => {
   return [(maxY - minY) / 2 + minY - gap, (maxX - minX) / 2 + minX + gap];
 };
 
-export default function Edge({ from, to, cost, color }: Props) {
+export default function Edge({ from, to, cost, color }: EdgeProps) {
   const isArrow = useSelector(({ arrowDirect }: RootState) => arrowDirect.isArrow);
 
   const [fromY, fromX] = from;
