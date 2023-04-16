@@ -14,7 +14,7 @@ const outofRange = (value: number, size: Size): number => {
   return value;
 };
 
-export interface IDragNode {
+interface IDragNode {
   dragActive: boolean;
   currentNode: (EventTarget & SVGCircleElement) | null;
 }

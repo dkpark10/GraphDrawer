@@ -15,7 +15,7 @@ html, body, #root{
   background-color: #f1f5f9;
 }
 
-.direct-button {
+.arrow-button {
   position: relative;
   display: inline-block;
   width: 60px;
@@ -48,15 +48,15 @@ html, body, #root{
   border-radius: 20px;
 }
 
-.direct-button input {
+.arrow-button input {
   display:none;
 }
 
-.direct-button input:checked+.onoff-switch {
+.arrow-button input:checked+.onoff-switch {
   background-color: #4f46e5;
 }
 
-.direct-button input:checked+.onoff-switch:before {
+.arrow-button input:checked+.onoff-switch:before {
   -webkit-transform: translateX(31px);
   -ms-transform: translateX(31px);
   transform: translateX(31px);

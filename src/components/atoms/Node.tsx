@@ -35,7 +35,7 @@ function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo
   };
 
   return (
-    <g style={{ cursor: 'pointer' }}>
+    <g className="cursor-pointer">
       <circle
         ref={ref}
         cy={x}

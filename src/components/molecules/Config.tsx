@@ -5,11 +5,6 @@ import { setShortestPath } from '../../store/shortestpath';
 import { DijkstraBuilder } from '../../utils/dijkstra';
 import { RootState } from '../../store/index';
 
-const LabelStyle = {
-  margin: '12px',
-  fontSize: '15px',
-};
-
 interface InputList {
   from: string;
   to: string;
@@ -26,7 +21,7 @@ export default function Config() {
     graphInfo: state.graph,
   }));
 
-  const toggleOnChange = () => dispatch(setArrowDirect());
+  const arrowToggle = () => dispatch(setArrowDirect());
 
   const run = () => {
     const dijkstra = new DijkstraBuilder()
@@ -67,35 +62,26 @@ export default function Config() {
 
   return (
     <div className="mt-[20px] w-[200px] h-[292px] p-2.5 flex items-center border-2 border-indigo-600 flex-col tarnslate-x-[-20%]">
-      <div style={LabelStyle}>Undirected : Directed</div>
-      <label className="direct-button" htmlFor="direction">
-        <input type="checkbox" onChange={toggleOnChange} id="direction" />
+      <div className="m-3 text-sm">Undirected : Directed</div>
+      <label className="arrow-button relative inline-block w-15 h-[22px]" htmlFor="direction">
+        <input type="checkbox" onChange={arrowToggle} id="direction" />
         <span className="onoff-switch" />
       </label>
-      <div style={LabelStyle}>Shortest Path Find</div>
-      <div>
-        <label style={{ fontSize: '13px' }} htmlFor="from">
-          from
-          <input
-            type="text"
-            name="path-from"
-            onChange={onChange}
-            value={inputList.from}
-            id="from"
-            style={{ width: '40px', height: '25px' }}
-          />
-        </label>
-        <label style={{ fontSize: '13px' }} htmlFor="to">
-          to
-          <input
-            type="text"
-            name="path-to"
-            onChange={onChange}
-            value={inputList.to}
-            id="to"
-            style={{ width: '40px', height: '25px' }}
-          />
-        </label>
+      <div className="m-3 text-sm">Shortest Path Find</div>
+      <div className="flex w-full justify-center">
+        {['from', 'to'].map((ele) => (
+          <label className="text-sm mr-1" htmlFor={ele} key={ele}>
+            {ele}
+            <input
+              className="w-10 h-6 outline-indigo-900 bg-slate-950 text-white px-1"
+              type="text"
+              name={`path-${ele}`}
+              onChange={onChange}
+              value={ele === 'from' ? inputList.from : inputList.to}
+              id={ele}
+            />
+          </label>
+        ))}
       </div>
       <button
         className="bg-indigo-600 text-white w-[90%] h-8 rounded-md my-5 hover:bg-pink-600"
