@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { MAINCOLOR } from '@/constants';
+import { MAIN_COLOR, SECOND_COLOR } from '@/constants';
 
 interface NodeProps {
   size: { y: number; x: number };
@@ -22,7 +22,7 @@ function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo
     if (fromOrTo === true) {
       return;
     }
-    e.currentTarget.setAttribute('fill', '#ebe534');
+    e.currentTarget.setAttribute('fill', SECOND_COLOR);
     textRef.current?.setAttribute('fill', 'black');
   };
 
@@ -30,7 +30,7 @@ function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo
     if (fromOrTo === true) {
       return;
     }
-    e.currentTarget.setAttribute('fill', MAINCOLOR);
+    e.currentTarget.setAttribute('fill', MAIN_COLOR);
     textRef.current?.setAttribute('fill', 'white');
   };
 
@@ -41,8 +41,8 @@ function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo
         cy={x}
         cx={y}
         r="22"
-        fill={fromOrTo === true ? '#ebe534' : MAINCOLOR}
-        stroke="#020617"
+        fill={fromOrTo === true ? '#8ce33d' : MAIN_COLOR}
+        stroke={MAIN_COLOR}
         strokeWidth="2.5"
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}

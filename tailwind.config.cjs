@@ -1,3 +1,5 @@
+import { MAIN_COLOR } from './src/constants';
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -5,7 +7,11 @@ module.exports = {
     './index.html',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'main-color': MAIN_COLOR,
+      },
+    },
   },
   plugins: [],
 };

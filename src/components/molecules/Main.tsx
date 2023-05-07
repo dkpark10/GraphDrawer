@@ -4,9 +4,9 @@ import { useSelector, shallowEqual } from 'react-redux';
 import { Point, Vertex, Size } from 'global-type';
 import Node from '../atoms/Node';
 import Edge from '../atoms/Edge';
-import { RootState } from '../../store/index';
-import { VertexCoordCalculator, VertexCoordCalculatorBuilder, isShortestEdge } from '../../services';
-import { BOARDSIZE } from '@/constants';
+import { RootState } from '@/store';
+import { VertexCoordCalculator, VertexCoordCalculatorBuilder, isShortestEdge } from '@/services';
+import { BOARDSIZE, MAIN_COLOR, SECOND_COLOR } from '@/constants';
 
 const outofRange = (value: number, size: Size): number => {
   if (value <= BOARDSIZE) return BOARDSIZE * 2;
@@ -129,7 +129,7 @@ export default function Main(): JSX.Element {
 
     return value.connectedList.map((connectedVertex, idx2) => {
       const p2: Point = vertexInfo[connectedVertex.vertex].coord;
-      const color = isShortestEdge(shortestPath.path, vertex, connectedVertex.vertex) ? '#ebe534' : '#020617';
+      const color = isShortestEdge(shortestPath.path, vertex, connectedVertex.vertex) ? SECOND_COLOR : MAIN_COLOR;
 
       return (
         <Edge
@@ -144,7 +144,7 @@ export default function Main(): JSX.Element {
   });
 
   return (
-    <main ref={mainRef} className="w-[600px] h-[600px] border-2 border-indigo-600 rounded-xl">
+    <main ref={mainRef} className="w-[600px] h-[600px] border-2 border-main-color rounded-xl">
       <svg width={mainSize.width} height={mainSize.height}>
         {edgeList}
         {nodeList}
