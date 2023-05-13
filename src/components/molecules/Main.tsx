@@ -112,7 +112,7 @@ export default function Main(): JSX.Element {
         onPointerMove={(e: React.PointerEvent<SVGCircleElement>) => handlePointerMove(e, ele)}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
-        isDraged={dragActive.dragActive}
+        isDragged={dragActive.dragActive}
         currentNode={dragActive.currentNode}
         fromOrTo={fromTo}
       />

@@ -7,12 +7,12 @@ interface NodeProps {
   onPointerDown: React.PointerEventHandler<SVGCircleElement>;
   onPointerUp: React.PointerEventHandler<SVGCircleElement>;
   onPointerMove: React.PointerEventHandler<SVGCircleElement>;
-  isDraged: boolean;
+  isDragged: boolean;
   currentNode: (EventTarget & SVGCircleElement) | null;
   fromOrTo: boolean;
 }
 
-function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo, isDraged, currentNode }: NodeProps) {
+function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo, isDragged, currentNode }: NodeProps) {
   const { y, x } = size;
 
   const ref = useRef<SVGCircleElement>(null);
@@ -68,7 +68,7 @@ function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo
 
 export default React.memo(Node, (prev, next) => {
   return (
-    prev.isDraged === next.isDraged &&
+    prev.isDragged === next.isDragged &&
     prev.size.y === next.size.y &&
     prev.size.x === next.size.x &&
     prev.fromOrTo === next.fromOrTo
