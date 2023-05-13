@@ -1,16 +1,16 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useRef, useEffect, useState } from 'react';
-import { useSelector, shallowEqual } from 'react-redux';
+import { shallow } from 'zustand/shallow';
 import { Point, Vertex, Size } from 'global-type';
 import Node from '@/components/atoms/Node';
 import Edge from '@/components/atoms/Edge';
-import { RootState } from '@/store';
+import { useGraphStore, useShortestPathStore } from '@/store';
 import { VertexCoordCalculator, VertexCoordCalculatorBuilder, isShortestEdge } from '@/services';
-import { BOARDSIZE, MAIN_COLOR, SECOND_COLOR } from '@/constants';
+import { BOARD_SIZE, MAIN_COLOR, SECOND_COLOR } from '@/constants';
 
 const outOfRange = (value: number, size: Size): number => {
-  if (value <= BOARDSIZE) return BOARDSIZE * 2;
-  if (value >= size.height - BOARDSIZE) return size.height - BOARDSIZE * 2;
+  if (value <= BOARD_SIZE) return BOARD_SIZE * 2;
+  if (value >= size.height - BOARD_SIZE) return size.height - BOARD_SIZE * 2;
   return value;
 };
 
@@ -30,13 +30,9 @@ export default function Main(): JSX.Element {
 
   const [off, setOff] = useState<number[]>([0, 0]);
 
-  const { graphInfo, shortestPath } = useSelector(
-    (state: RootState) => ({
-      graphInfo: state.graph,
-      shortestPath: state.shortestPath,
-    }),
-    shallowEqual,
-  );
+  const graphInfo = useGraphStore(({ graph, vertexCount }) => ({ vertexCount, graph }), shallow);
+
+  const shortestPath = useShortestPathStore(({ from, to, path }) => ({ from, to, path }), shallow);
 
   useEffect(() => {
     setMainSize((prev) => ({
@@ -49,8 +45,8 @@ export default function Main(): JSX.Element {
   useEffect(() => {
     const vertexCoordCalculator: VertexCoordCalculator = new VertexCoordCalculatorBuilder()
       .setGraphInfo(graphInfo)
-      .setLeftTop({ y: 0 + BOARDSIZE * 2, x: 0 + BOARDSIZE * 2 })
-      .setRightBottom({ y: mainSize.width - BOARDSIZE * 2, x: mainSize.height - BOARDSIZE * 2 })
+      .setLeftTop({ y: 0 + BOARD_SIZE * 2, x: 0 + BOARD_SIZE * 2 })
+      .setRightBottom({ y: mainSize.width - BOARD_SIZE * 2, x: mainSize.height - BOARD_SIZE * 2 })
       .build();
 
     setVertexInfo((prev) => ({ ...prev, ...vertexCoordCalculator.run() }));

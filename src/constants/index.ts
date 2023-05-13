@@ -1,4 +1,4 @@
-export const BOARDSIZE = 20;
+export const BOARD_SIZE = 20;
 
 export const MAIN_COLOR = '#060724';
 

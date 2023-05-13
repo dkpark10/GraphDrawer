@@ -1,22 +1,14 @@
-/* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { create } from 'zustand';
 
-export interface State {
+export interface ArrowState {
   isArrow: boolean;
 }
 
-export const initialState: State = {
+export interface ArrowStateDispatcher {
+  setArrowDirect: () => void;
+}
+
+export const useArrowStore = create<ArrowState & ArrowStateDispatcher>((set) => ({
   isArrow: false,
-};
-
-export const arrowDirectReducer = createSlice({
-  name: 'arrow-reducer',
-  initialState,
-  reducers: {
-    setArrowDirect: (state) => {
-      state.isArrow = !state.isArrow;
-    },
-  },
-});
-
-export const { setArrowDirect } = arrowDirectReducer.actions;
+  setArrowDirect: () => set(({ isArrow }) => ({ isArrow: !isArrow })),
+}));

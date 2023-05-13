@@ -1,10 +1,13 @@
-/* eslint-disable no-param-reassign */
+import { create } from 'zustand';
 import { ConnectedInfo } from 'global-type';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface GraphState {
   vertexCount: string;
   graph: ConnectedInfo;
+}
+
+export interface GraphStateDispatcher {
+  setGraph: (payload: GraphState) => void;
 }
 
 export const initialState: GraphState = {
@@ -12,15 +15,7 @@ export const initialState: GraphState = {
   graph: {},
 };
 
-export const graphReducer = createSlice({
-  name: 'graph-reducer',
-  initialState,
-  reducers: {
-    setGraph(state, action: PayloadAction<GraphState>) {
-      state.vertexCount = action.payload.vertexCount;
-      state.graph = action.payload.graph;
-    },
-  },
-});
-
-export const { setGraph } = graphReducer.actions;
+export const useGraphStore = create<GraphState & GraphStateDispatcher>((set) => ({
+  ...initialState,
+  setGraph: ({ vertexCount, graph }) => set(() => ({ vertexCount, graph })),
+}));

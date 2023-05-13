@@ -1,5 +1,4 @@
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
+import { useArrowStore } from '@/store';
 
 interface EdgeProps {
   from: number[];
@@ -23,7 +22,8 @@ const calculCostCoord = (from: number[], to: number[]) => {
 };
 
 export default function Edge({ from, to, cost, color }: EdgeProps) {
-  const isArrow = useSelector(({ arrowDirect }: RootState) => arrowDirect.isArrow);
+  const isArrow = useArrowStore((state) => state.isArrow);
+  // const isArrow = useSelector(({ arrowDirect }: RootState) => arrowDirect.isArrow);
 
   const [fromY, fromX] = from;
   const [toY, toX] = to;

@@ -1,9 +1,6 @@
-import { useDispatch, useSelector } from 'react-redux';
 import React, { useState } from 'react';
-import { setArrowDirect } from '@/store/node-arrow';
-import { setShortestPath } from '@/store/shortestpath';
 import { DijkstraBuilder } from '@/utils/dijkstra';
-import { RootState } from '@/store/index';
+import { useArrowStore, useGraphStore, useShortestPathStore } from '@/store/index';
 
 interface InputList {
   from: string;
@@ -11,17 +8,18 @@ interface InputList {
 }
 
 export default function Config() {
-  const dispatch = useDispatch();
+  const setArrowDirect = useArrowStore((state) => state.setArrowDirect);
+
+  const setShortestPath = useShortestPathStore((state) => state.setShortestPath);
+
   const [inputList, setInputList] = useState<InputList>({
     from: '',
     to: '',
   });
 
-  const { graphInfo } = useSelector((state: RootState) => ({
-    graphInfo: state.graph,
-  }));
+  const graphInfo = useGraphStore(({ graph, vertexCount }) => ({ vertexCount, graph }));
 
-  const arrowToggle = () => dispatch(setArrowDirect());
+  const arrowToggle = () => setArrowDirect();
 
   const run = () => {
     const dijkstra = new DijkstraBuilder()
@@ -33,13 +31,11 @@ export default function Config() {
     const ret = dijkstra.run();
 
     if (ret !== false) {
-      dispatch(
-        setShortestPath({
-          from: inputList.from,
-          to: inputList.to,
-          path: ret,
-        }),
-      );
+      setShortestPath({
+        from: inputList.from,
+        to: inputList.to,
+        path: ret,
+      });
     }
   };
 

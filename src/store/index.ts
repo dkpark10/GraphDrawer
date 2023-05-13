@@ -1,16 +1,3 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { graphReducer } from './graph';
-import { arrowDirectReducer } from './node-arrow';
-import { shortestPathReducer } from './shortestpath';
-
-export const store = configureStore({
-  reducer: {
-    arrowDirect: arrowDirectReducer.reducer,
-    graph: graphReducer.reducer,
-    shortestPath: shortestPathReducer.reducer,
-  },
-});
-
-export type RootState = ReturnType<typeof store.getState>;
-
-export type AppDispatch = typeof store.dispatch;
+export { useArrowStore } from './node-arrow';
+export { useGraphStore, type GraphState } from './graph';
+export { useShortestPathStore, type ShortestPathState } from './shortestpath';

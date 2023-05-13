@@ -41,7 +41,7 @@ function Node({ size, value, onPointerDown, onPointerUp, onPointerMove, fromOrTo
         cy={x}
         cx={y}
         r="22"
-        fill={fromOrTo === true ? '#8ce33d' : MAIN_COLOR}
+        fill={fromOrTo === true ? SECOND_COLOR : MAIN_COLOR}
         stroke={MAIN_COLOR}
         strokeWidth="2.5"
         onPointerDown={onPointerDown}
