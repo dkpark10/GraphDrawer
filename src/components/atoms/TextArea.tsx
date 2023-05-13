@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { createGraph } from '../../services/create-graph';
-import { setGraph, type GraphState } from '../../store/graph';
-import { debounce } from '../../utils';
+import { createGraph } from '@/services/create-graph';
+import { setGraph, type GraphState } from '@/store/graph';
+import { debounce } from '@/utils';
 
 export default function TextArea(): JSX.Element {
   const dispatch = useDispatch();

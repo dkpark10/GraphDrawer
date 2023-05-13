@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useState } from 'react';
-import { setArrowDirect } from '../../store/node-arrow';
-import { setShortestPath } from '../../store/shortestpath';
-import { DijkstraBuilder } from '../../utils/dijkstra';
-import { RootState } from '../../store/index';
+import { setArrowDirect } from '@/store/node-arrow';
+import { setShortestPath } from '@/store/shortestpath';
+import { DijkstraBuilder } from '@/utils/dijkstra';
+import { RootState } from '@/store/index';
 
 interface InputList {
   from: string;
@@ -61,7 +61,7 @@ export default function Config() {
   };
 
   return (
-    <div className="mt-[20px] w-[200px] h-[292px] p-2.5 flex items-center border-2 border-main-color flex-col tarnslate-x-[-20%]">
+    <div className="mt-[20px] w-[200px] h-[292px] p-2.5 flex items-center border border-main-color flex-col">
       <div className="m-3 text-sm">Undirected : Directed</div>
       <label className="arrow-button relative inline-block w-15 h-[22px]" htmlFor="direction">
         <input type="checkbox" onChange={arrowToggle} id="direction" />
@@ -70,10 +70,10 @@ export default function Config() {
       <div className="m-3 text-sm">Shortest Path Find</div>
       <div className="flex w-full justify-center">
         {['from', 'to'].map((ele) => (
-          <label className="text-sm mr-1" htmlFor={ele} key={ele}>
-            {ele}
+          <label className="text-sm" htmlFor={ele} key={ele}>
+            <span className="p-1">{ele}</span>
             <input
-              className="w-10 h-6 outline-main-color bg-slate-950 text-white px-1"
+              className="w-10 h-6 outline-main-color bg-slate-950 text-white px-1 rounded-md"
               type="text"
               name={`path-${ele}`}
               onChange={onChange}

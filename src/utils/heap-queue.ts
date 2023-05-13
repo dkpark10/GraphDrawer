@@ -1,6 +1,6 @@
 export type Comparator<T> = boolean | ((a: T, b: T) => number);
 
-export class ProirityQueue<T> {
+export class PriorityQueue<T> {
   private readonly list: T[] = [];
 
   private readonly comparator: Comparator<T>;

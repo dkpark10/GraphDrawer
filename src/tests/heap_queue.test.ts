@@ -1,11 +1,11 @@
-import { ProirityQueue } from '@/utils';
+import { PriorityQueue } from '@/utils';
 
 /**
  * @see {@link http://siever.info/cs351/hw/prj2/PQTestCases.html}
  */
 describe('우선순위 큐 테스트', () => {
   test('오름차순 숫자', () => {
-    const pq = new ProirityQueue<number>();
+    const pq = new PriorityQueue<number>();
 
     expect(pq.size()).toEqual(0);
     expect(pq.isEmpty()).toEqual(true);
@@ -38,7 +38,7 @@ describe('우선순위 큐 테스트', () => {
   });
 
   test('내림차순 숫자', () => {
-    const pq = new ProirityQueue<number>(true);
+    const pq = new PriorityQueue<number>(true);
 
     expect(pq.size()).toEqual(0);
     expect(pq.isEmpty()).toEqual(true);
@@ -100,7 +100,7 @@ describe('우선순위 큐 테스트', () => {
       grade: 2,
     } as Person;
 
-    const pq = new ProirityQueue<Person>((prev, next) => {
+    const pq = new PriorityQueue<Person>((prev, next) => {
       if (prev.height === next.height) {
         if (prev.weight === next.weight) {
           return prev.grade - next.grade;

@@ -2,13 +2,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { Point, Vertex, Size } from 'global-type';
-import Node from '../atoms/Node';
-import Edge from '../atoms/Edge';
+import Node from '@/components/atoms/Node';
+import Edge from '@/components/atoms/Edge';
 import { RootState } from '@/store';
 import { VertexCoordCalculator, VertexCoordCalculatorBuilder, isShortestEdge } from '@/services';
 import { BOARDSIZE, MAIN_COLOR, SECOND_COLOR } from '@/constants';
 
-const outofRange = (value: number, size: Size): number => {
+const outOfRange = (value: number, size: Size): number => {
   if (value <= BOARDSIZE) return BOARDSIZE * 2;
   if (value >= size.height - BOARDSIZE) return size.height - BOARDSIZE * 2;
   return value;
@@ -26,7 +26,7 @@ export default function Main(): JSX.Element {
 
   const [vertexInfo, setVertexInfo] = useState<{ [key: string]: Vertex }>({});
 
-  const [dragActive, setdragActive] = useState<IDragNode>({ dragActive: false, currentNode: null });
+  const [dragActive, setDragActive] = useState<IDragNode>({ dragActive: false, currentNode: null });
 
   const [off, setOff] = useState<number[]>([0, 0]);
 
@@ -64,7 +64,7 @@ export default function Main(): JSX.Element {
     e.currentTarget.setPointerCapture(e.pointerId);
 
     setOff([offX, offY]);
-    setdragActive((prev) => ({
+    setDragActive((prev) => ({
       ...prev,
       dragActive: true,
       currentNode: e.currentTarget,
@@ -72,7 +72,7 @@ export default function Main(): JSX.Element {
   };
 
   const handlePointerUp = () => {
-    setdragActive((prev) => ({
+    setDragActive((prev) => ({
       ...prev,
       dragActive: false,
       currentNode: null,
@@ -88,8 +88,8 @@ export default function Main(): JSX.Element {
 
     if (dragActive.dragActive) {
       const toff = [...off];
-      const moveY = outofRange(value.coord.y - (toff[1] - xx), mainSize);
-      const moveX = outofRange(value.coord.x - (toff[0] - yy), mainSize);
+      const moveY = outOfRange(value.coord.y - (toff[1] - xx), mainSize);
+      const moveX = outOfRange(value.coord.x - (toff[0] - yy), mainSize);
 
       setVertexInfo((prev) => ({
         ...prev,
@@ -144,8 +144,8 @@ export default function Main(): JSX.Element {
   });
 
   return (
-    <main ref={mainRef} className="w-[600px] h-[600px] border-2 border-main-color rounded-xl">
-      <svg width={mainSize.width} height={mainSize.height}>
+    <main ref={mainRef} className="w-[600px] h-[600px] border border-main-color rounded-xl">
+      <svg width={mainSize.width} height={mainSize.height} viewBox="0 0 600 600">
         {edgeList}
         {nodeList}
       </svg>
