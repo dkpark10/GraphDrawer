@@ -230,12 +230,25 @@ export default function App({ nodeList }: AppProps) {
       .selectAll('circle')
       .data(miserbles.nodes)
       .join('circle')
-      .attr('r', 18)
+      .attr('r', 20)
       .call(
         d3.drag().on('start', dragStarted).on('drag', dragged).on('end', dragEnded) as (
           selection: Selection<any | SVGCircleElement, { id: string; group: number }, SVGGElement, unknown>,
         ) => void,
       );
+
+    const text = svg
+      .append('g')
+      .attr('class', 'pointer-events-none')
+      .attr('fill', 'white')
+      .attr('fontSize', 12)
+      .selectAll('text')
+      .data(miserbles.nodes)
+      .join('text')
+      .attr('textAnchor', 'middle')
+      .attr('dy', 6)
+      .attr('dx', -4)
+      .text((d: any) => 6);
 
     const ticked = () => {
       link
@@ -245,6 +258,7 @@ export default function App({ nodeList }: AppProps) {
         .attr('y2', (d: any) => d.target.y);
 
       node.attr('cx', (d: any) => d.x).attr('cy', (d: any) => d.y);
+      text.attr('x', (d: any) => d.x).attr('y', (d: any) => d.y);
     };
 
     const simulation = d3
@@ -254,7 +268,7 @@ export default function App({ nodeList }: AppProps) {
         d3
           .forceLink(nodeList.links)
           .id((d: any) => d.id)
-          .distance(100),
+          .distance(120),
       )
       .force('charge', d3.forceManyBody().strength(-100))
       .force('x', d3.forceX(300))
