@@ -1,12 +1,7 @@
-/* eslint-disable react/require-default-props */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 // import Main from '@/components/molecules/Main';
 // import Textarea from '@/components/atoms/TextArea';
 // import Config from '@/components/molecules/Config';
@@ -28,128 +23,11 @@
 //   );
 // }
 
-// import React, { useEffect, useRef, useState } from 'react';
-// import * as d3 from 'd3';
-// import type { SimulationNodeDatum, SimulationLinkDatum } from 'd3-force';
-
-// interface Node {
-//   id?: string;
-//   group?: number;
-// }
-
-// interface Edge {
-//   source?: string;
-//   target?: string;
-//   value?: number;
-// }
-
-// interface AppProps {
-//   nodeList: {
-//     nodes: Array<Node & SimulationNodeDatum>;
-//     links: Array<Edge & SimulationLinkDatum<SimulationNodeDatum>>;
-//   };
-// }
-
-// export default function App({ nodeList }: AppProps) {
-//   const svgRef = useRef<SVGSVGElement | null>(null);
-
-//   const [mounted, setMounted] = useState(false);
-
-//   useEffect(() => {
-//     if (!svgRef.current || nodeList.nodes.length <= 0) {
-//       return;
-//     }
-
-//     d3.forceSimulation(nodeList.nodes as SimulationNodeDatum[])
-//       .force(
-//         'link',
-//         d3
-//           .forceLink(nodeList.links)
-//           .id((d: any) => d.id)
-//           .distance(500),
-//       )
-//       .force('charge', d3.forceManyBody().strength(-100))
-//       .force('x', d3.forceX(300))
-//       .force('y', d3.forceY(300))
-//       .on('tick', () => {
-//         setMounted(true);
-//       });
-//   }, [nodeList.nodes, nodeList.links]);
-
-//   return (
-//     <main className="flex justify-center items-center	 border border-red-500">
-//       <svg width="600" height="600" viewBox="0 0 600 600" ref={svgRef}>
-//         {mounted &&
-//           nodeList.links.map(({ source, target }, idx) => {
-//             return (
-//               <g key={idx}>
-//                 <defs>
-//                   <marker
-//                     id="arrow"
-//                     viewBox="0 0 10 10"
-//                     refX="24"
-//                     refY="5"
-//                     markerWidth="8"
-//                     markerHeight="8"
-//                     orient="auto-start-reverse"
-//                   >
-//                     <path d="M 0 0 L 10 5 L 0 10 z" fill="#020617" />
-//                   </marker>
-//                 </defs>
-//                 <path
-//                   d={`M ${(source as SimulationNodeDatum).x} ${(source as SimulationNodeDatum).y} L ${
-//                     (target as SimulationNodeDatum).x
-//                   } ${(target as SimulationNodeDatum).y}`}
-//                   strokeWidth="2"
-//                   stroke="yellow"
-//                   markerEnd="url(#arrow)"
-//                 />
-//                 {/* <text
-//                   className="pointer-events-none"
-//                   y={22}
-//                   x={22}
-//                   dx=".3em"
-//                   dy=".9em"
-//                   fontSize="14"
-//                   fill="pink"
-//                   textAnchor="right"
-//                 >
-//                   {idx}
-//                 </text> */}
-//               </g>
-//             );
-//           })}
-//         {mounted &&
-//           nodeList?.nodes.map((node, idx) => {
-//             console.log(node.y, node.x);
-//             return (
-//               <g className="cursor-pointer" key={idx}>
-//                 <circle cy={node.y} cx={node.x} r="22" fill="red" stroke="blue" strokeWidth="2.5" />
-//                 {/* <text
-//                   y={node.y}
-//                   x={node.x}
-//                   className="pointer-events-none"
-//                   dy=".35em"
-//                   fontSize="15"
-//                   fill="white"
-//                   textAnchor="middle"
-//                 >
-//                   {node.id}
-//                 </text> */}
-//               </g>
-//             );
-//           })}
-//       </svg>
-//     </main>
-//   );
-// }
-
-// --------------------------------------------------------------------------------------------------------------------------------
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import type { SimulationNodeDatum, SimulationLinkDatum } from 'd3-force';
 import type { Selection } from 'd3-selection';
-import { miserbles } from '@/__mock__';
+import type { D3DragEvent } from 'd3-drag';
 
 interface Node {
   id?: string;
@@ -169,26 +47,28 @@ interface AppProps {
   };
 }
 
+type DragEvent = D3DragEvent<Element, SimulationNodeDatum, SimulationNodeDatum>;
+
 export default function App({ nodeList }: AppProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   useEffect(() => {
-    if (!svgRef.current) {
+    if (!svgRef.current || nodeList.nodes.length <= 0 || nodeList.links.length <= 0) {
       return;
     }
 
-    const dragStarted = (event: any) => {
+    const dragStarted = (event: DragEvent) => {
       if (!event.active) simulation.alphaTarget(0.3).restart();
       event.subject.fx = event.subject.x;
       event.subject.fy = event.subject.y;
     };
 
-    const dragged = (event: any) => {
+    const dragged = (event: DragEvent) => {
       event.subject.fx = event.x;
       event.subject.fy = event.y;
     };
 
-    const dragEnded = (event: any) => {
+    const dragEnded = (event: DragEvent) => {
       if (!event.active) simulation.alphaTarget(0);
       event.subject.fx = null;
       event.subject.fy = null;
@@ -216,7 +96,7 @@ export default function App({ nodeList }: AppProps) {
       .attr('stroke-width', 1.5)
       .attr('stroke-linecap', 'round')
       .selectAll('line')
-      .data(miserbles.links)
+      .data(nodeList.links)
       .join('line')
       .attr('marker-end', 'url(#arrow)');
 
@@ -228,12 +108,18 @@ export default function App({ nodeList }: AppProps) {
       .attr('stroke-opacity', 1)
       .attr('stroke-width', 2.5)
       .selectAll('circle')
-      .data(miserbles.nodes)
+      .data(nodeList.nodes)
       .join('circle')
       .attr('r', 20)
+      .on('mouseenter', function hover() {
+        d3.select(this).attr('fill', 'rgb(251, 194, 44)');
+      })
+      .on('mouseleave', function hover() {
+        d3.select(this).attr('fill', '#060724');
+      })
       .call(
         d3.drag().on('start', dragStarted).on('drag', dragged).on('end', dragEnded) as (
-          selection: Selection<any | SVGCircleElement, { id: string; group: number }, SVGGElement, unknown>,
+          selection: Selection<any | SVGCircleElement, Node & SimulationNodeDatum, SVGGElement, unknown>,
         ) => void,
       );
 
@@ -243,23 +129,12 @@ export default function App({ nodeList }: AppProps) {
       .attr('fill', 'white')
       .attr('fontSize', 12)
       .selectAll('text')
-      .data(miserbles.nodes)
+      .data(nodeList.nodes)
       .join('text')
       .attr('textAnchor', 'middle')
       .attr('dy', 6)
       .attr('dx', -4)
-      .text((d: any) => 6);
-
-    const ticked = () => {
-      link
-        .attr('x1', (d: any) => d.source.x)
-        .attr('y1', (d: any) => d.source.y)
-        .attr('x2', (d: any) => d.target.x)
-        .attr('y2', (d: any) => d.target.y);
-
-      node.attr('cx', (d: any) => d.x).attr('cy', (d: any) => d.y);
-      text.attr('x', (d: any) => d.x).attr('y', (d: any) => d.y);
-    };
+      .text(6);
 
     const simulation = d3
       .forceSimulation(nodeList.nodes as SimulationNodeDatum[])
@@ -267,13 +142,24 @@ export default function App({ nodeList }: AppProps) {
         'link',
         d3
           .forceLink(nodeList.links)
-          .id((d: any) => d.id)
+          .id((d: any) => d.id as string)
           .distance(120),
       )
       .force('charge', d3.forceManyBody().strength(-100))
       .force('x', d3.forceX(300))
       .force('y', d3.forceY(300))
-      .on('tick', ticked);
+      .on('tick', () => {
+        link
+          .attr('x1', (d: SimulationLinkDatum<any>) => d.source.x as number)
+          .attr('y1', (d: SimulationLinkDatum<any>) => d.source.y as number)
+          .attr('x2', (d: SimulationLinkDatum<any>) => d.target.x as number)
+          .attr('y2', (d: SimulationLinkDatum<any>) => d.target.y as number);
+
+        node
+          .attr('cx', (d: SimulationNodeDatum) => d.x as number)
+          .attr('cy', (d: SimulationNodeDatum) => d.y as number);
+        text.attr('x', (d: SimulationNodeDatum) => d.x as number).attr('y', (d: SimulationNodeDatum) => d.y as number);
+      });
   }, [nodeList?.nodes, nodeList?.links]);
 
   return (
@@ -282,3 +168,122 @@ export default function App({ nodeList }: AppProps) {
     </main>
   );
 }
+
+// import "./styles.css";
+// import * as d3 from "d3";
+// import { useEffect, useMemo, useState } from "react";
+
+// function ForceGraph({ nodes, links }) {
+//   const [animatedNodes, setAnimatedNodes] = useState([]);
+
+//   const [animatedLinks, setAnimatedLinks] = useState([]);
+
+//   // re-create animation every time nodes change
+//   useEffect(() => {
+//     const simulation = d3
+//       .forceSimulation(nodes)
+//       .force("x", d3.forceX(400))
+//       .force("y", d3.forceY(400))
+//       .force(
+//         "link",
+//         d3
+//           .forceLink(links)
+//           .id((d) => d.id)
+//           .distance(120)
+//       )
+//       .force("charge", d3.forceManyBody().strength(-100))
+//       .force("collision", d3.forceCollide(5));
+
+//     const forceLink = d3
+//       .forceLink(links)
+//       .id((l) => l.id)
+//       .distance(120);
+
+//     // update state on every frame
+//     simulation.on("tick", () => {
+//       setAnimatedNodes([...simulation.nodes()]);
+//       setAnimatedLinks([...forceLink.links()]);
+//     });
+
+//     // slow down with a small alpha
+//     simulation.alpha(0.1).restart();
+
+//     // stop simulation on unmount
+//     return () => simulation.stop();
+//   }, [nodes, links]);
+
+//   console.log(animatedLinks);
+//   return (
+//     <g>
+//       {animatedNodes.map((node) => (
+//         <circle
+//           cx={node.x}
+//           cy={node.y}
+//           r={10}
+//           key={node.id}
+//           stroke="black"
+//           fill="transparent"
+//         />
+//       ))}
+//       {animatedLinks.map((link) => (
+//         <line
+//           stroke="black"
+//           x1={link.source.x}
+//           y1={link.source.y}
+//           x2={link.target.x}
+//           y2={link.target.y}
+//         />
+//       ))}
+//     </g>
+//   );
+// }
+
+// export default function App() {
+//   const [charge, setCharge] = useState(-3);
+
+//   const miserbles = useMemo(
+//     () => ({
+//       nodes: [
+//         { id: "Myriel", group: 1 },
+//         { id: "Napoleon", group: 1 },
+//         { id: "Mlle.Baptistine", group: 1 },
+//         { id: "Mme.Magloire", group: 1 },
+//         { id: "CountessdeLo", group: 1 },
+//         { id: "Geborand", group: 1 },
+//         { id: "Champtercier", group: 1 }
+//       ],
+//       links: [
+//         { source: "Mlle.Baptistine", target: "Myriel", value: 8 },
+//         { source: "Mme.Magloire", target: "Myriel", value: 10 },
+//         { source: "Mme.Magloire", target: "Mlle.Baptistine", value: 6 },
+//         { source: "CountessdeLo", target: "Myriel", value: 1 },
+//         { source: "Napoleon", target: "Myriel", value: 1 },
+//         { source: "Geborand", target: "Myriel", value: 1 },
+//         { source: "Champtercier", target: "Myriel", value: 1 }
+//       ]
+//     }),
+//     []
+//   );
+
+//   return (
+//     <div className="App">
+//       <h1>React & D3 force graph</h1>
+//       <p>Current charge: {charge}</p>
+//       <input
+//         type="range"
+//         min="-30"
+//         max="30"
+//         step="1"
+//         value={charge}
+//         onChange={(e) => setCharge(e.target.value)}
+//       />
+//       <svg width="800" height="800" viewBox="0 0 800 800">
+//         <ForceGraph
+//           nodes={miserbles.nodes}
+//           links={miserbles.links}
+//           charge={charge}
+//         />
+//       </svg>
+//     </div>
+//   );
+// }
