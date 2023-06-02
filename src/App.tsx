@@ -98,6 +98,7 @@ export default function App({ nodeList }: AppProps) {
       .selectAll('path')
       .data(nodeList.links)
       .join('path')
+      .attr('id', (_, i) => `edge-path-${i}`)
       .attr('marker-end', 'url(#arrow)');
 
     const node = svg
@@ -135,6 +136,25 @@ export default function App({ nodeList }: AppProps) {
       .attr('dy', 6)
       .attr('dx', -4)
       .text(6);
+
+    const costText = svg
+      .append('g')
+      .attr('class', 'pointer-events-none')
+      .attr('fill', 'pink')
+      .attr('fontSize', 14)
+      .selectAll('.cost-text')
+      .data(nodeList.links)
+      .join('text')
+      .attr('textAnchor', 'middle')
+      .attr('dy', -4)
+      .attr('dx', 38)
+      .attr('id', (_, i) => `edge-path-${i}`);
+
+    costText
+      .append('textPath')
+      .attr('xlink:href', (_, i) => `#edge-path-${i}`)
+      .style('pointer-events', 'none')
+      .text('edge');
 
     const simulation = d3
       .forceSimulation(nodeList.nodes as SimulationNodeDatum[])
