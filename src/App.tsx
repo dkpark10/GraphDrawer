@@ -95,9 +95,9 @@ export default function App({ nodeList }: AppProps) {
       .attr('stroke-opacity', 0.8)
       .attr('stroke-width', 1.5)
       .attr('stroke-linecap', 'round')
-      .selectAll('line')
+      .selectAll('path')
       .data(nodeList.links)
-      .join('line')
+      .join('path')
       .attr('marker-end', 'url(#arrow)');
 
     const node = svg
@@ -149,11 +149,16 @@ export default function App({ nodeList }: AppProps) {
       .force('x', d3.forceX(300))
       .force('y', d3.forceY(300))
       .on('tick', () => {
-        link
-          .attr('x1', (d: SimulationLinkDatum<any>) => d.source.x as number)
-          .attr('y1', (d: SimulationLinkDatum<any>) => d.source.y as number)
-          .attr('x2', (d: SimulationLinkDatum<any>) => d.target.x as number)
-          .attr('y2', (d: SimulationLinkDatum<any>) => d.target.y as number);
+        link.attr(
+          'd',
+          (d: SimulationLinkDatum<any>) =>
+            `M ${d.source.x as number} ${d.source.y as number} L ${d.target.x as number} ${d.target.y as number}`,
+        );
+        // link
+        //   .attr('x1', (d: SimulationLinkDatum<any>) => d.source.x as number)
+        //   .attr('y1', (d: SimulationLinkDatum<any>) => d.source.y as number)
+        //   .attr('x2', (d: SimulationLinkDatum<any>) => d.target.x as number)
+        //   .attr('y2', (d: SimulationLinkDatum<any>) => d.target.y as number);
 
         node
           .attr('cx', (d: SimulationNodeDatum) => d.x as number)
