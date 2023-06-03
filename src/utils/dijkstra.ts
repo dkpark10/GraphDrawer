@@ -101,9 +101,7 @@ export class Dijkstra {
     return path;
   }
 
-  /**
-   * @description 최단경로 역추적하는 함수
-   */
+  /** @description 최단경로 역추적하는 함수 */
   public backTracking(path: { [key: string]: string }) {
     const ret: { [key: string]: boolean } = {};
     let x = this.to;
@@ -120,16 +118,12 @@ export class Dijkstra {
     return ret;
   }
 
-  /**
-   * @description from to 정점이 하나라도 없다면
-   */
+  /** @description from to 정점이 하나라도 없다면 */
   public isExistVertex() {
     return Object.keys(this.graph).includes(this.from) && Object.keys(this.graph).includes(this.to);
   }
 
-  /**
-   * @description 객체 키값 개수가 정점 개수를 초과하는가?
-   */
+  /** @description 객체 키값 개수가 정점 개수를 초과하는가? */
   public isExceedVertexCount() {
     return Object.keys(this.graph).length >= this.vertexCount;
   }

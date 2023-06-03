@@ -26,34 +26,22 @@
 import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import type { SimulationNodeDatum, SimulationLinkDatum } from 'd3-force';
-import type { Selection } from 'd3-selection';
+import type { Selection, BaseType } from 'd3-selection';
 import type { D3DragEvent } from 'd3-drag';
-
-interface Node {
-  id?: string;
-  group?: number;
-}
-
-interface Edge {
-  source?: string;
-  target?: string;
-  value?: number;
-}
-
-interface AppProps {
-  nodeList: {
-    nodes: Array<Node & SimulationNodeDatum>;
-    links: Array<Edge & SimulationLinkDatum<SimulationNodeDatum>>;
-  };
-}
+import { shallow } from 'zustand/shallow';
+import { useGraphStore } from '@/store/graph2';
+import { GraphData, Node, Edge, AttrType } from '@/types/graph';
 
 type DragEvent = D3DragEvent<Element, SimulationNodeDatum, SimulationNodeDatum>;
 
-export default function App({ nodeList }: AppProps) {
+export default function App() {
   const svgRef = useRef<SVGSVGElement | null>(null);
 
+  const { nodes, links } = useGraphStore((state) => state, shallow);
+  console.log(links, nodes);
+
   useEffect(() => {
-    if (!svgRef.current || nodeList.nodes.length <= 0 || nodeList.links.length <= 0) {
+    if (!svgRef.current || nodes.length <= 0 || links.length <= 0) {
       return;
     }
 
@@ -96,7 +84,7 @@ export default function App({ nodeList }: AppProps) {
       .attr('stroke-width', 1.5)
       .attr('stroke-linecap', 'round')
       .selectAll('path')
-      .data(nodeList.links)
+      .data(links)
       .join('path')
       .attr('id', (_, i) => `edge-path-${i}`)
       .attr('marker-end', 'url(#arrow)');
@@ -109,7 +97,7 @@ export default function App({ nodeList }: AppProps) {
       .attr('stroke-opacity', 1)
       .attr('stroke-width', 2.5)
       .selectAll('circle')
-      .data(nodeList.nodes)
+      .data(nodes)
       .join('circle')
       .attr('r', 20)
       .on('mouseenter', function hover() {
@@ -120,7 +108,7 @@ export default function App({ nodeList }: AppProps) {
       })
       .call(
         d3.drag().on('start', dragStarted).on('drag', dragged).on('end', dragEnded) as (
-          selection: Selection<any | SVGCircleElement, Node & SimulationNodeDatum, SVGGElement, unknown>,
+          selection: Selection<BaseType | SVGCircleElement, Node & SimulationNodeDatum, SVGGElement, unknown>,
         ) => void,
       );
 
@@ -130,7 +118,7 @@ export default function App({ nodeList }: AppProps) {
       .attr('fill', 'white')
       .attr('fontSize', 12)
       .selectAll('text')
-      .data(nodeList.nodes)
+      .data(nodes)
       .join('text')
       .attr('textAnchor', 'middle')
       .attr('dy', 6)
@@ -143,7 +131,7 @@ export default function App({ nodeList }: AppProps) {
       .attr('fill', 'pink')
       .attr('fontSize', 14)
       .selectAll('.cost-text')
-      .data(nodeList.links)
+      .data(links)
       .join('text')
       .attr('textAnchor', 'middle')
       .attr('dy', -4)
@@ -157,12 +145,12 @@ export default function App({ nodeList }: AppProps) {
       .text('edge');
 
     const simulation = d3
-      .forceSimulation(nodeList.nodes as SimulationNodeDatum[])
+      .forceSimulation(nodes as Array<SimulationNodeDatum & Node>)
       .force(
         'link',
         d3
-          .forceLink(nodeList.links)
-          .id((d: any) => d.id as string)
+          .forceLink(links)
+          .id((d: SimulationNodeDatum) => (d as Node).id as string)
           .distance(120),
       )
       .force('charge', d3.forceManyBody().strength(-100))
@@ -171,21 +159,14 @@ export default function App({ nodeList }: AppProps) {
       .on('tick', () => {
         link.attr(
           'd',
-          (d: SimulationLinkDatum<any>) =>
+          (d: AttrType) =>
             `M ${d.source.x as number} ${d.source.y as number} L ${d.target.x as number} ${d.target.y as number}`,
         );
-        // link
-        //   .attr('x1', (d: SimulationLinkDatum<any>) => d.source.x as number)
-        //   .attr('y1', (d: SimulationLinkDatum<any>) => d.source.y as number)
-        //   .attr('x2', (d: SimulationLinkDatum<any>) => d.target.x as number)
-        //   .attr('y2', (d: SimulationLinkDatum<any>) => d.target.y as number);
 
-        node
-          .attr('cx', (d: SimulationNodeDatum) => d.x as number)
-          .attr('cy', (d: SimulationNodeDatum) => d.y as number);
-        text.attr('x', (d: SimulationNodeDatum) => d.x as number).attr('y', (d: SimulationNodeDatum) => d.y as number);
+        node.attr('cx', (d: AttrType) => d.x as number).attr('cy', (d: AttrType) => d.y as number);
+        text.attr('x', (d: AttrType) => d.x as number).attr('y', (d: AttrType) => d.y as number);
       });
-  }, [nodeList?.nodes, nodeList?.links]);
+  }, [nodes, links]);
 
   return (
     <main className="flex justify-center items-center	 border border-red-500">

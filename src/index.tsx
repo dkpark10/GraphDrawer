@@ -6,7 +6,7 @@ import { miserbles } from '@/__mock__';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App nodeList={miserbles} />
+    <App />
   </React.StrictMode>,
   document.getElementById('root'),
 );

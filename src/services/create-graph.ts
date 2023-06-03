@@ -1,4 +1,5 @@
 import { ConnectedInfo } from 'global-type';
+import { GraphData, Edge } from '@/types/graph';
 
 export type VertexString = `${string} ${string} ${string}`;
 
@@ -63,5 +64,35 @@ export const createGraph = (textAreaContent: string, LIMIT_INPUT_VALUE_LINE = 10
   return {
     vertexCount,
     graph,
+  };
+};
+
+export const parseGraph = (textAreaContent: string): GraphData | undefined => {
+  const inputValue = textAreaContent.split('\n');
+  const [vertexCount] = inputValue[0].split(' ');
+
+  const nodeInfo = new Set<string>();
+
+  if (Number.isNaN(Number(vertexCount)) === true) {
+    return undefined;
+  }
+
+  const restInputValue = inputValue.splice(1);
+  const links = restInputValue.map((value): Edge => {
+    const [source, target, cost] = value.split(' ');
+
+    nodeInfo.add(source);
+    nodeInfo.add(target);
+
+    return {
+      source,
+      target,
+      cost,
+    };
+  });
+
+  return {
+    nodes: Array.from(nodeInfo).map((id) => ({ id })),
+    links,
   };
 };
