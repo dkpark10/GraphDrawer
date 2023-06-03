@@ -10,10 +10,13 @@ import { shallow } from 'zustand/shallow';
 import { useGraphStore } from '@/store/graph2';
 import { GraphData, Node, Edge, AttrType } from '@/types/graph';
 import { useArrowStore } from '@/store';
+import { MAIN_COLOR, SECOND_COLOR } from '@/constants';
 
 type DragEvent = D3DragEvent<Element, SimulationNodeDatum, SimulationNodeDatum>;
 
 const arrowMarkId = 'arrow';
+const WIDTH = 600;
+const HEIGHT = 600;
 
 export default function App() {
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -61,11 +64,11 @@ export default function App() {
       .attr('orient', 'auto-start-reverse');
 
     const marker = d3.select(`#${arrowMarkId}`);
-    marker.append('path').attr('d', 'M 0 0 L 10 5 L 0 10 z').attr('fill', '#020617');
+    marker.append('path').attr('d', 'M 0 0 L 10 5 L 0 10 z').attr('fill', MAIN_COLOR);
 
     const link = svg
       .append('g')
-      .attr('stroke', '#999')
+      .attr('stroke', MAIN_COLOR)
       .attr('stroke-opacity', 0.8)
       .attr('stroke-width', 1.5)
       .attr('stroke-linecap', 'round')
@@ -77,9 +80,9 @@ export default function App() {
 
     const node = svg
       .append('g')
-      .attr('fill', '#060724')
+      .attr('fill', MAIN_COLOR)
       .attr('class', 'cursor-pointer')
-      .attr('stroke', '#060724')
+      .attr('stroke', MAIN_COLOR)
       .attr('stroke-opacity', 1)
       .attr('stroke-width', 2.5)
       .selectAll('circle')
@@ -87,10 +90,10 @@ export default function App() {
       .join('circle')
       .attr('r', 20)
       .on('mouseenter', function hover() {
-        d3.select(this).attr('fill', 'rgb(251, 194, 44)');
+        d3.select(this).attr('fill', SECOND_COLOR);
       })
       .on('mouseleave', function hover() {
-        d3.select(this).attr('fill', '#060724');
+        d3.select(this).attr('fill', MAIN_COLOR);
       })
       .call(
         d3.drag().on('start', dragStarted).on('drag', dragged).on('end', dragEnded) as (
@@ -114,7 +117,7 @@ export default function App() {
     const costText = svg
       .append('g')
       .attr('class', 'pointer-events-none')
-      .attr('fill', '#060724')
+      .attr('fill', MAIN_COLOR)
       .attr('fontSize', 14)
       .selectAll('.cost-text')
       .data(links)
@@ -128,7 +131,7 @@ export default function App() {
       .append('textPath')
       .attr('xlink:href', (_, i) => `#edge-path-${i}`)
       .style('pointer-events', 'none')
-      .text(({ cost }) => cost);
+      .text(({ cost }) => cost || '');
 
     const simulation = d3
       .forceSimulation(nodes as Array<SimulationNodeDatum & Node>)
@@ -139,9 +142,9 @@ export default function App() {
           .id((d: SimulationNodeDatum) => (d as Node).id as string)
           .distance(140),
       )
-      .force('charge', d3.forceManyBody().strength(-100))
-      .force('x', d3.forceX(300))
-      .force('y', d3.forceY(300))
+      .force('charge', d3.forceManyBody().strength(-240))
+      .force('x', d3.forceX(WIDTH / 2))
+      .force('y', d3.forceY(HEIGHT / 2))
       .on('tick', () => {
         link.attr(
           'd',
@@ -154,7 +157,7 @@ export default function App() {
       });
   }, [nodes, links, isArrow]);
 
-  return <svg width="600" height="600" viewBox="0 0 600 600" ref={svgRef} />;
+  return <svg width={WIDTH} height={HEIGHT} viewBox={`0 0 ${WIDTH} ${HEIGHT}`} ref={svgRef} />;
 }
 
 // import "./styles.css";

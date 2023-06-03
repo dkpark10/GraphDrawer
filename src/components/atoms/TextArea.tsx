@@ -42,24 +42,32 @@
 // }
 
 import React, { useCallback, useMemo, useEffect, useState } from 'react';
-import { parseGraph } from '@/services/create-graph';
-import { useGraphStore } from '@/store/graph2';
+import { parseGraph, createGraph } from '@/services/create-graph';
+import { useGraphStore } from '@/store/graph';
+import { useGraphStore as useGraphStore2 } from '@/store/graph2';
 import { debounce } from '@/utils';
 
 export default function TextArea(): JSX.Element {
-  const zsSetGraph = useGraphStore((state) => state.setGraph);
+  const setGraph = useGraphStore((state) => state.setGraph);
+
+  const setGraph2 = useGraphStore2((state) => state.setGraph);
 
   const [value, setValue] = useState<string>('6\n1 2 2\n2 3 8\n3 4 1\n1 4 9\n4 5 7\n5 6 2\n4 6 6\n3 6 9');
 
   const debounceSetGraph = useMemo(
     () =>
       debounce((arg: string) => {
-        const ng = parseGraph(arg[0]);
+        const ng = createGraph(arg[0]);
+        const ng2 = parseGraph(arg[0]);
         if (ng !== undefined) {
-          zsSetGraph(ng);
+          setGraph(ng);
+        }
+
+        if (ng2 !== undefined) {
+          setGraph2(ng2);
         }
       }, 550),
-    [zsSetGraph],
+    [setGraph, setGraph2],
   );
 
   const handleChange = useCallback(

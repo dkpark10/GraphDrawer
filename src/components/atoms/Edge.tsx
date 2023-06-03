@@ -23,7 +23,6 @@ const calculCostCoord = (from: number[], to: number[]) => {
 
 export default function Edge({ from, to, cost, color }: EdgeProps) {
   const isArrow = useArrowStore((state) => state.isArrow);
-  // const isArrow = useSelector(({ arrowDirect }: RootState) => arrowDirect.isArrow);
 
   const [fromY, fromX] = from;
   const [toY, toX] = to;

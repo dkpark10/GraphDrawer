@@ -88,7 +88,7 @@ export const parseGraph = (textAreaContent: string): GraphData | undefined => {
     nodeInfo.add(source);
     nodeInfo.add(target);
 
-    return [...acc, { source, target, cost }];
+    return [...acc, { source, target, cost: Number.isNaN(Number(cost)) ? '0' : cost }];
   }, [] as Array<Edge>);
 
   return {

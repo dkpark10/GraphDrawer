@@ -9,7 +9,7 @@ export interface Node {
   id: ReactText;
 }
 
-export type Edge = { cost: string } & SimulationLinkDatum<SimulationNodeDatum>;
+export type Edge = { cost?: string } & SimulationLinkDatum<SimulationNodeDatum>;
 
 export interface GraphData {
   nodes: Array<Node>;
