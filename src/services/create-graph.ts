@@ -78,18 +78,18 @@ export const parseGraph = (textAreaContent: string): GraphData | undefined => {
   }
 
   const restInputValue = inputValue.splice(1);
-  const links = restInputValue.map((value): Edge => {
+  const links = restInputValue.reduce((acc, value) => {
     const [source, target, cost] = value.split(' ');
+
+    if (!source || !target || !cost) {
+      return acc;
+    }
 
     nodeInfo.add(source);
     nodeInfo.add(target);
 
-    return {
-      source,
-      target,
-      cost,
-    };
-  });
+    return [...acc, { source, target, cost }];
+  }, [] as Array<Edge>);
 
   return {
     nodes: Array.from(nodeInfo).map((id) => ({ id })),
