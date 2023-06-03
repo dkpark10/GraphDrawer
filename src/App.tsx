@@ -31,13 +31,18 @@ import type { D3DragEvent } from 'd3-drag';
 import { shallow } from 'zustand/shallow';
 import { useGraphStore } from '@/store/graph2';
 import { GraphData, Node, Edge, AttrType } from '@/types/graph';
+import { useArrowStore } from '@/store';
 
 type DragEvent = D3DragEvent<Element, SimulationNodeDatum, SimulationNodeDatum>;
+
+const arrowMarkId = 'arrow';
 
 export default function App() {
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   const { nodes, links } = useGraphStore((state) => state, shallow);
+
+  const isArrow = useArrowStore((state) => state.isArrow);
 
   useEffect(() => {
     if (!svgRef.current || nodes.length <= 0 || links.length <= 0) {
@@ -65,15 +70,15 @@ export default function App() {
     svg
       .append('defs')
       .append('marker')
-      .attr('id', 'arrow')
+      .attr('id', arrowMarkId)
       .attr('viewBox', '0 0 10 10')
-      .attr('refX', '24')
+      .attr('refX', '26')
       .attr('refY', '5')
       .attr('markerWidth', '8')
       .attr('markerHeight', '8')
       .attr('orient', 'auto-start-reverse');
 
-    const marker = d3.select('#arrow');
+    const marker = d3.select(`#${arrowMarkId}`);
     marker.append('path').attr('d', 'M 0 0 L 10 5 L 0 10 z').attr('fill', '#020617');
 
     const link = svg
@@ -86,7 +91,7 @@ export default function App() {
       .data(links)
       .join('path')
       .attr('id', (_, i) => `edge-path-${i}`)
-      .attr('marker-end', 'url(#arrow)');
+      .attr('marker-end', !isArrow ? `url(#${arrowMarkId})` : '');
 
     const node = svg
       .append('g')
@@ -122,12 +127,12 @@ export default function App() {
       .attr('textAnchor', 'middle')
       .attr('dy', 6)
       .attr('dx', -4)
-      .text(6);
+      .text((d) => d.id as string);
 
     const costText = svg
       .append('g')
       .attr('class', 'pointer-events-none')
-      .attr('fill', 'pink')
+      .attr('fill', '#060724')
       .attr('fontSize', 14)
       .selectAll('.cost-text')
       .data(links)
@@ -141,9 +146,7 @@ export default function App() {
       .append('textPath')
       .attr('xlink:href', (_, i) => `#edge-path-${i}`)
       .style('pointer-events', 'none')
-      .text((d) => {
-        return d.cost;
-      });
+      .text(({ cost }) => cost);
 
     const simulation = d3
       .forceSimulation(nodes as Array<SimulationNodeDatum & Node>)
@@ -167,7 +170,7 @@ export default function App() {
         node.attr('cx', (d: AttrType) => d.x as number).attr('cy', (d: AttrType) => d.y as number);
         text.attr('x', (d: AttrType) => d.x as number).attr('y', (d: AttrType) => d.y as number);
       });
-  }, [nodes, links]);
+  }, [nodes, links, isArrow]);
 
   return (
     <main className="flex justify-center items-center	 border border-red-500">
@@ -242,55 +245,5 @@ export default function App() {
 //         />
 //       ))}
 //     </g>
-//   );
-// }
-
-// export default function App() {
-//   const [charge, setCharge] = useState(-3);
-
-//   const miserbles = useMemo(
-//     () => ({
-//       nodes: [
-//         { id: "Myriel", group: 1 },
-//         { id: "Napoleon", group: 1 },
-//         { id: "Mlle.Baptistine", group: 1 },
-//         { id: "Mme.Magloire", group: 1 },
-//         { id: "CountessdeLo", group: 1 },
-//         { id: "Geborand", group: 1 },
-//         { id: "Champtercier", group: 1 }
-//       ],
-//       links: [
-//         { source: "Mlle.Baptistine", target: "Myriel", value: 8 },
-//         { source: "Mme.Magloire", target: "Myriel", value: 10 },
-//         { source: "Mme.Magloire", target: "Mlle.Baptistine", value: 6 },
-//         { source: "CountessdeLo", target: "Myriel", value: 1 },
-//         { source: "Napoleon", target: "Myriel", value: 1 },
-//         { source: "Geborand", target: "Myriel", value: 1 },
-//         { source: "Champtercier", target: "Myriel", value: 1 }
-//       ]
-//     }),
-//     []
-//   );
-
-//   return (
-//     <div className="App">
-//       <h1>React & D3 force graph</h1>
-//       <p>Current charge: {charge}</p>
-//       <input
-//         type="range"
-//         min="-30"
-//         max="30"
-//         step="1"
-//         value={charge}
-//         onChange={(e) => setCharge(e.target.value)}
-//       />
-//       <svg width="800" height="800" viewBox="0 0 800 800">
-//         <ForceGraph
-//           nodes={miserbles.nodes}
-//           links={miserbles.links}
-//           charge={charge}
-//         />
-//       </svg>
-//     </div>
 //   );
 // }
