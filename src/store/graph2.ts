@@ -2,18 +2,25 @@ import { create, type StateCreator } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { GraphData } from '@/types/graph';
 
-export interface GraphStateDispatcher {
-  setGraph: (payload: GraphData) => void;
+export interface RawInputData {
+  rawInputData: string;
 }
 
-export const initialState: GraphData = {
+export interface GraphStateDispatcher {
+  setGraph: (payload: GraphData, rawInputData: string) => void;
+}
+
+export const initialState: GraphData & RawInputData = {
   nodes: [],
   links: [],
+  rawInputData: '',
 };
 
-const graphStore: StateCreator<GraphData & GraphStateDispatcher> = (set) => ({
+export type GraphStoreData = GraphData & GraphStateDispatcher & RawInputData;
+
+const graphStore: StateCreator<GraphStoreData> = (set) => ({
   ...initialState,
-  setGraph: ({ nodes, links }) => set(() => ({ nodes, links })),
+  setGraph: ({ nodes, links }, rawInputData) => set(() => ({ nodes, links, rawInputData })),
 });
 
-export const useGraphStore = create<GraphData & GraphStateDispatcher>()(devtools(graphStore));
+export const useGraphStore = create<GraphStoreData>()(devtools(graphStore));

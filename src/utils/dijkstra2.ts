@@ -12,7 +12,7 @@ export class Dijkstra2 {
 
   private to = '';
 
-  private dist: { [key: string]: number } = {};
+  private distance: { [key: string]: number } = {};
 
   constructor(builder: DijkstraBuilder2) {
     this.initGraph = builder.getGraphInfo();
@@ -28,11 +28,11 @@ export class Dijkstra2 {
   //   const path: { [key: string]: string } = {};
 
   //   Object.keys(this.graph).forEach((ele) => {
-  //     this.dist[ele] = this.dist[ele] || INFINITY;
+  //     this.distance[ele] = this.distance[ele] || INFINITY;
   //     path[ele] = path[ele] || ele;
   //   });
 
-  //   this.dist[this.from] = 0;
+  //   this.distance[this.from] = 0;
 
   //   const pq = new PriorityQueue<Pair>((a, b) => a[0] - b[0]);
   //   pq.push([0, this.from]);
@@ -42,15 +42,15 @@ export class Dijkstra2 {
   //     pq.pop();
 
   //     // eslint-disable-next-line no-continue
-  //     if (this.dist[curVertex] < cost) continue;
+  //     if (this.distance[curVertex] < cost) continue;
 
   //     Object.entries(this.graph[curVertex]).forEach((ele) => {
   //       const [nextVertex, tmpcost] = ele;
   //       const nextCost = Number(tmpcost) + cost;
 
-  //       if (nextCost < this.dist[nextVertex]) {
+  //       if (nextCost < this.distance[nextVertex]) {
   //         path[nextVertex] = curVertex;
-  //         this.dist[nextVertex] = nextCost;
+  //         this.distance[nextVertex] = nextCost;
   //         pq.push([nextCost, nextVertex]);
   //       }
   //     });

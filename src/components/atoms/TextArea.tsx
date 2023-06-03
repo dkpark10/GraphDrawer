@@ -64,7 +64,7 @@ export default function TextArea(): JSX.Element {
         }
 
         if (ng2 !== undefined) {
-          setGraph2(ng2);
+          setGraph2(ng2, arg);
         }
       }, 550),
     [setGraph, setGraph2],

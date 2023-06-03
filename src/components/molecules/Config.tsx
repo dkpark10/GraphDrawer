@@ -22,9 +22,13 @@ export default function Config() {
 
   const graphInfo = useGraphStore(({ graph, vertexCount }) => ({ vertexCount, graph }));
 
-  const { nodes, links } = useGraphStore2((state) => state, shallow);
+  const { nodes, links, rawInputData } = useGraphStore2((state) => state, shallow);
 
   const arrowToggle = () => setArrowDirect();
+
+  const isExistNodes = () => {
+    return nodes.some((node) => node.id === inputList.from) && nodes.some((node) => node.id === inputList.to);
+  };
 
   const findShortestPath = () => {
     const dijkstra = new DijkstraBuilder()
@@ -42,8 +46,7 @@ export default function Config() {
         path: ret,
       });
     }
-
-    if (nodes.includes({ id: inputList.from }) && nodes.includes({ id: inputList.to })) {
+    if (!isExistNodes()) {
       return;
     }
 
