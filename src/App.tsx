@@ -38,7 +38,6 @@ export default function App() {
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   const { nodes, links } = useGraphStore((state) => state, shallow);
-  console.log(links, nodes);
 
   useEffect(() => {
     if (!svgRef.current || nodes.length <= 0 || links.length <= 0) {
@@ -142,7 +141,9 @@ export default function App() {
       .append('textPath')
       .attr('xlink:href', (_, i) => `#edge-path-${i}`)
       .style('pointer-events', 'none')
-      .text('edge');
+      .text((d) => {
+        return d.cost;
+      });
 
     const simulation = d3
       .forceSimulation(nodes as Array<SimulationNodeDatum & Node>)
@@ -151,7 +152,7 @@ export default function App() {
         d3
           .forceLink(links)
           .id((d: SimulationNodeDatum) => (d as Node).id as string)
-          .distance(120),
+          .distance(140),
       )
       .force('charge', d3.forceManyBody().strength(-100))
       .force('x', d3.forceX(300))
