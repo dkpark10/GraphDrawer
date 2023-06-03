@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { shallow } from 'zustand/shallow';
 import { DijkstraBuilder } from '@/utils/dijkstra';
-import { useArrowStore, useGraphStore, useShortestPathStore } from '@/store/index';
+import { DijkstraBuilder2 } from '@/utils/dijkstra2';
+import { useArrowStore, useGraphStore, useShortestPathStore } from '@/store';
+import { useGraphStore as useGraphStore2 } from '@/store/graph2';
 
 interface InputList {
   from: string;
@@ -19,9 +22,11 @@ export default function Config() {
 
   const graphInfo = useGraphStore(({ graph, vertexCount }) => ({ vertexCount, graph }));
 
+  const { nodes, links } = useGraphStore2((state) => state, shallow);
+
   const arrowToggle = () => setArrowDirect();
 
-  const run = () => {
+  const findShortestPath = () => {
     const dijkstra = new DijkstraBuilder()
       .setGraphInfo(graphInfo)
       .setFromVertex(inputList.from)
@@ -37,6 +42,18 @@ export default function Config() {
         path: ret,
       });
     }
+
+    if (nodes.includes({ id: inputList.from }) && nodes.includes({ id: inputList.to })) {
+      return;
+    }
+
+    const dijkstra2 = new DijkstraBuilder2()
+      .setGraphInfo({ nodes, links })
+      .setFromVertex(inputList.from)
+      .setToVertex(inputList.to)
+      .build();
+
+    const result2 = dijkstra2.run();
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +99,7 @@ export default function Config() {
       <button
         className="bg-main-color text-white w-[90%] h-8 rounded-md my-5 hover:bg-pink-600"
         type="button"
-        onClick={run}
+        onClick={findShortestPath}
       >
         Find
       </button>
