@@ -1,4 +1,4 @@
-import { DijkstraBuilder } from '@/utils';
+// import { DijkstraBuilder } from '@/utils';
 import { DijkstraBuilder2 } from '@/utils/dijkstra2';
 
 describe('다익스트라 테스트', () => {

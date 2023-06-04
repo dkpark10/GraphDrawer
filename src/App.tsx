@@ -1,5 +1,4 @@
 import Main from '@/components/molecules/Main';
-import Main2 from '@/components/molecules/Main2';
 import Textarea from '@/components/atoms/TextArea';
 import Config from '@/components/molecules/Config';
 
@@ -15,7 +14,7 @@ export default function App() {
           <Config />
         </aside>
         <main className="w-[600px] h-[600px] border border-main-color rounded-xl">
-          <Main2 />
+          <Main />
         </main>
       </section>
     </>

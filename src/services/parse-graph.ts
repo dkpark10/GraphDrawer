@@ -88,7 +88,7 @@ export const parseGraph = (textAreaContent: string, LIMIT_INPUT_VALUE_LINE = 100
     nodeInfo.add(source);
     nodeInfo.add(target);
 
-    return [...acc, { source, target, cost: Number.isNaN(Number(cost)) ? '0' : cost }];
+    return [...acc, { source, target, cost: Number.isNaN(Number(cost)) ? undefined : cost }];
   }, [] as Array<Edge>);
 
   return {

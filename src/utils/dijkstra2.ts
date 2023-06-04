@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import { HeapQueue } from './heap-queue';
-import { initialState } from '@/store/graph';
 
 interface EdgeInfo {
   [key: string]: { [key: string]: string };
@@ -19,7 +18,10 @@ type VertexString = `${string} ${string} ${string}`;
 
 /** @todo 다익스트라가 너무 많은 일을 하고 있는 것 같다... */
 export class Dijkstra2 {
-  private initGraph: GraphState = initialState;
+  private initGraph: GraphState = {
+    vertexCount: '0',
+    graph: {},
+  };
 
   private from = '';
 
@@ -68,7 +70,10 @@ export class Dijkstra2 {
     const [vertexCount] = inputValue[0].split(' ');
 
     if (Number.isNaN(Number(vertexCount)) === true) {
-      return initialState;
+      return {
+        vertexCount: '0',
+        graph: {},
+      };
     }
 
     const restInputValue = inputValue.splice(1);

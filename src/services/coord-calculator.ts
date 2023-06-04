@@ -1,160 +1,160 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable max-classes-per-file */
 import { Point, Vertex, Connected } from 'global-type';
-import { GraphState } from '../store/graph';
+// import { GraphState } from '../store/graph';
 
-/**
- * @description 정점의 좌표를 배치하는 클래스
- */
-export class VertexCoordCalculator {
-  private graphInfo: GraphState;
+// /**
+//  * @description 정점의 좌표를 배치하는 클래스
+//  */
+// export class VertexCoordCalculator {
+//   private graphInfo: GraphState;
 
-  private vertexCount = 0;
+//   private vertexCount = 0;
 
-  private leftTop: Point;
+//   private leftTop: Point;
 
-  private rightBottom: Point;
+//   private rightBottom: Point;
 
-  private nodeCoord: Point[] = [];
+//   private nodeCoord: Point[] = [];
 
-  private readonly HORIZONTAL_AXIS = 0;
+//   private readonly HORIZONTAL_AXIS = 0;
 
-  constructor(builder: VertexCoordCalculatorBuilder) {
-    this.graphInfo = builder.getGraphInfo();
-    this.leftTop = builder.getLeftTop();
-    this.rightBottom = builder.getRightBottom();
-    this.vertexCount = Number(this.graphInfo.vertexCount);
-  }
+//   constructor(builder: VertexCoordCalculatorBuilder) {
+//     this.graphInfo = builder.getGraphInfo();
+//     this.leftTop = builder.getLeftTop();
+//     this.rightBottom = builder.getRightBottom();
+//     this.vertexCount = Number(this.graphInfo.vertexCount);
+//   }
 
-  /**
-   * @description 이진분할로 좌표를 랜덤 배치한다.
-   */
-  public run() {
-    this.BinarySpacePartitioning({ ...this.leftTop }, { ...this.rightBottom }, 0);
-    this.extractNodeCoordList();
+//   /**
+//    * @description 이진분할로 좌표를 랜덤 배치한다.
+//    */
+//   public run() {
+//     this.BinarySpacePartitioning({ ...this.leftTop }, { ...this.rightBottom }, 0);
+//     this.extractNodeCoordList();
 
-    return this.extractVertex();
-  }
+//     return this.extractVertex();
+//   }
 
-  public BinarySpacePartitioning(leftTop: Point, rightBottom: Point, depth: number) {
-    if (2 ** depth >= this.vertexCount) {
-      const randomY = Math.floor(Math.random() * (rightBottom.y - leftTop.y) + leftTop.y);
-      const randomX = Math.floor(Math.random() * (rightBottom.x - leftTop.x) + leftTop.x);
+//   public BinarySpacePartitioning(leftTop: Point, rightBottom: Point, depth: number) {
+//     if (2 ** depth >= this.vertexCount) {
+//       const randomY = Math.floor(Math.random() * (rightBottom.y - leftTop.y) + leftTop.y);
+//       const randomX = Math.floor(Math.random() * (rightBottom.x - leftTop.x) + leftTop.x);
 
-      this.nodeCoord.push({ y: randomY, x: randomX });
+//       this.nodeCoord.push({ y: randomY, x: randomX });
 
-      return;
-    }
+//       return;
+//     }
 
-    const axis = Math.floor(Math.floor(Math.random() * 2));
-    const ratio = Math.floor(Math.random() * (6 - 3) + 4);
+//     const axis = Math.floor(Math.floor(Math.random() * 2));
+//     const ratio = Math.floor(Math.random() * (6 - 3) + 4);
 
-    if (axis === this.HORIZONTAL_AXIS) {
-      const height = ((rightBottom.y - leftTop.y) * ratio) / 10 + leftTop.y;
-      this.BinarySpacePartitioning({ ...leftTop }, { y: height, x: rightBottom.x }, depth + 1);
-      this.BinarySpacePartitioning({ y: height + 1, x: leftTop.x }, { ...rightBottom }, depth + 1);
-    } else {
-      const width = ((rightBottom.x - leftTop.x) * ratio) / 10 + leftTop.x;
-      this.BinarySpacePartitioning({ ...leftTop }, { y: rightBottom.y, x: width }, depth + 1);
-      this.BinarySpacePartitioning({ y: leftTop.y, x: width + 1 }, { ...rightBottom }, depth + 1);
-    }
-  }
+//     if (axis === this.HORIZONTAL_AXIS) {
+//       const height = ((rightBottom.y - leftTop.y) * ratio) / 10 + leftTop.y;
+//       this.BinarySpacePartitioning({ ...leftTop }, { y: height, x: rightBottom.x }, depth + 1);
+//       this.BinarySpacePartitioning({ y: height + 1, x: leftTop.x }, { ...rightBottom }, depth + 1);
+//     } else {
+//       const width = ((rightBottom.x - leftTop.x) * ratio) / 10 + leftTop.x;
+//       this.BinarySpacePartitioning({ ...leftTop }, { y: rightBottom.y, x: width }, depth + 1);
+//       this.BinarySpacePartitioning({ y: leftTop.y, x: width + 1 }, { ...rightBottom }, depth + 1);
+//     }
+//   }
 
-  /**
-   * @description 랜덤한 노드 좌표 중 노드갯수만큼 뽑아낸다.
-   */
-  public extractNodeCoordList() {
-    let cnt = this.nodeCoord.length - this.vertexCount;
+//   /**
+//    * @description 랜덤한 노드 좌표 중 노드갯수만큼 뽑아낸다.
+//    */
+//   public extractNodeCoordList() {
+//     let cnt = this.nodeCoord.length - this.vertexCount;
 
-    while (cnt) {
-      const { length } = this.nodeCoord;
-      const idx = Math.floor(Math.random() * length);
-      this.nodeCoord.splice(idx, 1);
-      cnt -= 1;
-    }
-  }
+//     while (cnt) {
+//       const { length } = this.nodeCoord;
+//       const idx = Math.floor(Math.random() * length);
+//       this.nodeCoord.splice(idx, 1);
+//       cnt -= 1;
+//     }
+//   }
 
-  public extractVertex(init = { connectedList: [], coord: undefined }) {
-    const vertexList: { [key: string]: Vertex } = {};
+//   public extractVertex(init = { connectedList: [], coord: undefined }) {
+//     const vertexList: { [key: string]: Vertex } = {};
 
-    Object.entries(this.graphInfo.graph).forEach((ele) => {
-      const [key, value] = ele;
+//     Object.entries(this.graphInfo.graph).forEach((ele) => {
+//       const [key, value] = ele;
 
-      // 정점 객수를 넘어가면 리턴
-      if (Object.keys(vertexList).length >= this.vertexCount && Object.keys(vertexList).includes(key) === false) return;
+//       // 정점 객수를 넘어가면 리턴
+//       if (Object.keys(vertexList).length >= this.vertexCount && Object.keys(vertexList).includes(key) === false) return;
 
-      vertexList[key] = vertexList[key] || { ...init };
-      if (!vertexList[key].coord) {
-        [vertexList[key].coord] = this.nodeCoord;
+//       vertexList[key] = vertexList[key] || { ...init };
+//       if (!vertexList[key].coord) {
+//         [vertexList[key].coord] = this.nodeCoord;
 
-        this.nodeCoord.shift();
-      }
+//         this.nodeCoord.shift();
+//       }
 
-      vertexList[key].connectedList = this.connect(vertexList, value);
-    });
+//       vertexList[key].connectedList = this.connect(vertexList, value);
+//     });
 
-    return vertexList;
-  }
+//     return vertexList;
+//   }
 
-  public connect(vertexList: { [key: string]: Vertex }, connectedList: Connected) {
-    const ret: Connected = [];
+//   public connect(vertexList: { [key: string]: Vertex }, connectedList: Connected) {
+//     const ret: Connected = [];
 
-    connectedList.forEach((vele) => {
-      const { vertex, cost } = vele;
-      if (vertex === '' || cost === undefined) return;
+//     connectedList.forEach((vele) => {
+//       const { vertex, cost } = vele;
+//       if (vertex === '' || cost === undefined) return;
 
-      // 키값 개수는 정점갯수를 넘고 새로운 정점키값일 경우 리턴
-      if (Object.keys(vertexList).length >= this.vertexCount && vertexList[vertex] === undefined) return;
+//       // 키값 개수는 정점갯수를 넘고 새로운 정점키값일 경우 리턴
+//       if (Object.keys(vertexList).length >= this.vertexCount && vertexList[vertex] === undefined) return;
 
-      ret.push(vele);
-      vertexList[vertex] = vertexList[vertex] || { connectedList: [], coord: undefined };
+//       ret.push(vele);
+//       vertexList[vertex] = vertexList[vertex] || { connectedList: [], coord: undefined };
 
-      if (!vertexList[vertex].coord) {
-        [vertexList[vertex].coord] = this.nodeCoord;
+//       if (!vertexList[vertex].coord) {
+//         [vertexList[vertex].coord] = this.nodeCoord;
 
-        this.nodeCoord.shift();
-      }
-    });
+//         this.nodeCoord.shift();
+//       }
+//     });
 
-    return ret;
-  }
-}
+//     return ret;
+//   }
+// }
 
-export class VertexCoordCalculatorBuilder {
-  private graphInfo: GraphState = {} as GraphState;
+// export class VertexCoordCalculatorBuilder {
+//   private graphInfo: GraphState = {} as GraphState;
 
-  private leftTop: Point = { y: 0, x: 0 };
+//   private leftTop: Point = { y: 0, x: 0 };
 
-  private rightBottom: Point = { y: 0, x: 0 };
+//   private rightBottom: Point = { y: 0, x: 0 };
 
-  public setGraphInfo(graphInfo: GraphState) {
-    this.graphInfo = graphInfo;
-    return this;
-  }
+//   public setGraphInfo(graphInfo: GraphState) {
+//     this.graphInfo = graphInfo;
+//     return this;
+//   }
 
-  public setLeftTop(pt: Point) {
-    this.leftTop = pt;
-    return this;
-  }
+//   public setLeftTop(pt: Point) {
+//     this.leftTop = pt;
+//     return this;
+//   }
 
-  public setRightBottom(pt: Point) {
-    this.rightBottom = pt;
-    return this;
-  }
+//   public setRightBottom(pt: Point) {
+//     this.rightBottom = pt;
+//     return this;
+//   }
 
-  public getGraphInfo() {
-    return this.graphInfo;
-  }
+//   public getGraphInfo() {
+//     return this.graphInfo;
+//   }
 
-  public getLeftTop() {
-    return this.leftTop;
-  }
+//   public getLeftTop() {
+//     return this.leftTop;
+//   }
 
-  public getRightBottom() {
-    return this.rightBottom;
-  }
+//   public getRightBottom() {
+//     return this.rightBottom;
+//   }
 
-  public build() {
-    return new VertexCoordCalculator(this);
-  }
-}
+//   public build() {
+//     return new VertexCoordCalculator(this);
+//   }
+// }
