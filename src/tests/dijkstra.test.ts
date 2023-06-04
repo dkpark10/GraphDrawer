@@ -1,60 +1,12 @@
 import { DijkstraBuilder } from '@/utils';
-import { GraphState } from '@/store/graph';
 
 describe('다익스트라 테스트', () => {
   test('case1', () => {
-    const graphInfo = {
-      vertexCount: '6',
-      graph: {
-        '1': [
-          {
-            vertex: '2',
-            cost: '2',
-          },
-          {
-            vertex: '4',
-            cost: '9',
-          },
-        ],
-        '2': [
-          {
-            vertex: '3',
-            cost: '8',
-          },
-        ],
-        '3': [
-          {
-            vertex: '4',
-            cost: '1',
-          },
-          {
-            vertex: '6',
-            cost: '9',
-          },
-        ],
-        '4': [
-          {
-            vertex: '5',
-            cost: '7',
-          },
-          {
-            vertex: '6',
-            cost: '6',
-          },
-        ],
-        '5': [
-          {
-            vertex: '6',
-            cost: '2',
-          },
-        ],
-      },
-    } as GraphState;
-
+    const rawData = '6\n1 2 2\n2 3 8\n3 4 1\n1 4 9\n4 5 7\n5 6 2\n4 6 6\n3 6 9';
     const from = '1';
     const to = '6';
 
-    const dijkstra = new DijkstraBuilder().setGraphInfo(graphInfo).setFromVertex(from).setToVertex(to).build();
+    const dijkstra = new DijkstraBuilder().setGraphRawData(rawData).setFromVertex(from).setToVertex(to).build();
     const shortestPath = dijkstra.run();
 
     const expected = ['1', '4', '6'];
@@ -67,48 +19,12 @@ describe('다익스트라 테스트', () => {
   });
 
   test('case2', () => {
-    const graphInfo = {
-      vertexCount: '5',
-      graph: {
-        '5': [
-          {
-            vertex: '1',
-            cost: '1',
-          },
-        ],
-        '1': [
-          {
-            vertex: '2',
-            cost: '2',
-          },
-          {
-            vertex: '3',
-            cost: '3',
-          },
-        ],
-        '2': [
-          {
-            vertex: '3',
-            cost: '4',
-          },
-          {
-            vertex: '4',
-            cost: '5',
-          },
-        ],
-        '3': [
-          {
-            vertex: '4',
-            cost: '6',
-          },
-        ],
-      },
-    } as GraphState;
+    const rawData = '5\n5 1 1\n1 2 2\n1 3 3\n2 3 4\n2 4 5\n3 4 6';
 
     const from = '1';
     const to = '4';
 
-    const dijkstra = new DijkstraBuilder().setGraphInfo(graphInfo).setFromVertex(from).setToVertex(to).build();
+    const dijkstra = new DijkstraBuilder().setGraphRawData(rawData).setFromVertex(from).setToVertex(to).build();
     const shortestPath = dijkstra.run();
 
     const expected = ['1', '2', '4'];
@@ -121,38 +37,11 @@ describe('다익스트라 테스트', () => {
   });
 
   test('목적지까지 도달할 수 없을 때 테스트', () => {
-    const graphInfo = {
-      vertexCount: '6',
-      graph: {
-        A: [
-          {
-            vertex: 'B',
-            cost: '1',
-          },
-          {
-            vertex: 'D',
-            cost: '1',
-          },
-        ],
-        B: [
-          {
-            vertex: 'C',
-            cost: '2',
-          },
-        ],
-        E: [
-          {
-            vertex: 'F',
-            cost: '3',
-          },
-        ],
-      },
-    } as GraphState;
-
+    const rawData = '6\nA B 1\nA D 1\nB C 2\nE F 3';
     const from = 'A';
     const to = 'F';
 
-    const dijkstra = new DijkstraBuilder().setGraphInfo(graphInfo).setFromVertex(from).setToVertex(to).build();
+    const dijkstra = new DijkstraBuilder().setGraphRawData(rawData).setFromVertex(from).setToVertex(to).build();
     dijkstra.run();
 
     const dist = dijkstra.getDist();

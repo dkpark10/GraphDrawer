@@ -15,6 +15,9 @@ interface GraphState {
   };
 }
 
+type VertexString = `${string} ${string} ${string}`;
+
+/** @todo 다익스트라가 너무 많은 일을 하고 있는 것 같다... */
 export class Dijkstra {
   private initGraph: GraphState = initialState;
 
@@ -29,10 +32,70 @@ export class Dijkstra {
   private distance: { [key: string]: number } = {};
 
   constructor(builder: DijkstraBuilder) {
-    this.initGraph = builder.getGraphInfo();
+    this.initGraph = this.createGraph(builder.getGraphRawData());
     this.from = builder.getFromVertex();
     this.to = builder.getToVertex();
     this.vertexCount = Number(this.initGraph.vertexCount);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public getVertexList(inputValue: string[]) {
+    return inputValue
+      .map((item): VertexString => {
+        const [vertex1, vertex2, cost] = item.split(' ');
+        return vertex1 < vertex2 ? `${vertex1} ${vertex2} ${cost}` : `${vertex2} ${vertex1} ${cost}`;
+      })
+      .reduce((acc, item) => {
+        const [vertex1, vertex2] = item.split(' ');
+        const vertexs = `${vertex1}${vertex2}`;
+
+        const x = acc.find((v) => {
+          const [v1, v2] = v.split(' ');
+          const vs = `${v1}${v2}`;
+          return vertexs === vs;
+        });
+
+        if (!x) {
+          return [...acc, item];
+        }
+
+        return acc;
+      }, [] as Array<VertexString>);
+  }
+
+  public createGraph(rawGraphData: string, LIMIT_INPUT_VALUE_LINE = 100): GraphState {
+    const inputValue = rawGraphData.split('\n');
+    const [vertexCount] = inputValue[0].split(' ');
+
+    if (Number.isNaN(Number(vertexCount)) === true) {
+      return initialState;
+    }
+
+    const restInputValue = inputValue.splice(1);
+    const vertexList = this.getVertexList(restInputValue);
+
+    const graph = vertexList.reduce((acc, item, idx) => {
+      const [vertex1, vertex2, cost] = item.split(' ');
+
+      if (idx >= LIMIT_INPUT_VALUE_LINE) return acc;
+
+      if (vertex1 === '') return acc;
+
+      acc[vertex1] = acc[vertex1] || [];
+
+      if (vertex2 === undefined && cost === undefined) return acc;
+
+      if (vertex2 === '') return acc;
+
+      acc[vertex1].push({ vertex: vertex2, cost });
+
+      return acc;
+    }, {} as GraphState['graph']);
+
+    return {
+      vertexCount,
+      graph,
+    };
   }
 
   public run() {
@@ -131,14 +194,14 @@ export class Dijkstra {
 }
 
 export class DijkstraBuilder {
-  private graphInfo: GraphState = initialState;
+  private rawGraphData = '';
 
   private from = '';
 
   private to = '';
 
-  public setGraphInfo(graphInfo: GraphState) {
-    this.graphInfo = graphInfo;
+  public setGraphRawData(rawData: string) {
+    this.rawGraphData = rawData;
     return this;
   }
 
@@ -152,8 +215,8 @@ export class DijkstraBuilder {
     return this;
   }
 
-  public getGraphInfo() {
-    return this.graphInfo;
+  public getGraphRawData() {
+    return this.rawGraphData;
   }
 
   public getFromVertex() {

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { shallow } from 'zustand/shallow';
 import { DijkstraBuilder } from '@/utils/dijkstra';
-import { useArrowStore, useGraphStore, useShortestPathStore } from '@/store';
+import { useArrowStore, useShortestPathStore } from '@/store';
 import { useGraphStore as useGraphStore2 } from '@/store/graph2';
 
 type InputTuple = {
@@ -19,9 +19,7 @@ export default function Config() {
 
   const setShortestPath = useShortestPathStore((state) => state.setShortestPath);
 
-  const graphInfo = useGraphStore(({ graph, vertexCount }) => ({ vertexCount, graph }));
-
-  const { nodes, links, rawInputData } = useGraphStore2((state) => state, shallow);
+  const { nodes, rawInputData } = useGraphStore2((state) => state, shallow);
 
   const isExistNodes = () => {
     return (
@@ -36,7 +34,7 @@ export default function Config() {
     }
 
     const dijkstra = new DijkstraBuilder()
-      .setGraphInfo(graphInfo)
+      .setGraphRawData(rawInputData)
       .setFromVertex(inputFromToRef.current.from?.value)
       .setToVertex(inputFromToRef.current.from?.value)
       .build();
