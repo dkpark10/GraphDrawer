@@ -67,7 +67,7 @@ export const createGraph = (textAreaContent: string, LIMIT_INPUT_VALUE_LINE = 10
   };
 };
 
-export const parseGraph = (textAreaContent: string): GraphData | undefined => {
+export const parseGraph = (textAreaContent: string, LIMIT_INPUT_VALUE_LINE = 100): GraphData | undefined => {
   const inputValue = textAreaContent.split('\n');
   const [vertexCount] = inputValue[0].split(' ');
 
@@ -78,10 +78,10 @@ export const parseGraph = (textAreaContent: string): GraphData | undefined => {
   }
 
   const restInputValue = inputValue.splice(1);
-  const links = restInputValue.reduce((acc, value) => {
+  const links = restInputValue.reduce((acc, value, idx) => {
     const [source, target, cost] = value.split(' ');
 
-    if (!source || !target || !cost) {
+    if (!source || !target || !cost || idx >= LIMIT_INPUT_VALUE_LINE) {
       return acc;
     }
 

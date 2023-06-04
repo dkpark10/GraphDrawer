@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import { shallow } from 'zustand/shallow';
 import { DijkstraBuilder } from '@/utils/dijkstra';
-import { DijkstraBuilder2 } from '@/utils/dijkstra2';
 import { useArrowStore, useGraphStore, useShortestPathStore } from '@/store';
 import { useGraphStore as useGraphStore2 } from '@/store/graph2';
 
@@ -24,8 +23,6 @@ export default function Config() {
 
   const { nodes, links, rawInputData } = useGraphStore2((state) => state, shallow);
 
-  const arrowToggle = () => setArrowDirect();
-
   const isExistNodes = () => {
     return (
       nodes.some((node) => node.id === inputFromToRef.current.from?.value) &&
@@ -34,11 +31,7 @@ export default function Config() {
   };
 
   const findShortestPath = () => {
-    if (!inputFromToRef.current.from || !inputFromToRef.current.to) {
-      return;
-    }
-
-    if (!isExistNodes()) {
+    if (!inputFromToRef.current.from || !inputFromToRef.current.to || !isExistNodes()) {
       return;
     }
 
@@ -48,30 +41,18 @@ export default function Config() {
       .setToVertex(inputFromToRef.current.from?.value)
       .build();
 
-    const ret = dijkstra.run();
-
-    if (ret !== false) {
-      setShortestPath({
-        from: inputFromToRef.current.from?.value,
-        to: inputFromToRef.current.to?.value,
-        path: ret,
-      });
-    }
-
-    const dijkstra2 = new DijkstraBuilder2()
-      .setGraphInfo({ nodes, links })
-      .setFromVertex(inputFromToRef.current.from?.value)
-      .setToVertex(inputFromToRef.current.from?.value)
-      .build();
-
-    const result2 = dijkstra2.run();
+    setShortestPath({
+      from: inputFromToRef.current.from?.value,
+      to: inputFromToRef.current.to?.value,
+      path: dijkstra.run(),
+    });
   };
 
   return (
     <div className="mt-[20px] w-[200px] h-[292px] p-2.5 flex items-center border border-main-color flex-col">
       <div className="m-3 text-sm">Undirected : Directed</div>
       <label className="arrow-button relative inline-block w-15 h-[22px]" htmlFor="direction">
-        <input type="checkbox" onChange={arrowToggle} id="direction" />
+        <input type="checkbox" onChange={() => setArrowDirect()} id="direction" />
         <span className="onoff-switch" />
       </label>
       <div className="m-3 text-sm">Shortest Path Find</div>

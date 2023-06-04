@@ -1,4 +1,4 @@
-import { DijkstraBuilder, INFINITY } from '@/utils';
+import { DijkstraBuilder } from '@/utils';
 import { GraphState } from '@/store/graph';
 
 describe('다익스트라 테스트', () => {
@@ -156,6 +156,6 @@ describe('다익스트라 테스트', () => {
     dijkstra.run();
 
     const dist = dijkstra.getDist();
-    expect(dist).toEqual({ A: 0, B: 1, D: 1, C: 3, E: INFINITY, F: INFINITY });
+    expect(dist).toEqual({ A: 0, B: 1, D: 1, C: 3, E: Infinity, F: Infinity });
   });
 });
