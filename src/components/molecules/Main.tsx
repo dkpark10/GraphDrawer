@@ -18,6 +18,7 @@ const arrowMarkId = 'arrow';
 const WIDTH = 600;
 const HEIGHT = 600;
 
+/** @todo 선언형으로 바꿔보자.. */
 export default function App() {
   const svgRef = useRef<SVGSVGElement | null>(null);
 
@@ -127,9 +128,8 @@ export default function App() {
       .selectAll('text')
       .data(nodes)
       .join('text')
-      .attr('textAnchor', 'middle')
+      .attr('text-anchor', 'middle')
       .attr('dy', 6)
-      .attr('dx', -4)
       .text((d) => d.id);
 
     const costText = svg
@@ -177,72 +177,3 @@ export default function App() {
 
   return <svg width={WIDTH} height={HEIGHT} viewBox={`0 0 ${WIDTH} ${HEIGHT}`} ref={svgRef} />;
 }
-
-// import "./styles.css";
-// import * as d3 from "d3";
-// import { useEffect, useMemo, useState } from "react";
-
-// function ForceGraph({ nodes, links }) {
-//   const [animatedNodes, setAnimatedNodes] = useState([]);
-
-//   const [animatedLinks, setAnimatedLinks] = useState([]);
-
-//   // re-create animation every time nodes change
-//   useEffect(() => {
-//     const simulation = d3
-//       .forceSimulation(nodes)
-//       .force("x", d3.forceX(400))
-//       .force("y", d3.forceY(400))
-//       .force(
-//         "link",
-//         d3
-//           .forceLink(links)
-//           .id((d) => d.id)
-//           .distance(120)
-//       )
-//       .force("charge", d3.forceManyBody().strength(-100))
-//       .force("collision", d3.forceCollide(5));
-
-//     const forceLink = d3
-//       .forceLink(links)
-//       .id((l) => l.id)
-//       .distance(120);
-
-//     // update state on every frame
-//     simulation.on("tick", () => {
-//       setAnimatedNodes([...simulation.nodes()]);
-//       setAnimatedLinks([...forceLink.links()]);
-//     });
-
-//     // slow down with a small alpha
-//     simulation.alpha(0.1).restart();
-
-//     // stop simulation on unmount
-//     return () => simulation.stop();
-//   }, [nodes, links]);
-
-//   console.log(animatedLinks);
-//   return (
-//     <g>
-//       {animatedNodes.map((node) => (
-//         <circle
-//           cx={node.x}
-//           cy={node.y}
-//           r={10}
-//           key={node.id}
-//           stroke="black"
-//           fill="transparent"
-//         />
-//       ))}
-//       {animatedLinks.map((link) => (
-//         <line
-//           stroke="black"
-//           x1={link.source.x}
-//           y1={link.source.y}
-//           x2={link.target.x}
-//           y2={link.target.y}
-//         />
-//       ))}
-//     </g>
-//   );
-// }
