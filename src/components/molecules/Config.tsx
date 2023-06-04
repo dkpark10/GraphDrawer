@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
+import { useRef } from 'react';
 import { shallow } from 'zustand/shallow';
 import { DijkstraBuilder } from '@/utils/dijkstra';
 import { DijkstraBuilder2 } from '@/utils/dijkstra2';
 import { useArrowStore, useGraphStore, useShortestPathStore } from '@/store';
 import { useGraphStore as useGraphStore2 } from '@/store/graph2';
 
-interface InputList {
-  from: string;
-  to: string;
-}
+type InputTuple = {
+  from: HTMLInputElement | null;
+  to: HTMLInputElement | null;
+};
 
 export default function Config() {
+  const inputFromToRef = useRef<InputTuple>({
+    from: null,
+    to: null,
+  });
+
   const setArrowDirect = useArrowStore((state) => state.setArrowDirect);
 
   const setShortestPath = useShortestPathStore((state) => state.setShortestPath);
-
-  const [inputList, setInputList] = useState<InputList>({
-    from: '',
-    to: '',
-  });
 
   const graphInfo = useGraphStore(({ graph, vertexCount }) => ({ vertexCount, graph }));
 
@@ -27,53 +27,44 @@ export default function Config() {
   const arrowToggle = () => setArrowDirect();
 
   const isExistNodes = () => {
-    return nodes.some((node) => node.id === inputList.from) && nodes.some((node) => node.id === inputList.to);
+    return (
+      nodes.some((node) => node.id === inputFromToRef.current.from?.value) &&
+      nodes.some((node) => node.id === inputFromToRef.current.to?.value)
+    );
   };
 
   const findShortestPath = () => {
+    if (!inputFromToRef.current.from || !inputFromToRef.current.to) {
+      return;
+    }
+
+    if (!isExistNodes()) {
+      return;
+    }
+
     const dijkstra = new DijkstraBuilder()
       .setGraphInfo(graphInfo)
-      .setFromVertex(inputList.from)
-      .setToVertex(inputList.to)
+      .setFromVertex(inputFromToRef.current.from?.value)
+      .setToVertex(inputFromToRef.current.from?.value)
       .build();
 
     const ret = dijkstra.run();
 
     if (ret !== false) {
       setShortestPath({
-        from: inputList.from,
-        to: inputList.to,
+        from: inputFromToRef.current.from?.value,
+        to: inputFromToRef.current.to?.value,
         path: ret,
       });
-    }
-    if (!isExistNodes()) {
-      return;
     }
 
     const dijkstra2 = new DijkstraBuilder2()
       .setGraphInfo({ nodes, links })
-      .setFromVertex(inputList.from)
-      .setToVertex(inputList.to)
+      .setFromVertex(inputFromToRef.current.from?.value)
+      .setToVertex(inputFromToRef.current.from?.value)
       .build();
 
     const result2 = dijkstra2.run();
-  };
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    if (name === 'path-from') {
-      setInputList((prev) => ({
-        ...prev,
-        from: value,
-      }));
-
-      return;
-    }
-    setInputList((prev) => ({
-      ...prev,
-      to: value,
-    }));
   };
 
   return (
@@ -92,8 +83,9 @@ export default function Config() {
               className="w-10 h-6 outline-main-color bg-slate-950 text-white px-1 rounded-md"
               type="text"
               name={`path-${ele}`}
-              onChange={onChange}
-              value={ele === 'from' ? inputList.from : inputList.to}
+              ref={(el) => {
+                inputFromToRef.current[ele as 'to' | 'from'] = el;
+              }}
               id={ele}
             />
           </label>
