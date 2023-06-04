@@ -6,7 +6,10 @@ export default function App() {
   return (
     <>
       <header className="flex items-center justify-center py-4">
-        <h1 className="text-4xl">Graph Painter</h1>
+        <h1 className="text-4xl flex items-center">
+          <img className="w-8 h-8" alt="main-img" src="graphpaintericon.png" />
+          Graph Painter
+        </h1>
       </header>
       <section className="w-full space-x-7 flex justify-center min-w-[1520px] h-[700px] m-auto">
         <aside>

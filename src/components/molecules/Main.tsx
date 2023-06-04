@@ -71,12 +71,18 @@ export default function App() {
     const link = svg
       .append('g')
       .attr('stroke-opacity', 0.8)
-      .attr('stroke-width', 2)
       .attr('stroke-linecap', 'round')
       .selectAll('path')
       .data(links)
       .join('path')
       .attr('id', (_, i) => `edge-path-${i}`)
+      .attr('stroke-width', (l) => {
+        const { source, target } = l;
+        return Object.prototype.hasOwnProperty.call(shortestPath.path, (source as Node).id) &&
+          Object.prototype.hasOwnProperty.call(shortestPath.path, (target as Node).id)
+          ? 3
+          : 2;
+      })
       .attr('stroke', (l) => {
         const { source, target } = l;
         return Object.prototype.hasOwnProperty.call(shortestPath.path, (source as Node).id) &&

@@ -1,4 +1,4 @@
-import { MAIN_COLOR } from './src/constants';
+import { MAIN_COLOR, ERROR_COLOR } from './src/constants';
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -10,6 +10,7 @@ module.exports = {
     extend: {
       colors: {
         'main-color': MAIN_COLOR,
+        'error-color': ERROR_COLOR,
       },
     },
   },

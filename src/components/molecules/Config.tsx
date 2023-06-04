@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { shallow } from 'zustand/shallow';
 import { DijkstraBuilder2 } from '@/utils/dijkstra2';
 import { useArrowStore, useShortestPathStore, useGraphStore } from '@/store';
@@ -18,6 +18,8 @@ export default function Config() {
 
   const setShortestPath = useShortestPathStore((state) => state.setShortestPath);
 
+  const [invalidInputNodes, setInvalidInputNodes] = useState(false);
+
   const { nodes, rawInputData } = useGraphStore((state) => state, shallow);
 
   const isExistNodes = () => {
@@ -29,8 +31,11 @@ export default function Config() {
 
   const findShortestPath = () => {
     if (!inputFromToRef.current.from || !inputFromToRef.current.to || !isExistNodes()) {
+      setInvalidInputNodes(true);
       return;
     }
+
+    setInvalidInputNodes(false);
 
     const dijkstra = new DijkstraBuilder2()
       .setGraphRawData(rawInputData)
@@ -69,6 +74,7 @@ export default function Config() {
           </label>
         ))}
       </div>
+      {invalidInputNodes && <div className="text-xs text-error-color h-3">invalid input</div>}
       <button
         className="bg-main-color text-white w-[90%] h-8 rounded-md my-5 hover:bg-pink-600"
         type="button"
