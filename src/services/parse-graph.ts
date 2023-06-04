@@ -81,7 +81,7 @@ export const parseGraph = (textAreaContent: string, LIMIT_INPUT_VALUE_LINE = 100
   const links = restInputValue.reduce((acc, value, idx) => {
     const [source, target, cost] = value.split(' ');
 
-    if (!source || !target || !cost || idx >= LIMIT_INPUT_VALUE_LINE) {
+    if (!source || !target || idx >= LIMIT_INPUT_VALUE_LINE) {
       return acc;
     }
 
