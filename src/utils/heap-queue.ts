@@ -1,6 +1,6 @@
 export type Comparator<T> = boolean | ((a: T, b: T) => number);
 
-export class PriorityQueue<T> {
+export class HeapQueue<T> {
   private readonly list: T[] = [];
 
   private readonly comparator: Comparator<T>;
@@ -8,7 +8,7 @@ export class PriorityQueue<T> {
   private readonly ascending = false;
 
   constructor(comparator?: Comparator<T>) {
-    this.comparator = comparator || this.ascending;
+    this.comparator = comparator || false;
   }
 
   private swap(idx1: number, idx2: number) {
@@ -44,11 +44,12 @@ export class PriorityQueue<T> {
 
   public pop() {
     if (this.isEmpty()) {
-      return;
+      return null;
     }
 
-    const rootValue = this.list.slice(-1)[0];
-    this.list[0] = rootValue;
+    const topData = this.list[0];
+    // eslint-disable-next-line prefer-destructuring
+    this.list[0] = this.list.slice(-1)[0];
     this.list.pop();
 
     let idx = 0;
@@ -83,6 +84,8 @@ export class PriorityQueue<T> {
         idx = rightChildIndex;
       }
     }
+
+    return topData;
   }
 
   public size(): number {

@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { PriorityQueue } from './heap-queue';
+import { HeapQueue } from './heap-queue';
 import { type GraphState, initialState } from '@/store/graph';
 import { GraphData } from '@/types/graph';
 

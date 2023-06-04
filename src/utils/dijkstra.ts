@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { PriorityQueue } from './heap-queue';
+import { HeapQueue } from './heap-queue';
 import { type GraphState, initialState } from '@/store/graph';
 
 interface EdgeInfo {
@@ -76,7 +76,7 @@ export class Dijkstra {
 
     this.dist[this.from] = 0;
 
-    const pq = new PriorityQueue<Pair>((a, b) => a[0] - b[0]);
+    const pq = new HeapQueue<Pair>((a, b) => a[0] - b[0]);
     pq.push([0, this.from]);
 
     while (!pq.isEmpty()) {
