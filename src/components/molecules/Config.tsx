@@ -47,12 +47,12 @@ export default function Config() {
 
   return (
     <div className="mt-[20px] w-[200px] h-[292px] p-2.5 flex items-center border border-main-color flex-col">
-      <div className="m-3 text-sm">Undirected : Directed</div>
+      <div className="m-3 text-sm">arrow marker</div>
       <label className="arrow-button relative inline-block w-15 h-[22px]" htmlFor="direction">
         <input type="checkbox" onChange={() => setArrowDirect()} id="direction" />
         <span className="onoff-switch" />
       </label>
-      <div className="m-3 text-sm">Shortest Path Find</div>
+      <div className="m-3 text-sm">shortest path find</div>
       <div className="flex w-full justify-center">
         {['from', 'to'].map((ele) => (
           <label className="text-sm" htmlFor={ele} key={ele}>
