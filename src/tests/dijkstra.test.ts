@@ -1,4 +1,5 @@
 import { DijkstraBuilder } from '@/utils';
+import { DijkstraBuilder2 } from '@/utils/dijkstra2';
 
 describe('다익스트라 테스트', () => {
   test('case1', () => {
@@ -6,7 +7,7 @@ describe('다익스트라 테스트', () => {
     const from = '1';
     const to = '6';
 
-    const dijkstra = new DijkstraBuilder().setGraphRawData(rawData).setFromVertex(from).setToVertex(to).build();
+    const dijkstra = new DijkstraBuilder2().setGraphRawData(rawData).setFromVertex(from).setToVertex(to).build();
     const shortestPath = dijkstra.run();
 
     const expected = ['1', '4', '6'];
@@ -24,7 +25,7 @@ describe('다익스트라 테스트', () => {
     const from = '1';
     const to = '4';
 
-    const dijkstra = new DijkstraBuilder().setGraphRawData(rawData).setFromVertex(from).setToVertex(to).build();
+    const dijkstra = new DijkstraBuilder2().setGraphRawData(rawData).setFromVertex(from).setToVertex(to).build();
     const shortestPath = dijkstra.run();
 
     const expected = ['1', '2', '4'];
@@ -41,7 +42,7 @@ describe('다익스트라 테스트', () => {
     const from = 'A';
     const to = 'F';
 
-    const dijkstra = new DijkstraBuilder().setGraphRawData(rawData).setFromVertex(from).setToVertex(to).build();
+    const dijkstra = new DijkstraBuilder2().setGraphRawData(rawData).setFromVertex(from).setToVertex(to).build();
     dijkstra.run();
 
     const dist = dijkstra.getDist();

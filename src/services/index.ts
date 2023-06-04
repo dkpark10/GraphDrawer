@@ -3,5 +3,5 @@
  */
 
 export * from './coord-calculator';
-export * from './create-graph';
+export * from './parse-graph';
 export * from './is-shortest-path';

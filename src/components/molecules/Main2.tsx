@@ -9,7 +9,7 @@ import type { D3DragEvent } from 'd3-drag';
 import { shallow } from 'zustand/shallow';
 import { useGraphStore } from '@/store/graph2';
 import { GraphData, Node, Edge, AttrType } from '@/types/graph';
-import { useArrowStore } from '@/store';
+import { useArrowStore, useShortestPathStore } from '@/store';
 import { MAIN_COLOR, SECOND_COLOR } from '@/constants';
 
 type DragEvent = D3DragEvent<Element, SimulationNodeDatum, SimulationNodeDatum>;
@@ -24,6 +24,8 @@ export default function App() {
   const { nodes, links } = useGraphStore((state) => state, shallow);
 
   const isArrow = useArrowStore((state) => state.isArrow);
+
+  const shortestPath = useShortestPathStore(({ from, to, path }) => ({ from, to, path }), shallow);
 
   useEffect(() => {
     if (!svgRef.current || nodes.length <= 0 || links.length <= 0) {
@@ -75,12 +77,13 @@ export default function App() {
       .selectAll('path')
       .data(links)
       .join('path')
-      .attr('id', (_, i) => `edge-path-${i}`)
+      .attr('id', (d, i) => {
+        return `edge-path-${i}`;
+      })
       .attr('marker-end', isArrow ? `url(#${arrowMarkId})` : '');
 
     const node = svg
       .append('g')
-      .attr('fill', MAIN_COLOR)
       .attr('class', 'cursor-pointer')
       .attr('stroke', MAIN_COLOR)
       .attr('stroke-opacity', 1)
@@ -93,7 +96,12 @@ export default function App() {
         d3.select(this).attr('fill', SECOND_COLOR);
       })
       .on('mouseleave', function hover() {
-        d3.select(this).attr('fill', MAIN_COLOR);
+        d3.select(this).attr('fill', (d) => {
+          return Object.prototype.hasOwnProperty.call(shortestPath.path, (d as Node).id) ? SECOND_COLOR : MAIN_COLOR;
+        });
+      })
+      .attr('fill', (d) => {
+        return Object.prototype.hasOwnProperty.call(shortestPath.path, d.id) ? SECOND_COLOR : MAIN_COLOR;
       })
       .call(
         d3.drag().on('start', dragStarted).on('drag', dragged).on('end', dragEnded) as (
@@ -112,7 +120,7 @@ export default function App() {
       .attr('textAnchor', 'middle')
       .attr('dy', 6)
       .attr('dx', -4)
-      .text((d) => d.id as string);
+      .text((d) => d.id);
 
     const costText = svg
       .append('g')
@@ -139,7 +147,7 @@ export default function App() {
         'link',
         d3
           .forceLink(links)
-          .id((d: SimulationNodeDatum) => (d as Node).id as string)
+          .id((d: SimulationNodeDatum) => (d as Node).id)
           .distance(140),
       )
       .force('charge', d3.forceManyBody().strength(-240))
@@ -155,7 +163,7 @@ export default function App() {
         node.attr('cx', (d: AttrType) => d.x as number).attr('cy', (d: AttrType) => d.y as number);
         text.attr('x', (d: AttrType) => d.x as number).attr('y', (d: AttrType) => d.y as number);
       });
-  }, [nodes, links, isArrow]);
+  }, [nodes, links, isArrow, shortestPath]);
 
   return <svg width={WIDTH} height={HEIGHT} viewBox={`0 0 ${WIDTH} ${HEIGHT}`} ref={svgRef} />;
 }

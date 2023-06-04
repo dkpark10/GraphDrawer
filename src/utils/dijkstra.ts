@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { HeapQueue } from './heap-queue';
-import { initialState } from '@/store/graph';
+import { type GraphState, initialState } from '@/store/graph';
 
 interface EdgeInfo {
   [key: string]: { [key: string]: string };
@@ -8,16 +8,8 @@ interface EdgeInfo {
 
 type Pair = [number, string];
 
-interface GraphState {
-  vertexCount: string;
-  graph: {
-    [key: string]: Array<{ vertex: string; cost: string }>;
-  };
-}
+export const INFINITY = Math.floor(Number.MAX_SAFE_INTEGER / 987);
 
-type VertexString = `${string} ${string} ${string}`;
-
-/** @todo 다익스트라가 너무 많은 일을 하고 있는 것 같다... */
 export class Dijkstra {
   private initGraph: GraphState = initialState;
 
@@ -29,77 +21,20 @@ export class Dijkstra {
 
   private vertexCount = 0;
 
-  private distance: { [key: string]: number } = {};
+  private dist: { [key: string]: number } = {};
 
   constructor(builder: DijkstraBuilder) {
-    this.initGraph = this.createGraph(builder.getGraphRawData());
+    this.initGraph = builder.getGraphInfo();
     this.from = builder.getFromVertex();
     this.to = builder.getToVertex();
     this.vertexCount = Number(this.initGraph.vertexCount);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  public getVertexList(inputValue: string[]) {
-    return inputValue
-      .map((item): VertexString => {
-        const [vertex1, vertex2, cost] = item.split(' ');
-        return vertex1 < vertex2 ? `${vertex1} ${vertex2} ${cost}` : `${vertex2} ${vertex1} ${cost}`;
-      })
-      .reduce((acc, item) => {
-        const [vertex1, vertex2] = item.split(' ');
-        const vertexs = `${vertex1}${vertex2}`;
-
-        const x = acc.find((v) => {
-          const [v1, v2] = v.split(' ');
-          const vs = `${v1}${v2}`;
-          return vertexs === vs;
-        });
-
-        if (!x) {
-          return [...acc, item];
-        }
-
-        return acc;
-      }, [] as Array<VertexString>);
-  }
-
-  public createGraph(rawGraphData: string, LIMIT_INPUT_VALUE_LINE = 100): GraphState {
-    const inputValue = rawGraphData.split('\n');
-    const [vertexCount] = inputValue[0].split(' ');
-
-    if (Number.isNaN(Number(vertexCount)) === true) {
-      return initialState;
-    }
-
-    const restInputValue = inputValue.splice(1);
-    const vertexList = this.getVertexList(restInputValue);
-
-    const graph = vertexList.reduce((acc, item, idx) => {
-      const [vertex1, vertex2, cost] = item.split(' ');
-
-      if (idx >= LIMIT_INPUT_VALUE_LINE) return acc;
-
-      if (vertex1 === '') return acc;
-
-      acc[vertex1] = acc[vertex1] || [];
-
-      if (vertex2 === undefined && cost === undefined) return acc;
-
-      if (vertex2 === '') return acc;
-
-      acc[vertex1].push({ vertex: vertex2, cost });
-
-      return acc;
-    }, {} as GraphState['graph']);
-
-    return {
-      vertexCount,
-      graph,
-    };
-  }
-
   public run() {
     this.mapping();
+
+    if (this.isExistVertex() === false) return false;
+
     return this.backTracking(this.dijkstra());
   }
 
@@ -135,11 +70,11 @@ export class Dijkstra {
     const path: { [key: string]: string } = {};
 
     Object.keys(this.graph).forEach((ele) => {
-      this.distance[ele] = this.distance[ele] || Infinity;
+      this.dist[ele] = this.dist[ele] || INFINITY;
       path[ele] = path[ele] || ele;
     });
 
-    this.distance[this.from] = 0;
+    this.dist[this.from] = 0;
 
     const pq = new HeapQueue<Pair>((a, b) => a[0] - b[0]);
     pq.push([0, this.from]);
@@ -149,15 +84,15 @@ export class Dijkstra {
       pq.pop();
 
       // eslint-disable-next-line no-continue
-      if (this.distance[curVertex] < cost) continue;
+      if (this.dist[curVertex] < cost) continue;
 
       Object.entries(this.graph[curVertex]).forEach((ele) => {
-        const [nextVertex, tmpCost] = ele;
-        const nextCost = Number(tmpCost) + cost;
+        const [nextVertex, tmpcost] = ele;
+        const nextCost = Number(tmpcost) + cost;
 
-        if (nextCost < this.distance[nextVertex]) {
+        if (nextCost < this.dist[nextVertex]) {
           path[nextVertex] = curVertex;
-          this.distance[nextVertex] = nextCost;
+          this.dist[nextVertex] = nextCost;
           pq.push([nextCost, nextVertex]);
         }
       });
@@ -183,25 +118,30 @@ export class Dijkstra {
     return ret;
   }
 
+  /** @description from to 정점이 하나라도 없다면 */
+  public isExistVertex() {
+    return Object.keys(this.graph).includes(this.from) && Object.keys(this.graph).includes(this.to);
+  }
+
   /** @description 객체 키값 개수가 정점 개수를 초과하는가? */
   public isExceedVertexCount() {
     return Object.keys(this.graph).length >= this.vertexCount;
   }
 
   public getDist() {
-    return this.distance;
+    return this.dist;
   }
 }
 
 export class DijkstraBuilder {
-  private rawGraphData = '';
+  private graphInfo: GraphState = initialState;
 
   private from = '';
 
   private to = '';
 
-  public setGraphRawData(rawData: string) {
-    this.rawGraphData = rawData;
+  public setGraphInfo(graphInfo: GraphState) {
+    this.graphInfo = graphInfo;
     return this;
   }
 
@@ -215,8 +155,8 @@ export class DijkstraBuilder {
     return this;
   }
 
-  public getGraphRawData() {
-    return this.rawGraphData;
+  public getGraphInfo() {
+    return this.graphInfo;
   }
 
   public getFromVertex() {

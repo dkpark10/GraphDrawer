@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useEffect, useState } from 'react';
-import { parseGraph, createGraph } from '@/services/create-graph';
-import { useGraphStore } from '@/store/graph';
+import { parseGraph, createGraph } from '@/services/parse-graph';
 import { useGraphStore as useGraphStore2 } from '@/store/graph2';
+import { useGraphStore } from '@/store/graph';
 import { debounce } from '@/utils';
 
 export default function TextArea(): JSX.Element {
@@ -15,7 +15,7 @@ export default function TextArea(): JSX.Element {
 
   const debounceSetGraph = useMemo(
     () =>
-      debounce((rawTextAreaValue: string) => {
+      debounce((rawTextAreaValue: [string]) => {
         const ng = createGraph(rawTextAreaValue[0]);
         const ng2 = parseGraph(rawTextAreaValue[0]);
         if (ng !== undefined) {
@@ -23,7 +23,7 @@ export default function TextArea(): JSX.Element {
         }
 
         if (ng2 !== undefined) {
-          setGraph2(ng2, rawTextAreaValue);
+          setGraph2(ng2, rawTextAreaValue[0]);
         }
       }, 550),
     [setGraph, setGraph2],

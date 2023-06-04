@@ -6,7 +6,7 @@ export interface Size {
 }
 
 export interface Node {
-  id: ReactText;
+  id: string;
 }
 
 export type Edge = { cost?: string } & SimulationLinkDatum<SimulationNodeDatum>;
