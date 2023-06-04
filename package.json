@@ -7,7 +7,7 @@
   "dependencies": {
     "d3": "^7.8.4",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2",    
+    "react-dom": "^17.0.2",
     "web-vitals": "^1.1.2",
     "zustand": "^4.3.8"
   },

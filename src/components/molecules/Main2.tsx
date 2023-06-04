@@ -3,12 +3,12 @@
 /* eslint-disable no-param-reassign */
 import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import type { SimulationNodeDatum, SimulationLinkDatum, Simulation } from 'd3-force';
+import type { SimulationNodeDatum } from 'd3-force';
 import type { Selection, BaseType } from 'd3-selection';
 import type { D3DragEvent } from 'd3-drag';
 import { shallow } from 'zustand/shallow';
 import { useGraphStore } from '@/store/graph2';
-import { GraphData, Node, Edge, AttrType } from '@/types/graph';
+import { Node, AttrType } from '@/types/graph';
 import { useArrowStore, useShortestPathStore } from '@/store';
 import { MAIN_COLOR, SECOND_COLOR } from '@/constants';
 
@@ -70,15 +70,19 @@ export default function App() {
 
     const link = svg
       .append('g')
-      .attr('stroke', MAIN_COLOR)
       .attr('stroke-opacity', 0.8)
-      .attr('stroke-width', 1.5)
+      .attr('stroke-width', 2)
       .attr('stroke-linecap', 'round')
       .selectAll('path')
       .data(links)
       .join('path')
-      .attr('id', (d, i) => {
-        return `edge-path-${i}`;
+      .attr('id', (_, i) => `edge-path-${i}`)
+      .attr('stroke', (l) => {
+        const { source, target } = l;
+        return Object.prototype.hasOwnProperty.call(shortestPath.path, (source as Node).id) &&
+          Object.prototype.hasOwnProperty.call(shortestPath.path, (target as Node).id)
+          ? SECOND_COLOR
+          : MAIN_COLOR;
       })
       .attr('marker-end', isArrow ? `url(#${arrowMarkId})` : '');
 
