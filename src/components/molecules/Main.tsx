@@ -3,7 +3,7 @@
 /* eslint-disable no-param-reassign */
 import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import type { SimulationNodeDatum } from 'd3-force';
+import type { SimulationNodeDatum, SimulationLinkDatum } from 'd3-force';
 import type { Selection, BaseType } from 'd3-selection';
 import type { D3DragEvent } from 'd3-drag';
 import { shallow } from 'zustand/shallow';
@@ -142,7 +142,7 @@ export default function App() {
       .join('text')
       .attr('textAnchor', 'middle')
       .attr('dy', -4)
-      .attr('dx', 38)
+      .attr('dx', 60)
       .attr('id', (_, i) => `edge-path-${i}`);
 
     costText
