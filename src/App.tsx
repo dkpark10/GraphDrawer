@@ -18,7 +18,7 @@ export default function App() {
           <Config />
         </aside>
         <main className="w-[600px] h-[600px] border border-main-color rounded-xl">
-          <Main3 />
+          <Main />
         </main>
       </section>
     </>

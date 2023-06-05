@@ -22,9 +22,13 @@ export default function TextArea(): JSX.Element {
   );
 
   const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setTextAreaValue(e.target.value);
-      debounceSetGraph(e.target.value);
+    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const {
+        target: { value },
+      } = event;
+
+      setTextAreaValue(value);
+      debounceSetGraph(value);
     },
     [debounceSetGraph],
   );

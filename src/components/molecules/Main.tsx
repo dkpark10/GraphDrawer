@@ -29,7 +29,7 @@ export default function App() {
   const shortestPath = useShortestPathStore(({ from, to, path }) => ({ from, to, path }), shallow);
 
   useEffect(() => {
-    if (!svgRef.current || nodes.length <= 0 || links.length <= 0) {
+    if (!svgRef.current) {
       return;
     }
 
