@@ -92,7 +92,7 @@ export const parseGraph = (textAreaContent: string, LIMIT_INPUT_VALUE_LINE = 100
   }, [] as Array<Edge>);
 
   return {
-    nodes: Array.from(nodeInfo).map((id) => ({ id })),
+    nodes: Array.from(nodeInfo).map((value) => ({ value })),
     links,
   };
 };

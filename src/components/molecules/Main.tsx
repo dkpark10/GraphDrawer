@@ -8,7 +8,7 @@ import type { Selection, BaseType } from 'd3-selection';
 import type { D3DragEvent } from 'd3-drag';
 import { shallow } from 'zustand/shallow';
 import { useGraphStore } from '@/store/graph';
-import { Node, AttrType } from '@/types/graph';
+import { Vertex, AttrType } from '@/types/graph';
 import { useArrowStore, useShortestPathStore } from '@/store';
 import { MAIN_COLOR, SECOND_COLOR } from '@/constants';
 
@@ -97,11 +97,13 @@ export default function App() {
       .attr('id', (_, i) => `edge-path-${i}`)
       .attr('stroke-width', (l) => {
         const { source, target } = l;
-        return isShortestPath((source as Node).id, (target as Node).id, shortestPathState.shortestPath) ? 3 : 2;
+        return isShortestPath((source as Vertex).value, (target as Vertex).value, shortestPathState.shortestPath)
+          ? 3
+          : 2;
       })
       .attr('stroke', (l) => {
         const { source, target } = l;
-        return isShortestPath((source as Node).id, (target as Node).id, shortestPathState.shortestPath)
+        return isShortestPath((source as Vertex).value, (target as Vertex).value, shortestPathState.shortestPath)
           ? SECOND_COLOR
           : MAIN_COLOR;
       })
@@ -122,15 +124,17 @@ export default function App() {
       })
       .on('mouseleave', function hover() {
         d3.select(this).attr('fill', (d) => {
-          return shortestPathState.shortestPath.some((vertex) => vertex === (d as Node).id) ? SECOND_COLOR : MAIN_COLOR;
+          return shortestPathState.shortestPath.some((vertex) => vertex === (d as Vertex).value)
+            ? SECOND_COLOR
+            : MAIN_COLOR;
         });
       })
       .attr('fill', (d) => {
-        return shortestPathState.shortestPath.some((vertex) => vertex === d.id) ? SECOND_COLOR : MAIN_COLOR;
+        return shortestPathState.shortestPath.some((vertex) => vertex === d.value) ? SECOND_COLOR : MAIN_COLOR;
       })
       .call(
         d3.drag().on('start', dragStarted).on('drag', dragged).on('end', dragEnded) as (
-          selection: Selection<BaseType | SVGCircleElement, Node & SimulationNodeDatum, SVGGElement, unknown>,
+          selection: Selection<BaseType | SVGCircleElement, Vertex & SimulationNodeDatum, SVGGElement, unknown>,
         ) => void,
       );
 
@@ -144,7 +148,7 @@ export default function App() {
       .join('text')
       .attr('text-anchor', 'middle')
       .attr('dy', 6)
-      .text((d) => d.id);
+      .text((d) => d.value);
 
     const costText = svg
       .append('g')
@@ -166,12 +170,12 @@ export default function App() {
       .text(({ cost }) => cost || '');
 
     const simulation = d3
-      .forceSimulation(nodes as Array<SimulationNodeDatum & Node>)
+      .forceSimulation(nodes as Array<SimulationNodeDatum & Vertex>)
       .force(
         'link',
         d3
           .forceLink(links)
-          .id((d: SimulationNodeDatum) => (d as Node).id)
+          .id((d: SimulationNodeDatum) => (d as Vertex).value)
           .distance(140),
       )
       .force('charge', d3.forceManyBody().strength(-240))

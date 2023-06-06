@@ -24,8 +24,8 @@ export default function Config() {
 
   const isExistNodes = () => {
     return (
-      nodes.some((node) => node.id === inputFromToRef.current.from?.value) &&
-      nodes.some((node) => node.id === inputFromToRef.current.to?.value)
+      nodes.some((node) => node.value === inputFromToRef.current.from?.value) &&
+      nodes.some((node) => node.value === inputFromToRef.current.to?.value)
     );
   };
 

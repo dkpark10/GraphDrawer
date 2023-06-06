@@ -6,7 +6,7 @@ import type { Selection, BaseType } from 'd3-selection';
 import type { D3DragEvent } from 'd3-drag';
 import { shallow } from 'zustand/shallow';
 import { useGraphStore } from '@/store/graph';
-import { Node, AttrType } from '@/types/graph';
+import { Vertex, AttrType } from '@/types/graph';
 import { useArrowStore, useShortestPathStore } from '@/store';
 import { MAIN_COLOR, SECOND_COLOR } from '@/constants';
 
@@ -32,11 +32,11 @@ export default function App() {
 
   const shortestPathState = useShortestPathStore(({ from, to, shortestPath }) => ({ from, to, shortestPath }), shallow);
 
-  const [simulationNodes, setSimulationNodes] = useState<Array<SimulationNodeDatum & Node>>([]);
+  const [simulationNodes, setSimulationNodes] = useState<Array<SimulationNodeDatum & Vertex>>([]);
 
   const [simulationLinks, setSimulationLinks] = useState<Array<SimulationLinkDatum<SimulationNodeDatum>>>([]);
 
-  const simulationRef = useRef<Simulation<d3.SimulationNodeDatum & Node, undefined>>();
+  const simulationRef = useRef<Simulation<d3.SimulationNodeDatum & Vertex, undefined>>();
 
   useEffect(() => {
     if (!svgRef.current || nodes.length <= 0 || links.length <= 0) {
@@ -45,11 +45,11 @@ export default function App() {
 
     const forceLink = d3
       .forceLink(links)
-      .id((d: SimulationNodeDatum) => (d as Node).id)
+      .id((d: SimulationNodeDatum) => (d as Vertex).value)
       .distance(140);
 
     simulationRef.current = d3
-      .forceSimulation(nodes as Array<SimulationNodeDatum & Node>)
+      .forceSimulation(nodes as Array<SimulationNodeDatum & Vertex>)
       .force('link', forceLink)
       .force('charge', d3.forceManyBody().strength(-240))
       .force('x', d3.forceX(WIDTH / 2))
@@ -59,7 +59,7 @@ export default function App() {
       // eslint-disable-next-line react/no-this-in-sfc
       const simulationNodesData = this.nodes().map((node) => ({
         ...node,
-        id: node.id,
+        id: node.value,
       }));
       setSimulationNodes(simulationNodesData);
       setSimulationLinks([...forceLink.links()]);
@@ -137,7 +137,7 @@ export default function App() {
             fill="white"
             textAnchor="middle"
           >
-            {node.id}
+            {node.value}
           </text>
         </g>
       ))}

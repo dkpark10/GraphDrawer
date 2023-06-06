@@ -5,14 +5,14 @@ export interface Size {
   height: number;
 }
 
-export interface Node {
-  id: string;
+export interface Vertex {
+  value: string;
 }
 
 export type Edge = { cost?: string } & SimulationLinkDatum<SimulationNodeDatum>;
 
 export interface GraphData {
-  nodes: Array<Node>;
+  nodes: Array<Vertex>;
   links: Array<Edge>;
 }
 
