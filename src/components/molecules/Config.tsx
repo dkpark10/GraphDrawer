@@ -46,7 +46,7 @@ export default function Config() {
     setShortestPath({
       from: inputFromToRef.current.from?.value,
       to: inputFromToRef.current.to?.value,
-      path: dijkstra.run(),
+      shortestPath: dijkstra.run(),
     });
   };
 

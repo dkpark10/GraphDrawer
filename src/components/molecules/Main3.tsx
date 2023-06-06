@@ -30,7 +30,7 @@ export default function App() {
 
   const isArrow = useArrowStore((state) => state.isArrow);
 
-  const shortestPath = useShortestPathStore(({ from, to, path }) => ({ from, to, path }), shallow);
+  const shortestPathState = useShortestPathStore(({ from, to, shortestPath }) => ({ from, to, shortestPath }), shallow);
 
   const [simulationNodes, setSimulationNodes] = useState<Array<SimulationNodeDatum & Node>>([]);
 

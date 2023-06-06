@@ -3,7 +3,7 @@
 /* eslint-disable no-param-reassign */
 import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import type { SimulationNodeDatum, SimulationLinkDatum } from 'd3-force';
+import type { SimulationNodeDatum } from 'd3-force';
 import type { Selection, BaseType } from 'd3-selection';
 import type { D3DragEvent } from 'd3-drag';
 import { shallow } from 'zustand/shallow';
@@ -18,6 +18,24 @@ const arrowMarkId = 'arrow';
 const WIDTH = 600;
 const HEIGHT = 600;
 
+/**
+ * @description 해당 엣지가 최단경로 루트인지 확인하는 함수
+ * 최단경로는 역순으로 정점 스트링 배열이 주어지므로 소스와 타켓의 인덱스 차이를 계산하여 1이하 이면 최단경로 판별
+ */
+const isShortestPath = (source: string, target: string, shortestPathList: Array<string>) => {
+  if (shortestPathList.length <= 0) {
+    return false;
+  }
+  const sourceIndex = shortestPathList.findIndex((ele) => ele === source);
+  const targetIndex = shortestPathList.findIndex((ele) => ele === target);
+
+  return (
+    Math.abs(sourceIndex - targetIndex) <= 1 &&
+    shortestPathList.some((ele) => ele === source) &&
+    shortestPathList.some((ele) => ele === target)
+  );
+};
+
 /** @todo 선언형으로 바꿔보자.. */
 export default function App() {
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -26,7 +44,7 @@ export default function App() {
 
   const isArrow = useArrowStore((state) => state.isArrow);
 
-  const shortestPath = useShortestPathStore(({ from, to, path }) => ({ from, to, path }), shallow);
+  const shortestPathState = useShortestPathStore(({ from, to, shortestPath }) => ({ from, to, shortestPath }), shallow);
 
   useEffect(() => {
     if (!svgRef.current) {
@@ -79,15 +97,11 @@ export default function App() {
       .attr('id', (_, i) => `edge-path-${i}`)
       .attr('stroke-width', (l) => {
         const { source, target } = l;
-        return Object.prototype.hasOwnProperty.call(shortestPath.path, (source as Node).id) &&
-          Object.prototype.hasOwnProperty.call(shortestPath.path, (target as Node).id)
-          ? 3
-          : 2;
+        return isShortestPath((source as Node).id, (target as Node).id, shortestPathState.shortestPath) ? 3 : 2;
       })
       .attr('stroke', (l) => {
         const { source, target } = l;
-        return Object.prototype.hasOwnProperty.call(shortestPath.path, (source as Node).id) &&
-          Object.prototype.hasOwnProperty.call(shortestPath.path, (target as Node).id)
+        return isShortestPath((source as Node).id, (target as Node).id, shortestPathState.shortestPath)
           ? SECOND_COLOR
           : MAIN_COLOR;
       })
@@ -108,11 +122,11 @@ export default function App() {
       })
       .on('mouseleave', function hover() {
         d3.select(this).attr('fill', (d) => {
-          return Object.prototype.hasOwnProperty.call(shortestPath.path, (d as Node).id) ? SECOND_COLOR : MAIN_COLOR;
+          return shortestPathState.shortestPath.some((vertex) => vertex === (d as Node).id) ? SECOND_COLOR : MAIN_COLOR;
         });
       })
       .attr('fill', (d) => {
-        return Object.prototype.hasOwnProperty.call(shortestPath.path, d.id) ? SECOND_COLOR : MAIN_COLOR;
+        return shortestPathState.shortestPath.some((vertex) => vertex === d.id) ? SECOND_COLOR : MAIN_COLOR;
       })
       .call(
         d3.drag().on('start', dragStarted).on('drag', dragged).on('end', dragEnded) as (
@@ -173,7 +187,7 @@ export default function App() {
         node.attr('cx', (d: AttrType) => d.x as number).attr('cy', (d: AttrType) => d.y as number);
         text.attr('x', (d: AttrType) => d.x as number).attr('y', (d: AttrType) => d.y as number);
       });
-  }, [nodes, links, isArrow, shortestPath]);
+  }, [nodes, links, isArrow, shortestPathState]);
 
   return <svg width={WIDTH} height={HEIGHT} viewBox={`0 0 ${WIDTH} ${HEIGHT}`} ref={svgRef} />;
 }

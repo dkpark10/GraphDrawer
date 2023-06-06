@@ -4,7 +4,7 @@ import { devtools } from 'zustand/middleware';
 export interface ShortestPathState {
   from: string;
   to: string;
-  path: { [key: string]: boolean };
+  shortestPath: Array<string>;
 }
 
 export interface ShortestPathStateDispatcher {
@@ -14,8 +14,8 @@ export interface ShortestPathStateDispatcher {
 const shortestPathStore: StateCreator<ShortestPathState & ShortestPathStateDispatcher> = (set) => ({
   from: '',
   to: '',
-  path: {},
-  setShortestPath: ({ from, to, path }) => set(() => ({ from, to, path })),
+  shortestPath: [],
+  setShortestPath: ({ from, to, shortestPath }) => set(() => ({ from, to, shortestPath })),
 });
 
 export const useShortestPathStore = create<ShortestPathState & ShortestPathStateDispatcher>()(

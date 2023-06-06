@@ -172,7 +172,7 @@ export class Dijkstra2 {
   }
 
   /** @description 최단경로 역추적하는 함수 */
-  public backTracking(path: { [key: string]: string }) {
+  public backTracking(path: { [key: string]: string }): Array<string> {
     const ret: { [key: string]: boolean } = {};
     let x = this.to;
 
@@ -185,7 +185,7 @@ export class Dijkstra2 {
     ret[this.to] = true;
     ret[this.from] = true;
 
-    return ret;
+    return Object.keys(ret).map((ele) => ele);
   }
 
   /** @description 객체 키값 개수가 정점 개수를 초과하는가? */
