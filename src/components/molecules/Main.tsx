@@ -78,10 +78,10 @@ export default function App() {
       .append('marker')
       .attr('id', arrowMarkId)
       .attr('viewBox', '0 0 10 10')
-      .attr('refX', '26')
-      .attr('refY', '5')
-      .attr('markerWidth', '8')
-      .attr('markerHeight', '8')
+      .attr('refX', 23)
+      .attr('refY', 5)
+      .attr('markerWidth', 8)
+      .attr('markerHeight', 8)
       .attr('orient', 'auto-start-reverse');
 
     const marker = d3.select(`#${arrowMarkId}`);
@@ -95,12 +95,7 @@ export default function App() {
       .data(links)
       .join('path')
       .attr('id', (_, i) => `edge-path-${i}`)
-      .attr('stroke-width', (l) => {
-        const { source, target } = l;
-        return isShortestPath((source as Vertex).value, (target as Vertex).value, shortestPathState.shortestPath)
-          ? 3
-          : 2;
-      })
+      .attr('stroke-width', 2)
       .attr('stroke', (l) => {
         const { source, target } = l;
         return isShortestPath((source as Vertex).value, (target as Vertex).value, shortestPathState.shortestPath)
