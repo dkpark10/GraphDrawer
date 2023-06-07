@@ -11,9 +11,7 @@ describe('다익스트라 테스트', () => {
     const shortestPath = dijkstra.run();
 
     const expected = ['1', '4', '6'];
-    Object.keys(shortestPath).forEach((v, i) => {
-      expect(expected[i]).toEqual(v);
-    });
+    expect(expected).toEqual(shortestPath);
 
     const dist = dijkstra.getDist();
     expect(dist).toEqual({ '1': 0, '2': 2, '3': 10, '4': 9, '5': 16, '6': 15 });
@@ -29,9 +27,7 @@ describe('다익스트라 테스트', () => {
     const shortestPath = dijkstra.run();
 
     const expected = ['1', '2', '4'];
-    Object.keys(shortestPath).forEach((v, i) => {
-      expect(expected[i]).toEqual(v);
-    });
+    expect(expected).toEqual(shortestPath);
 
     const dist = dijkstra.getDist();
     expect(dist).toEqual({ '1': 0, '2': 2, '3': 3, '4': 7, '5': 1 });
