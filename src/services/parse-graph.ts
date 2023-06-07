@@ -59,7 +59,7 @@ export const createGraph = (textAreaContent: string, LIMIT_INPUT_VALUE_LINE = 10
 };
 
 /** @description 입력값을 d3 nodesimullink 타입으로 파싱하는 함수 */
-export const parseGraph = (textAreaContent: string, LIMIT_INPUT_VALUE_LINE = 100): GraphData | undefined => {
+export const parseGraph = (textAreaContent: string, LIMIT_INPUT_VALUE_LINE = 100): GraphData => {
   const inputValue = textAreaContent.split('\n');
   const nodeInfo = new Set<string>();
 

@@ -116,11 +116,11 @@ export class Dijkstra2 {
   }
 
   public dijkstra() {
-    const path: { [key: string]: string } = {};
+    const prevVertexList: { [key: string]: string } = {};
 
     Object.keys(this.graph).forEach((ele) => {
       this.distance[ele] = this.distance[ele] || Infinity;
-      path[ele] = path[ele] || ele;
+      prevVertexList[ele] = prevVertexList[ele] || ele;
     });
 
     this.distance[this.from] = 0;
@@ -140,31 +140,31 @@ export class Dijkstra2 {
         const nextCost = Number(tmpCost) + cost;
 
         if (nextCost < this.distance[nextVertex]) {
-          path[nextVertex] = curVertex;
+          prevVertexList[nextVertex] = curVertex;
           this.distance[nextVertex] = nextCost;
           pq.push([nextCost, nextVertex]);
         }
       });
     }
 
-    return path;
+    return prevVertexList;
   }
 
   /** @description 최단경로 역추적하는 함수 */
-  public backTracking(path: { [key: string]: string }): Array<string> {
-    const ret: { [key: string]: boolean } = {};
+  public backTracking(prevVertexList: { [key: string]: string }): Array<string> {
+    const shortestPath: { [key: string]: boolean } = {};
     let x = this.to;
 
-    while (x !== path[x]) {
-      ret[x] = ret[x] || false;
-      x = path[x];
+    while (x !== prevVertexList[x]) {
+      shortestPath[x] = shortestPath[x] || false;
+      x = prevVertexList[x];
     }
 
-    ret[x] = ret[x] || false;
-    ret[this.to] = true;
-    ret[this.from] = true;
+    shortestPath[x] = shortestPath[x] || false;
+    shortestPath[this.to] = true;
+    shortestPath[this.from] = true;
 
-    return Object.keys(ret).map((ele) => ele);
+    return Object.keys(shortestPath).map((ele) => ele);
   }
 
   public getDist() {
