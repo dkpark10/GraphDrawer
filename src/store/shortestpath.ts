@@ -11,10 +11,14 @@ export interface ShortestPathStateDispatcher {
   setShortestPath: (payload: ShortestPathState) => void;
 }
 
-const shortestPathStore: StateCreator<ShortestPathState & ShortestPathStateDispatcher> = (set) => ({
+export const shortestPathInitState: ShortestPathState = {
   from: '',
   to: '',
   shortestPath: [],
+};
+
+const shortestPathStore: StateCreator<ShortestPathState & ShortestPathStateDispatcher> = (set) => ({
+  ...shortestPathInitState,
   setShortestPath: ({ from, to, shortestPath }) => set(() => ({ from, to, shortestPath })),
 });
 
