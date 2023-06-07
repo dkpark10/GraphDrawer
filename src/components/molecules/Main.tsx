@@ -104,6 +104,25 @@ export default function App() {
       })
       .attr('marker-end', isArrow ? `url(#${arrowMarkId})` : '');
 
+    const costText = svg
+      .append('g')
+      .attr('class', 'pointer-events-none')
+      .attr('fill', MAIN_COLOR)
+      .attr('fontSize', 14)
+      .selectAll('.cost-text')
+      .data(links)
+      .join('text')
+      .attr('textAnchor', 'middle')
+      .attr('dy', -4)
+      .attr('dx', 60)
+      .attr('id', (_, i) => `edge-path-${i}`);
+
+    costText
+      .append('textPath')
+      .attr('xlink:href', (_, i) => `#edge-path-${i}`)
+      .style('pointer-events', 'none')
+      .text(({ cost }) => cost || '');
+
     const node = svg
       .append('g')
       .attr('class', 'cursor-pointer')
@@ -144,25 +163,6 @@ export default function App() {
       .attr('text-anchor', 'middle')
       .attr('dy', 6)
       .text((d) => d.value);
-
-    const costText = svg
-      .append('g')
-      .attr('class', 'pointer-events-none')
-      .attr('fill', MAIN_COLOR)
-      .attr('fontSize', 14)
-      .selectAll('.cost-text')
-      .data(links)
-      .join('text')
-      .attr('textAnchor', 'middle')
-      .attr('dy', -4)
-      .attr('dx', 60)
-      .attr('id', (_, i) => `edge-path-${i}`);
-
-    costText
-      .append('textPath')
-      .attr('xlink:href', (_, i) => `#edge-path-${i}`)
-      .style('pointer-events', 'none')
-      .text(({ cost }) => cost || '');
 
     const simulation = d3
       .forceSimulation(nodes as Array<SimulationNodeDatum & Vertex>)
