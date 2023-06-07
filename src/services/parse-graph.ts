@@ -34,14 +34,8 @@ export const getVertexList = (inputValue: string[]): Array<VertexString> => {
 
 export const createGraph = (textAreaContent: string, LIMIT_INPUT_VALUE_LINE = 100) => {
   const inputValue = textAreaContent.split('\n');
-  const [vertexCount] = inputValue[0].split(' ');
 
-  if (Number.isNaN(Number(vertexCount)) === true) {
-    return undefined;
-  }
-
-  const restInputValue = inputValue.splice(1);
-  const vertexList = getVertexList(restInputValue);
+  const vertexList = getVertexList(inputValue);
 
   const graph = vertexList.reduce((acc, item, idx) => {
     const [vertex1, vertex2, cost] = item.split(' ');
@@ -61,24 +55,15 @@ export const createGraph = (textAreaContent: string, LIMIT_INPUT_VALUE_LINE = 10
     return acc;
   }, {} as ConnectedInfo);
 
-  return {
-    vertexCount,
-    graph,
-  };
+  return { graph };
 };
 
+/** @description 입력값을 d3 nodesimullink 타입으로 파싱하는 함수 */
 export const parseGraph = (textAreaContent: string, LIMIT_INPUT_VALUE_LINE = 100): GraphData | undefined => {
   const inputValue = textAreaContent.split('\n');
-  const [vertexCount] = inputValue[0].split(' ');
-
   const nodeInfo = new Set<string>();
 
-  if (Number.isNaN(Number(vertexCount)) === true) {
-    return undefined;
-  }
-
-  const restInputValue = inputValue.splice(1);
-  const links = restInputValue.reduce((acc, value, idx) => {
+  const links = inputValue.reduce((acc, value, idx) => {
     const [source, target, cost] = value.split(' ');
 
     if (!source || !target || idx >= LIMIT_INPUT_VALUE_LINE) {

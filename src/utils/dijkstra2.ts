@@ -8,7 +8,6 @@ interface EdgeInfo {
 type Pair = [number, string];
 
 interface GraphState {
-  vertexCount: string;
   graph: {
     [key: string]: Array<{ vertex: string; cost: string }>;
   };
@@ -19,7 +18,6 @@ type VertexString = `${string} ${string} ${string}`;
 /** @todo 다익스트라가 너무 많은 일을 하고 있는 것 같다... */
 export class Dijkstra2 {
   private initGraph: GraphState = {
-    vertexCount: '0',
     graph: {},
   };
 
@@ -29,15 +27,12 @@ export class Dijkstra2 {
 
   private graph: EdgeInfo = {};
 
-  private vertexCount = 0;
-
   private distance: { [key: string]: number } = {};
 
   constructor(builder: DijkstraBuilder2) {
     this.initGraph = this.parseDataForDijkstra(builder.getGraphRawData());
     this.from = builder.getFromVertex();
     this.to = builder.getToVertex();
-    this.vertexCount = Number(this.initGraph.vertexCount);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -67,17 +62,8 @@ export class Dijkstra2 {
 
   public parseDataForDijkstra(rawGraphData: string, LIMIT_INPUT_VALUE_LINE = 100): GraphState {
     const inputValue = rawGraphData.split('\n');
-    const [vertexCount] = inputValue[0].split(' ');
 
-    if (Number.isNaN(Number(vertexCount)) === true) {
-      return {
-        vertexCount: '0',
-        graph: {},
-      };
-    }
-
-    const restInputValue = inputValue.splice(1);
-    const vertexList = this.getVertexList(restInputValue);
+    const vertexList = this.getVertexList(inputValue);
 
     const graph = vertexList.reduce((acc, item, idx) => {
       const [vertex1, vertex2, cost] = item.split(' ');
@@ -97,10 +83,7 @@ export class Dijkstra2 {
       return acc;
     }, {} as GraphState['graph']);
 
-    return {
-      vertexCount,
-      graph,
-    };
+    return { graph };
   }
 
   public run() {
@@ -112,15 +95,11 @@ export class Dijkstra2 {
     Object.entries(this.initGraph.graph).forEach((ele) => {
       const [currentVertex, value] = ele;
 
-      if (this.isExceedVertexCount() && value.length <= 0) return;
-
       this.graph[currentVertex] = this.graph[currentVertex] || {};
 
       value.forEach((ele2) => {
         const { vertex, cost } = ele2;
         if (vertex === undefined && cost === undefined) return;
-
-        if (this.isExceedVertexCount() && !this.graph[vertex]) return;
 
         this.graph[vertex] = this.graph[vertex] || {};
 
@@ -186,11 +165,6 @@ export class Dijkstra2 {
     ret[this.from] = true;
 
     return Object.keys(ret).map((ele) => ele);
-  }
-
-  /** @description 객체 키값 개수가 정점 개수를 초과하는가? */
-  public isExceedVertexCount() {
-    return Object.keys(this.graph).length >= this.vertexCount;
   }
 
   public getDist() {
