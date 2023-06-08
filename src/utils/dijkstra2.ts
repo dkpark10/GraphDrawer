@@ -1,148 +1,75 @@
 /* eslint-disable max-classes-per-file */
 import { HeapQueue } from './heap-queue';
+import { GraphData } from '@/types/graph';
 
-interface EdgeInfo {
-  [key: string]: { [key: string]: string };
-}
+export type AllNumber = { [key: string]: number };
 
-type Pair = [number, string];
-
-interface GraphState {
-  graph: {
-    [key: string]: Array<{ vertex: string; cost: string }>;
-  };
-}
-
-type VertexString = `${string} ${string} ${string}`;
+type Pair = { currentCost: number; currentVertex: string };
 
 /** @todo 다익스트라가 너무 많은 일을 하고 있는 것 같다... */
 export class Dijkstra2 {
-  private initGraph: GraphState = {
-    graph: {},
-  };
+  private graphData: GraphData = {} as GraphData;
 
-  private from = '';
+  private begin = '';
 
-  private to = '';
+  private end = '';
 
-  private graph: EdgeInfo = {};
+  private distance: AllNumber = {};
 
-  private distance: { [key: string]: number } = {};
+  /** @description 다익스트라용 링크 데이터 */
+  private transferLinkData: { [key: string]: Array<{ nextVertex: string; cost: number }> } = {};
 
   constructor(builder: DijkstraBuilder2) {
-    this.initGraph = this.parseDataForDijkstra(builder.getGraphRawData());
-    this.from = builder.getFromVertex();
-    this.to = builder.getToVertex();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  public getVertexList(inputValue: string[]) {
-    return inputValue
-      .map((item): VertexString => {
-        const [vertex1, vertex2, cost] = item.split(' ');
-        return vertex1 < vertex2 ? `${vertex1} ${vertex2} ${cost}` : `${vertex2} ${vertex1} ${cost}`;
-      })
-      .reduce((acc, item) => {
-        const [vertex1, vertex2] = item.split(' ');
-        const vertexs = `${vertex1}${vertex2}`;
-
-        const x = acc.find((v) => {
-          const [v1, v2] = v.split(' ');
-          const vs = `${v1}${v2}`;
-          return vertexs === vs;
-        });
-
-        if (!x) {
-          return [...acc, item];
-        }
-
-        return acc;
-      }, [] as Array<VertexString>);
-  }
-
-  public parseDataForDijkstra(rawGraphData: string, LIMIT_INPUT_VALUE_LINE = 100): GraphState {
-    const inputValue = rawGraphData.split('\n');
-
-    const vertexList = this.getVertexList(inputValue);
-
-    const graph = vertexList.reduce((acc, item, idx) => {
-      const [vertex1, vertex2, cost] = item.split(' ');
-
-      if (idx >= LIMIT_INPUT_VALUE_LINE) return acc;
-
-      if (vertex1 === '') return acc;
-
-      acc[vertex1] = acc[vertex1] || [];
-
-      if (vertex2 === undefined && cost === undefined) return acc;
-
-      if (vertex2 === '') return acc;
-
-      acc[vertex1].push({ vertex: vertex2, cost });
-
-      return acc;
-    }, {} as GraphState['graph']);
-
-    return { graph };
+    this.graphData = builder.getGraphData();
+    this.begin = builder.getBeginVertex();
+    this.end = builder.getEndVertex();
   }
 
   public run() {
-    this.mapping();
     return this.backTracking(this.dijkstra());
   }
 
-  public mapping() {
-    Object.entries(this.initGraph.graph).forEach((ele) => {
-      const [currentVertex, value] = ele;
-
-      this.graph[currentVertex] = this.graph[currentVertex] || {};
-
-      value.forEach((ele2) => {
-        const { vertex, cost } = ele2;
-        if (vertex === undefined && cost === undefined) return;
-
-        this.graph[vertex] = this.graph[vertex] || {};
-
-        // 현재 정점과 연결된 정점 객체가 존재하지 않는다면
-        if (Object.keys(this.graph[currentVertex]).includes(vertex) === false) {
-          this.graph[currentVertex][vertex] = cost;
-        }
-        // 양방향으로 연결한다.
-        if (Object.keys(this.graph[vertex]).includes(currentVertex) === false) {
-          this.graph[vertex][currentVertex] = cost;
-        }
-      });
-    });
-  }
-
   public dijkstra() {
-    const prevVertexList: { [key: string]: string } = {};
+    const { nodes, links } = this.graphData;
 
-    Object.keys(this.graph).forEach((ele) => {
-      this.distance[ele] = this.distance[ele] || Infinity;
-      prevVertexList[ele] = prevVertexList[ele] || ele;
+    links.forEach(({ source, target, cost }) => {
+      this.transferLinkData[source as string] = this.transferLinkData[source as string] || [];
+      this.transferLinkData[source as string].push({ nextVertex: target as string, cost: Number(cost) || Infinity });
     });
 
-    this.distance[this.from] = 0;
+    /** @description 각정점들의 거리 초기화 */
+    this.distance = nodes.reduce(
+      (acc, { value }) => ({
+        ...acc,
+        [value]: Infinity,
+      }),
+      {} as AllNumber,
+    );
 
-    const pq = new HeapQueue<Pair>((a, b) => a[0] - b[0]);
-    pq.push([0, this.from]);
+    const prevVertexList: { [key: string]: string } = {};
+    this.distance[this.begin] = 0;
+
+    const pq = new HeapQueue<Pair>((a, b) => a.currentCost - b.currentCost);
+    pq.push({ currentCost: 0, currentVertex: this.begin });
 
     while (!pq.isEmpty()) {
-      const [cost, curVertex] = pq.top();
+      const { currentCost, currentVertex } = pq.top();
       pq.pop();
 
       // eslint-disable-next-line no-continue
-      if (this.distance[curVertex] < cost) continue;
+      if (this.distance[currentVertex] < currentCost) continue;
 
-      Object.entries(this.graph[curVertex]).forEach((ele) => {
-        const [nextVertex, tmpCost] = ele;
-        const nextCost = Number(tmpCost) + cost;
+      // eslint-disable-next-line no-continue
+      if (!this.transferLinkData[currentVertex]) continue;
+
+      this.transferLinkData[currentVertex].forEach((ele) => {
+        const { nextVertex, cost } = ele;
+        const nextCost = cost + currentCost;
 
         if (nextCost < this.distance[nextVertex]) {
-          prevVertexList[nextVertex] = curVertex;
+          prevVertexList[nextVertex] = currentVertex;
           this.distance[nextVertex] = nextCost;
-          pq.push([nextCost, nextVertex]);
+          pq.push({ currentCost: nextCost, currentVertex: nextVertex });
         }
       });
     }
@@ -152,17 +79,21 @@ export class Dijkstra2 {
 
   /** @description 최단경로 역추적하는 함수 */
   public backTracking(prevVertexList: { [key: string]: string }): Array<string> {
-    const shortestPath: { [key: string]: boolean } = {};
-    let x = this.to;
+    if (this.distance[this.end] === Infinity) {
+      return [];
+    }
 
-    while (x !== prevVertexList[x]) {
+    const shortestPath: { [key: string]: boolean } = {};
+    let x = this.end;
+
+    while (x !== prevVertexList[x] && x !== this.begin) {
       shortestPath[x] = shortestPath[x] || false;
       x = prevVertexList[x];
     }
 
     shortestPath[x] = shortestPath[x] || false;
-    shortestPath[this.to] = true;
-    shortestPath[this.from] = true;
+    shortestPath[this.begin] = true;
+    shortestPath[this.end] = true;
 
     return Object.keys(shortestPath).map((ele) => ele);
   }
@@ -173,37 +104,37 @@ export class Dijkstra2 {
 }
 
 export class DijkstraBuilder2 {
-  private rawGraphData = '';
+  private graphData: GraphData = {} as GraphData;
 
-  private from = '';
+  private end = '';
 
-  private to = '';
+  private begin = '';
 
-  public setGraphRawData(rawData: string) {
-    this.rawGraphData = rawData;
+  public setGraphRawData(graphData: GraphData) {
+    this.graphData = graphData;
     return this;
   }
 
-  public setFromVertex(from: string) {
-    this.from = from;
+  public setFromVertex(begin: string) {
+    this.begin = begin;
     return this;
   }
 
-  public setToVertex(to: string) {
-    this.to = to;
+  public setToVertex(end: string) {
+    this.end = end;
     return this;
   }
 
-  public getGraphRawData() {
-    return this.rawGraphData;
+  public getGraphData() {
+    return this.graphData;
   }
 
-  public getFromVertex() {
-    return this.from;
+  public getBeginVertex() {
+    return this.begin;
   }
 
-  public getToVertex() {
-    return this.to;
+  public getEndVertex() {
+    return this.end;
   }
 
   public build() {

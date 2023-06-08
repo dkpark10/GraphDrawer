@@ -19,4 +19,8 @@ declare module 'global-type' {
     width: number;
     height: number;
   };
+
+  export type AllNumber = { [key: string]: number };
+
+  export type AllString = { [key: string]: string };
 }
