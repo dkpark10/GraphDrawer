@@ -20,7 +20,7 @@ export default function Config() {
 
   const [invalidInputNodes, setInvalidInputNodes] = useState(false);
 
-  const { nodes, links } = useGraphStore((state) => state, shallow);
+  const { nodes, links, rawInputData } = useGraphStore((state) => state, shallow);
 
   const isExistNodes = () => {
     return (
@@ -38,7 +38,7 @@ export default function Config() {
     setInvalidInputNodes(false);
 
     const dijkstra = new DijkstraBuilder2()
-      .setGraphRawData({ nodes, links })
+      .setGraphRawData(rawInputData)
       .setFromVertex(inputFromToRef.current.from?.value)
       .setToVertex(inputFromToRef.current.to?.value)
       .build();

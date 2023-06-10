@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { HeapQueue } from './heap-queue';
 import { GraphData } from '@/types/graph';
+import { parseGraph } from '@/services/parse-graph';
 
 export type AllNumber = { [key: string]: number };
 
@@ -8,6 +9,8 @@ type Pair = { currentCost: number; currentVertex: string };
 
 /** @todo 다익스트라가 너무 많은 일을 하고 있는 것 같다... */
 export class Dijkstra2 {
+  private rawInputData = '';
+
   private graphData: GraphData = {} as GraphData;
 
   private begin = '';
@@ -20,9 +23,10 @@ export class Dijkstra2 {
   private transferLinkData: { [key: string]: Array<{ nextVertex: string; cost: number }> } = {};
 
   constructor(builder: DijkstraBuilder2) {
-    this.graphData = builder.getGraphData();
+    this.rawInputData = builder.getGraphData();
     this.begin = builder.getBeginVertex();
     this.end = builder.getEndVertex();
+    this.graphData = parseGraph(this.rawInputData);
   }
 
   public run() {
@@ -104,14 +108,14 @@ export class Dijkstra2 {
 }
 
 export class DijkstraBuilder2 {
-  private graphData: GraphData = {} as GraphData;
+  private rawInputData = '';
 
   private end = '';
 
   private begin = '';
 
-  public setGraphRawData(graphData: GraphData) {
-    this.graphData = graphData;
+  public setGraphRawData(rawInputData: string) {
+    this.rawInputData = rawInputData;
     return this;
   }
 
@@ -126,7 +130,7 @@ export class DijkstraBuilder2 {
   }
 
   public getGraphData() {
-    return this.graphData;
+    return this.rawInputData;
   }
 
   public getBeginVertex() {
