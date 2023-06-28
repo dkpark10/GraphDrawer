@@ -40,7 +40,9 @@ export const isShortestEdge = (source: string, target: string, shortestPathList:
 export default function App() {
   const svgRef = useRef<SVGSVGElement | null>(null);
 
-  const { nodes, links } = useGraphStore((state) => state, shallow);
+  const nodes = useGraphStore((state) => state.nodes, shallow);
+
+  const links = useGraphStore((state) => state.links, shallow);
 
   const isArrow = useArrowStore((state) => state.isArrow);
 
@@ -152,7 +154,7 @@ export default function App() {
         ) => void,
       );
 
-    const text = svg
+    const nodeText = svg
       .append('g')
       .attr('class', 'pointer-events-none')
       .attr('fill', 'white')
@@ -184,7 +186,7 @@ export default function App() {
         );
 
         node.attr('cx', (d: AttrType) => d.x as number).attr('cy', (d: AttrType) => d.y as number);
-        text.attr('x', (d: AttrType) => d.x as number).attr('y', (d: AttrType) => d.y as number);
+        nodeText.attr('x', (d: AttrType) => d.x as number).attr('y', (d: AttrType) => d.y as number);
       });
   }, [nodes, links, isArrow, shortestPathState]);
 

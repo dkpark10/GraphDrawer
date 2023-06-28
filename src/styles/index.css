@@ -21,13 +21,6 @@ html, body, #root{
   background-color: #f1f5f9;
 }
 
-.arrow-button {
-  position: relative;
-  display: inline-block;
-  width: 58px;
-  height: 22px;
-}
-
 .onoff-switch {
   position: absolute;
   cursor: pointer;
@@ -52,10 +45,6 @@ html, body, #root{
   -webkit-transition: .5s;
   transition: .4s;
   border-radius: 20px;
-}
-
-.arrow-button input {
-  display:none;
 }
 
 .arrow-button input:checked+.onoff-switch {

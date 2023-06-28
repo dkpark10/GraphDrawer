@@ -20,7 +20,7 @@ export default function Config() {
 
   const [invalidInputNodes, setInvalidInputNodes] = useState(false);
 
-  const { nodes, links, rawInputData } = useGraphStore((state) => state, shallow);
+  const { nodes, rawInputData } = useGraphStore((state) => state, shallow);
 
   const isExistNodes = () => {
     return (
@@ -53,8 +53,8 @@ export default function Config() {
   return (
     <div className="mt-[20px] w-[200px] h-[292px] p-2.5 flex items-center border border-main-color flex-col">
       <div className="m-3 text-sm">arrow marker</div>
-      <label className="arrow-button relative inline-block w-15 h-[22px]" htmlFor="direction">
-        <input type="checkbox" onChange={() => setArrowDirect()} id="direction" />
+      <label className="arrow-button relative inline-block w-[58px] h-[22px]" htmlFor="direction">
+        <input className="hidden" type="checkbox" onChange={() => setArrowDirect()} id="direction" />
         <span className="onoff-switch" />
       </label>
       <div className="m-3 text-sm">shortest path find</div>
@@ -80,7 +80,7 @@ export default function Config() {
         type="button"
         onClick={findShortestPath}
       >
-        Find
+        find
       </button>
       <a href="https://github.com/dkpark10/graphpainter" target="_blank" rel="noreferrer">
         <img
