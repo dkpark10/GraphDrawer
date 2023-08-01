@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable no-param-reassign */
@@ -123,7 +124,7 @@ export default function App() {
       .append('textPath')
       .attr('xlink:href', (_, i) => `#edge-path-${i}`)
       .style('pointer-events', 'none')
-      .text(({ cost }) => cost || '');
+      .text(({ cost }: { cost: string }) => cost || '');
 
     const node = svg
       .append('g')
