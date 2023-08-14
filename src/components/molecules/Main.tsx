@@ -4,9 +4,7 @@
 /* eslint-disable no-param-reassign */
 import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import type { SimulationNodeDatum } from 'd3-force';
-import type { Selection, BaseType } from 'd3-selection';
-import type { D3DragEvent } from 'd3-drag';
+import type { SimulationNodeDatum, Selection, BaseType, D3DragEvent } from 'd3';
 import { shallow } from 'zustand/shallow';
 import { useGraphStore } from '@/store/graph';
 import { Vertex, AttrType } from '@/types/graph';
