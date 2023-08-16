@@ -122,7 +122,7 @@ export default function App() {
       .append('textPath')
       .attr('xlink:href', (_, i) => `#edge-path-${i}`)
       .style('pointer-events', 'none')
-      .text(({ cost }: { cost: string }) => cost || '');
+      .text(({ cost }) => cost || '');
 
     const node = svg
       .append('g')

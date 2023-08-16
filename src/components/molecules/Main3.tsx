@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import type { SimulationNodeDatum, SimulationLinkDatum, Simulation } from 'd3-force';
-import type { Selection, BaseType } from 'd3-selection';
-import type { D3DragEvent } from 'd3-drag';
+import type { SimulationNodeDatum, Selection, BaseType, D3DragEvent, Simulation, SimulationLinkDatum } from 'd3';
 import { shallow } from 'zustand/shallow';
 import { useGraphStore } from '@/store/graph';
 import { Vertex, AttrType } from '@/types/graph';
