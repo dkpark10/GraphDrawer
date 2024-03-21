@@ -1,4 +1,5 @@
-import { create, type StateCreator } from 'zustand';
+import { createWithEqualityFn } from 'zustand/traditional';
+import { type StateCreator } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
 export interface ShortestPathState {
@@ -22,6 +23,6 @@ const shortestPathStore: StateCreator<ShortestPathState & ShortestPathStateDispa
   setShortestPath: ({ from, to, shortestPath }) => set(() => ({ from, to, shortestPath })),
 });
 
-export const useShortestPathStore = create<ShortestPathState & ShortestPathStateDispatcher>()(
+export const useShortestPathStore = createWithEqualityFn<ShortestPathState & ShortestPathStateDispatcher>()(
   devtools(shortestPathStore),
 );

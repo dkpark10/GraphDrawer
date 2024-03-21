@@ -1,4 +1,5 @@
-import { create, type StateCreator } from 'zustand';
+import { createWithEqualityFn } from 'zustand/traditional';
+import { type StateCreator } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { GraphData } from '@/types/graph';
 
@@ -23,4 +24,4 @@ const graphStore: StateCreator<GraphStoreData> = (set) => ({
   setGraph: ({ nodes, links }, rawInputData) => set(() => ({ nodes, links, rawInputData })),
 });
 
-export const useGraphStore = create<GraphStoreData>()(devtools(graphStore));
+export const useGraphStore = createWithEqualityFn<GraphStoreData>()(devtools(graphStore));
