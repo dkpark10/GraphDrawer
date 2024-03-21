@@ -1,9 +1,9 @@
-type CallBack = (...rest: any[]) => void;
+type CallBack = (...rest: unknown[]) => void;
 
 export const debounce = (callback: CallBack, delay: number) => {
   let timer: ReturnType<typeof setTimeout>;
 
-  return (...rest: any[]) => {
+  return (...rest: unknown[]) => {
     clearTimeout(timer);
     timer = setTimeout(() => {
       callback(rest);

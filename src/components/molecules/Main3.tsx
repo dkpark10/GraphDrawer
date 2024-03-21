@@ -61,6 +61,7 @@ export default function App() {
         ...node,
         id: node.value,
       }));
+
       setSimulationNodes(simulationNodesData);
       setSimulationLinks([...forceLink.links()]);
     });

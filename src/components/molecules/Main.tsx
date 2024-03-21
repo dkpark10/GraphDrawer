@@ -40,21 +40,15 @@ export default function App() {
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   const nodes = useGraphStore((state) => state.nodes, shallow);
-
   const links = useGraphStore((state) => state.links, shallow);
-
   const isArrow = useArrowStore((state) => state.isArrow);
 
   const shortestPathState = useShortestPathStore(({ from, to, shortestPath }) => ({ from, to, shortestPath }), shallow);
 
   useEffect(() => {
-    if (!svgRef.current) {
-      return;
-    }
+    if (!svgRef.current) return;
 
-    if (svgRef.current) {
-      d3.selectAll('svg > *').remove();
-    }
+    if (svgRef.current) d3.selectAll('svg > *').remove();
 
     const dragStarted = (event: DragEvent) => {
       if (!event.active) simulation.alphaTarget(0.3).restart();
