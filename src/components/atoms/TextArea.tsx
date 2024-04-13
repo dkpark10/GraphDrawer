@@ -18,7 +18,7 @@ export default function TextArea(): JSX.Element {
           setGraph(pg, rawTextAreaValue[0]);
         }
         setShortestPath(shortestPathInitState);
-      }, 550),
+      }, 250),
     [setGraph, setShortestPath],
   );
 
