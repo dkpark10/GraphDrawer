@@ -16,6 +16,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@headlessui/react": "^2.0.3",
     "d3": "^7.8.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
