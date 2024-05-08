@@ -2,14 +2,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import type { SimulationNodeDatum, Selection, BaseType, D3DragEvent, Simulation, SimulationLinkDatum } from 'd3';
 import { shallow } from 'zustand/shallow';
 import { useGraphStore } from '@/store/graph';
-import { Vertex, AttrType } from '@/types/graph';
+import { Vertex } from '@/types/graph';
 import { useArrowStore, useShortestPathStore } from '@/store';
 import { MAIN_COLOR, SECOND_COLOR } from '@/constants';
+import { useIsMounted } from '@/hooks/use-mounted';
 
 type DragEvent = D3DragEvent<Element, SimulationNodeDatum, SimulationNodeDatum>;
 
@@ -25,21 +26,18 @@ interface CustomLink {
 
 export default function App() {
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const isMounted = useIsMounted();
 
   const { nodes, links } = useGraphStore((state) => state, shallow);
-
   const isArrow = useArrowStore((state) => state.isArrow);
-
   const shortestPathState = useShortestPathStore(({ from, to, shortestPath }) => ({ from, to, shortestPath }), shallow);
 
   const [simulationNodes, setSimulationNodes] = useState<Array<SimulationNodeDatum & Vertex>>([]);
-
   const [simulationLinks, setSimulationLinks] = useState<Array<SimulationLinkDatum<SimulationNodeDatum>>>([]);
-
   const simulationRef = useRef<Simulation<d3.SimulationNodeDatum & Vertex, undefined>>();
 
   useEffect(() => {
-    if (!svgRef.current || nodes.length <= 0 || links.length <= 0) return;
+    if (!svgRef.current) return;
 
     const svg = d3.select(svgRef.current);
     const forceLink = d3
@@ -57,6 +55,9 @@ export default function App() {
     svg
       .selectAll('circle')
       .data(nodes)
+      .on('mouseenter', function hover() {
+        d3.select(this).attr('fill', SECOND_COLOR);
+      })
       .call(
         d3
           .drag()
@@ -94,7 +95,7 @@ export default function App() {
         simulationRef.current.stop();
       }
     };
-  }, [nodes, links]);
+  }, [isMounted, nodes, links, isArrow]);
 
   return (
     <svg width={WIDTH} height={HEIGHT} viewBox={`0 0 ${WIDTH} ${HEIGHT}`} ref={svgRef}>
@@ -111,35 +112,37 @@ export default function App() {
           <path d="M 0 0 L 10 5 L 0 10 z" fill={MAIN_COLOR} />
         </marker>
       </defs>
-      {simulationLinks.map((link, index) => {
-        const { source, target } = link as CustomLink;
-        const pathId = `edge-path-${index}`;
+      <g strokeOpacity={0.8} strokeLinecap="round">
+        {simulationLinks.map((link, index) => {
+          const { source, target } = link as CustomLink;
+          const pathId = `edge-path-${index}`;
 
-        return (
-          <g key={link.index}>
-            <path
-              id={pathId}
-              d={`M ${source.x} ${source.y} L ${target.x} ${target.y} z`}
-              strokeWidth="2"
-              stroke={MAIN_COLOR}
-              markerEnd={isArrow === true ? `url(#${arrowMarkId})` : ''}
-            />
-            <text
-              id={pathId}
-              className="pointer-events-none"
-              dy="-4"
-              dx="60"
-              fontSize="15"
-              fill={MAIN_COLOR}
-              textAnchor="middle"
-            >
-              <textPath xlinkHref={`#${pathId}`} className="pointer-events-none">
-                {link.index}
-              </textPath>
-            </text>
-          </g>
-        );
-      })}
+          return (
+            <>
+              <path
+                id={pathId}
+                d={`M ${source.x} ${source.y} L ${target.x} ${target.y} z`}
+                strokeWidth="2"
+                stroke={MAIN_COLOR}
+                markerEnd={isArrow === true ? `url(#${arrowMarkId})` : ''}
+              />
+              <text
+                id={pathId}
+                className="pointer-events-none"
+                dy="-4"
+                dx="60"
+                fontSize="15"
+                fill={MAIN_COLOR}
+                textAnchor="middle"
+              >
+                <textPath xlinkHref={`#${pathId}`} className="pointer-events-none">
+                  {link.index}
+                </textPath>
+              </text>
+            </>
+          );
+        })}
+      </g>
       {simulationNodes.map((node) => (
         <g key={node.index}>
           <circle
@@ -151,6 +154,12 @@ export default function App() {
             strokeWidth={2.5}
             stroke={MAIN_COLOR}
             key={node.index}
+            onMouseEnter={(e) => {
+              e.currentTarget.setAttribute('fill', SECOND_COLOR);
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.setAttribute('fill', MAIN_COLOR);
+            }}
           />
           <text
             className="pointer-events-none"

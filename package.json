@@ -12,7 +12,6 @@
     "lint:fix": "eslint --fix \"./src/**/*.{ts,tsx,js,jsx}\"",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "preview": "vite preview",
     "test": "jest"
   },
   "dependencies": {
