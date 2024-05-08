@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable no-param-reassign */
 import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import type { SimulationNodeDatum, Selection, BaseType, D3DragEvent } from 'd3';
@@ -47,25 +45,7 @@ export default function App() {
 
   useEffect(() => {
     if (!svgRef.current) return;
-
     if (svgRef.current) d3.selectAll('svg > *').remove();
-
-    const dragStarted = (event: DragEvent) => {
-      if (!event.active) simulation.alphaTarget(0.3).restart();
-      event.subject.fx = event.subject.x;
-      event.subject.fy = event.subject.y;
-    };
-
-    const dragged = (event: DragEvent) => {
-      event.subject.fx = event.x;
-      event.subject.fy = event.y;
-    };
-
-    const dragEnded = (event: DragEvent) => {
-      if (!event.active) simulation.alphaTarget(0);
-      event.subject.fx = null;
-      event.subject.fy = null;
-    };
 
     const svg = d3.select(svgRef.current);
     svg
@@ -142,7 +122,22 @@ export default function App() {
         return shortestPathState.shortestPath.some((vertex) => vertex === d.value) ? SECOND_COLOR : MAIN_COLOR;
       })
       .call(
-        d3.drag().on('start', dragStarted).on('drag', dragged).on('end', dragEnded) as (
+        d3
+          .drag()
+          .on('start', function dragStarted(e: DragEvent) {
+            if (!e.active) simulation.alphaTarget(0.3).restart();
+            e.subject.fx = e.subject.x;
+            e.subject.fy = e.subject.y;
+          })
+          .on('drag', function dragged(e: DragEvent) {
+            e.subject.fx = e.x;
+            e.subject.fy = e.y;
+          })
+          .on('end', function dragEnded(e: DragEvent) {
+            if (!e.active) simulation.alphaTarget(0);
+            e.subject.fx = null;
+            e.subject.fy = null;
+          }) as (
           selection: Selection<BaseType | SVGCircleElement, Vertex & SimulationNodeDatum, SVGGElement, unknown>,
         ) => void,
       );

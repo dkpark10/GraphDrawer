@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
@@ -22,7 +23,6 @@ interface CustomLink {
   index?: number | undefined;
 }
 
-/** @todo 선언형으로 바꿔보자.. */
 export default function App() {
   const svgRef = useRef<SVGSVGElement | null>(null);
 
@@ -39,10 +39,9 @@ export default function App() {
   const simulationRef = useRef<Simulation<d3.SimulationNodeDatum & Vertex, undefined>>();
 
   useEffect(() => {
-    if (!svgRef.current || nodes.length <= 0 || links.length <= 0) {
-      return undefined;
-    }
+    if (!svgRef.current || nodes.length <= 0 || links.length <= 0) return;
 
+    const svg = d3.select(svgRef.current);
     const forceLink = d3
       .forceLink(links)
       .id((d: SimulationNodeDatum) => (d as Vertex).value)
@@ -54,6 +53,30 @@ export default function App() {
       .force('charge', d3.forceManyBody().strength(-240))
       .force('x', d3.forceX(WIDTH / 2))
       .force('y', d3.forceY(HEIGHT / 2));
+
+    svg
+      .selectAll('circle')
+      .data(nodes)
+      .call(
+        d3
+          .drag()
+          .on('start', function dragStarted(e: DragEvent) {
+            if (!e.active) simulationRef.current?.alphaTarget(0.3).restart();
+            e.subject.fx = e.subject.x;
+            e.subject.fy = e.subject.y;
+          })
+          .on('drag', function dragged(e: DragEvent) {
+            e.subject.fx = e.x;
+            e.subject.fy = e.y;
+          })
+          .on('end', function dragEnded(e: DragEvent) {
+            if (!e.active) simulationRef.current?.alphaTarget(0);
+            e.subject.fx = null;
+            e.subject.fy = null;
+          }) as (
+          selection: Selection<BaseType | SVGCircleElement, Vertex & SimulationNodeDatum, SVGGElement, unknown>,
+        ) => void,
+      );
 
     simulationRef.current.on('tick', function tick() {
       // eslint-disable-next-line react/no-this-in-sfc
@@ -71,7 +94,7 @@ export default function App() {
         simulationRef.current.stop();
       }
     };
-  }, [links, nodes]);
+  }, [nodes, links]);
 
   return (
     <svg width={WIDTH} height={HEIGHT} viewBox={`0 0 ${WIDTH} ${HEIGHT}`} ref={svgRef}>
