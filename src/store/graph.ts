@@ -14,7 +14,7 @@ export interface GraphStateDispatcher {
 export const initialState: GraphData & RawInputData = {
   nodes: [],
   links: [],
-  rawInputData: '',
+  rawInputData: '1 2 2\n2 3 8\n3 4 1\n1 4 9\n4 5 7\n5 6 2\n4 6 6\n3 6 9',
 };
 
 export type GraphStoreData = GraphData & GraphStateDispatcher & RawInputData;

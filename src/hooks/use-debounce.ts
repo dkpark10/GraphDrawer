@@ -6,7 +6,7 @@ interface DebounceParam<T> {
 }
 
 export const useDebounce = <T>({ value, delay }: DebounceParam<T>) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
   useEffect(() => {
     const timer = setTimeout(() => {

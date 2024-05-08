@@ -22,12 +22,9 @@ export default function Config() {
 
   const { nodes, rawInputData } = useGraphStore((state) => state, shallow);
 
-  const isExistNodes = () => {
-    return (
-      nodes.some((node) => node.value === inputFromToRef.current.from?.value) &&
-      nodes.some((node) => node.value === inputFromToRef.current.to?.value)
-    );
-  };
+  const isExistNodes = () =>
+    nodes.some((node) => node.value === inputFromToRef.current.from?.value) &&
+    nodes.some((node) => node.value === inputFromToRef.current.to?.value);
 
   const findShortestPath = () => {
     if (!inputFromToRef.current.from || !inputFromToRef.current.to || !isExistNodes()) {
