@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { shallow } from 'zustand/shallow';
+import { Switch } from '@headlessui/react';
 import { DijkstraBuilder2 } from '@/utils/dijkstra2';
 import { useArrowStore, useShortestPathStore, useGraphStore } from '@/store';
 
@@ -14,7 +15,10 @@ export default function Config() {
     to: null,
   });
 
-  const setArrowDirect = useArrowStore((state) => state.setArrowDirect);
+  const { isArrow, setArrowDirect } = useArrowStore((state) => ({
+    setArrowDirect: state.setArrowDirect,
+    isArrow: state.isArrow,
+  }));
 
   const setShortestPath = useShortestPathStore((state) => state.setShortestPath);
 
@@ -50,11 +54,15 @@ export default function Config() {
   return (
     <div className="mt-[20px] w-[200px] h-[292px] p-2.5 flex items-center border border-main-color flex-col">
       <div className="m-3 text-sm">arrow marker</div>
-      <label className="arrow-button relative inline-block w-[58px] h-[22px]" htmlFor="direction">
-        <input className="hidden" type="checkbox" onChange={() => setArrowDirect()} id="direction" />
-        <span className="onoff-switch" />
-      </label>
-      <div className="m-3 text-sm">shortest path find</div>
+      <Switch
+        checked={isArrow}
+        onChange={() => setArrowDirect()}
+        className="group inline-flex h-6 w-14 items-center rounded-full bg-gray-400 transition data-[checked]:bg-pink-600"
+      >
+        <span className="size-4 translate-x-1 rounded-full bg-white transition group-data-[checked]:translate-x-9" />
+      </Switch>
+
+      <div className="m-3 text-sm">find shortest path</div>
       <div className="flex w-full justify-center">
         {['from', 'to'].map((ele) => (
           <label className="text-sm" htmlFor={ele} key={ele}>
@@ -79,13 +87,6 @@ export default function Config() {
       >
         find
       </button>
-      <a href="https://github.com/dkpark10/graphpainter" target="_blank" rel="noreferrer">
-        <img
-          style={{ width: '45px', height: '45px', cursor: 'pointer' }}
-          alt="my github"
-          src="https://media.cdnandroid.com/item_images/1097581/imagen-github-0thumb.jpeg"
-        />
-      </a>
     </div>
   );
 }

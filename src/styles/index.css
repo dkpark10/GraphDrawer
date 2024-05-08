@@ -20,39 +20,3 @@ html, body, #root{
   font-family: 'Noto Sans KR', sans-serif;
   background-color: #f1f5f9;
 }
-
-.onoff-switch {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 20px;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.onoff-switch:before {
-  position: absolute;
-  content: "";
-  height: 18px;
-  width: 18px;
-  bottom: 2px;
-  left: 4px;
-  background-color: #fff;
-  -webkit-transition: .5s;
-  transition: .4s;
-  border-radius: 20px;
-}
-
-.arrow-button input:checked+.onoff-switch {
-  background-color: #4f46e5;
-}
-
-.arrow-button input:checked+.onoff-switch:before {
-  -webkit-transform: translateX(31px);
-  -ms-transform: translateX(31px);
-  transform: translateX(31px);
-}
