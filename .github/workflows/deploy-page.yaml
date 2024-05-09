@@ -10,6 +10,8 @@ jobs:
     concurrency: ci-${{ github.ref }}
     
     runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Seoul
 
     steps:
       - name: Checkout 🛎️
@@ -19,6 +21,9 @@ jobs:
         with:
           node-version: 18.x
           cache: 'yarn'
+
+      - name: Remove Build Folder
+        run: yarn prebuild
 
       - name: Build
         run: yarn build
