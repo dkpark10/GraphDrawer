@@ -19,6 +19,9 @@ jobs:
           node-version: 18.x
           cache: 'yarn'
 
+      - name: Test 🛠️
+        run: yarn test
+
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
