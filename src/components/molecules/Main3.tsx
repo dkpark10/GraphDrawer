@@ -1,13 +1,14 @@
 /* eslint-disable consistent-return */
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import type { SimulationNodeDatum, Selection, BaseType, D3DragEvent, Simulation, SimulationLinkDatum } from 'd3';
+import { SimulationNodeDatum, Selection, BaseType, D3DragEvent, Simulation, SimulationLinkDatum } from 'd3';
 import { shallow } from 'zustand/shallow';
 import { useGraphStore } from '@/store/graph';
 import { Vertex } from '@/types/graph';
 import { useArrowStore, useShortestPathStore } from '@/store';
 import { MAIN_COLOR, SECOND_COLOR } from '@/constants';
 import { useIsMounted } from '@/hooks/use-mounted';
+import { isShortestEdge } from '@/services';
 
 type DragEvent = D3DragEvent<Element, SimulationNodeDatum, SimulationNodeDatum>;
 
@@ -92,7 +93,7 @@ export default function App() {
         simulationRef.current.stop();
       }
     };
-  }, [isMounted, nodes, links, isArrow]);
+  }, [isMounted, nodes, links]);
 
   return (
     <svg width={WIDTH} height={HEIGHT} viewBox={`0 0 ${WIDTH} ${HEIGHT}`} ref={svgRef}>
@@ -115,12 +116,16 @@ export default function App() {
           const pathId = `edge-path-${index}`;
 
           return (
-            <>
+            <React.Fragment key={link.index}>
               <path
                 id={pathId}
                 d={`M ${source.x} ${source.y} L ${target.x} ${target.y}`}
                 strokeWidth="2"
-                stroke={MAIN_COLOR}
+                stroke={
+                  isShortestEdge((source as Vertex).value, (target as Vertex).value, shortestPathState.shortestPath)
+                    ? SECOND_COLOR
+                    : MAIN_COLOR
+                }
                 markerEnd={isArrow === true ? `url(#${arrowMarkId})` : ''}
               />
               <text
@@ -136,41 +141,54 @@ export default function App() {
                   {link.index}
                 </textPath>
               </text>
-            </>
+            </React.Fragment>
           );
         })}
       </g>
-      {simulationNodes.map((node) => (
-        <g key={node.index}>
-          <circle
-            className="cursor-pointer"
-            cx={node.x}
-            cy={node.y}
-            r={20}
-            fill={MAIN_COLOR}
-            strokeWidth={2.5}
-            stroke={MAIN_COLOR}
-            key={node.index}
-            onMouseEnter={(e) => {
-              e.currentTarget.setAttribute('fill', SECOND_COLOR);
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.setAttribute('fill', MAIN_COLOR);
-            }}
-          />
-          <text
-            className="pointer-events-none"
-            x={node.x}
-            y={node.y}
-            dy=".35em"
-            fontSize="15"
-            fill="white"
-            textAnchor="middle"
-          >
-            {node.value}
-          </text>
-        </g>
-      ))}
+      <g>
+        {simulationNodes.map((node) => {
+          const isShortestVertex = shortestPathState.shortestPath.some((vertex) => vertex === node.value);
+          return (
+            <React.Fragment key={node.index}>
+              <circle
+                className="cursor-pointer"
+                cx={node.x}
+                cy={node.y}
+                r={20}
+                fill={isShortestVertex ? SECOND_COLOR : MAIN_COLOR}
+                strokeWidth={2.5}
+                stroke={MAIN_COLOR}
+                key={node.index}
+                onMouseEnter={(e) => {
+                  if (!isShortestVertex) {
+                    e.currentTarget.setAttribute('fill', SECOND_COLOR);
+                  } else {
+                    e.currentTarget.setAttribute('fill', MAIN_COLOR);
+                  }
+                }}
+                onMouseOut={(e) => {
+                  if (!isShortestVertex) {
+                    e.currentTarget.setAttribute('fill', MAIN_COLOR);
+                  } else {
+                    e.currentTarget.setAttribute('fill', SECOND_COLOR);
+                  }
+                }}
+              />
+              <text
+                className="pointer-events-none"
+                x={node.x}
+                y={node.y}
+                dy=".35em"
+                fontSize="15"
+                fill="white"
+                textAnchor="middle"
+              >
+                {node.value}
+              </text>
+            </React.Fragment>
+          );
+        })}
+      </g>
     </svg>
   );
 }

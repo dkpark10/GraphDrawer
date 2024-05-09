@@ -8,30 +8,13 @@ import { useGraphStore } from '@/store/graph';
 import { Vertex, AttrType } from '@/types/graph';
 import { useArrowStore, useShortestPathStore } from '@/store';
 import { MAIN_COLOR, SECOND_COLOR } from '@/constants';
+import { isShortestEdge } from '@/services';
 
 type DragEvent = D3DragEvent<Element, SimulationNodeDatum, SimulationNodeDatum>;
 
 const arrowMarkId = 'arrow';
 const WIDTH = 600;
 const HEIGHT = 600;
-
-/**
- * @description 해당 엣지가 최단경로 루트인지 확인하는 함수
- * 최단경로는 역순으로 정점 스트링 배열이 주어지므로 소스와 타켓의 인덱스 차이를 계산하여 1이하 이면 최단경로 판별
- */
-export const isShortestEdge = (source: string, target: string, shortestPathList: Array<string>) => {
-  if (shortestPathList.length <= 0) {
-    return false;
-  }
-  const sourceIndex = shortestPathList.findIndex((ele) => ele === source);
-  const targetIndex = shortestPathList.findIndex((ele) => ele === target);
-
-  return (
-    Math.abs(sourceIndex - targetIndex) <= 1 &&
-    shortestPathList.some((ele) => ele === source) &&
-    shortestPathList.some((ele) => ele === target)
-  );
-};
 
 /** @todo 선언형으로 바꿔보자.. */
 export default function App() {
