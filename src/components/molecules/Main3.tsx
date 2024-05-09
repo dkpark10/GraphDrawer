@@ -114,18 +114,26 @@ export default function App() {
         {simulationLinks.map((link, index) => {
           const { source, target } = link as CustomLink;
           const pathId = `edge-path-${index}`;
+          const isShortestLink = isShortestEdge(
+            (source as Vertex).value,
+            (target as Vertex).value,
+            shortestPathState.shortestPath,
+          );
 
           return (
             <React.Fragment key={link.index}>
               <path
                 id={pathId}
                 d={`M ${source.x} ${source.y} L ${target.x} ${target.y}`}
+                strokeWidth={isShortestLink ? '9' : '2'}
+                stroke={isShortestLink ? SECOND_COLOR : MAIN_COLOR}
+                markerEnd={isArrow === true ? `url(#${arrowMarkId})` : ''}
+              />
+              <path
+                id={pathId}
+                d={`M ${source.x} ${source.y} L ${target.x} ${target.y}`}
                 strokeWidth="2"
-                stroke={
-                  isShortestEdge((source as Vertex).value, (target as Vertex).value, shortestPathState.shortestPath)
-                    ? SECOND_COLOR
-                    : MAIN_COLOR
-                }
+                stroke={MAIN_COLOR}
                 markerEnd={isArrow === true ? `url(#${arrowMarkId})` : ''}
               />
               <text
