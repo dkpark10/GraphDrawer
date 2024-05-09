@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { SimulationNodeDatum, Selection, BaseType, D3DragEvent, Simulation, SimulationLinkDatum } from 'd3';
 import { shallow } from 'zustand/shallow';
@@ -25,6 +25,7 @@ interface CustomLink {
 export default function App() {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const isMounted = useIsMounted();
+  const [, forceRender] = useReducer<(x: number) => number>((x) => x + 1, 0);
 
   const { nodes, links } = useGraphStore((state) => state, shallow);
   const isArrow = useArrowStore((state) => state.isArrow);
@@ -36,6 +37,7 @@ export default function App() {
 
   useEffect(() => {
     if (!svgRef.current) return;
+    if (!isMounted) forceRender();
 
     const svg = d3.select(svgRef.current);
     const forceLink = d3
@@ -127,7 +129,6 @@ export default function App() {
                 d={`M ${source.x} ${source.y} L ${target.x} ${target.y}`}
                 strokeWidth={isShortestLink ? '9' : '2'}
                 stroke={isShortestLink ? SECOND_COLOR : MAIN_COLOR}
-                markerEnd={isArrow === true ? `url(#${arrowMarkId})` : ''}
               />
               <path
                 id={pathId}

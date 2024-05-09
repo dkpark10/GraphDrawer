@@ -1,5 +1,5 @@
-// import Main from '@/components/molecules/Main';
-import Main3 from '@/components/molecules/Main3';
+import Main from '@/components/molecules/Main';
+// import Main3 from '@/components/molecules/Main3';
 import Textarea from '@/components/atoms/TextArea';
 import Config from '@/components/molecules/Config';
 // eslint-disable-next-line import/extensions
@@ -21,7 +21,7 @@ export default function App() {
           <Config />
         </aside>
         <main className="w-[600px] h-[600px] border border-main-color rounded-xl">
-          <Main3 />
+          <Main />
         </main>
       </section>
     </>
