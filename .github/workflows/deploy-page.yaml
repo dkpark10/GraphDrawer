@@ -1,0 +1,39 @@
+name: Graphpainter-deploy
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-deploy:
+    concurrency: ci-${{ github.ref }}
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: 'yarn'
+
+      # - name: Set Version Info
+      #   id: set-env
+      #   run: |
+      #     version=$(jq -r .version package.json)-$(date '+%Y%m%d-%H%M%S')
+
+      # - name: Generate Version Text
+      #   run: |
+      #     echo "${{ steps.set-env.outputs.version }}" > container_image_tag.txt
+
+      - name: Install and Build
+        run: |
+          yarn
+          yarn build
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build
