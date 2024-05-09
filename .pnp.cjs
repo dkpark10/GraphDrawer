@@ -47,6 +47,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["babel-jest", "virtual:28790f3e04c80de5c53ae29b07c7820bd9b3af3e0728f63e653ba6aa2d937fad7b52a5123853e30e625f027e5d4df4de96a3c6db2d216b01f4775b3a6e3ae60e#npm:29.7.0"],\
             ["babel-loader", "virtual:28790f3e04c80de5c53ae29b07c7820bd9b3af3e0728f63e653ba6aa2d937fad7b52a5123853e30e625f027e5d4df4de96a3c6db2d216b01f4775b3a6e3ae60e#npm:9.1.3"],\
             ["copy-webpack-plugin", "virtual:28790f3e04c80de5c53ae29b07c7820bd9b3af3e0728f63e653ba6aa2d937fad7b52a5123853e30e625f027e5d4df4de96a3c6db2d216b01f4775b3a6e3ae60e#npm:10.2.4"],\
+            ["cross-env", "npm:7.0.3"],\
             ["css-loader", "virtual:28790f3e04c80de5c53ae29b07c7820bd9b3af3e0728f63e653ba6aa2d937fad7b52a5123853e30e625f027e5d4df4de96a3c6db2d216b01f4775b3a6e3ae60e#npm:6.10.0"],\
             ["d3", "npm:7.9.0"],\
             ["date-fns", "npm:3.6.0"],\
@@ -7071,6 +7072,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["cross-env", [\
+        ["npm:7.0.3", {\
+          "packageLocation": "./.yarn/cache/cross-env-npm-7.0.3-96d81820f4-26f2f3ea2a.zip/node_modules/cross-env/",\
+          "packageDependencies": [\
+            ["cross-env", "npm:7.0.3"],\
+            ["cross-spawn", "npm:7.0.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["cross-spawn", [\
         ["npm:7.0.3", {\
           "packageLocation": "./.yarn/cache/cross-spawn-npm-7.0.3-e4ff3e65b3-671cc7c728.zip/node_modules/cross-spawn/",\
@@ -9994,6 +10005,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["babel-jest", "virtual:28790f3e04c80de5c53ae29b07c7820bd9b3af3e0728f63e653ba6aa2d937fad7b52a5123853e30e625f027e5d4df4de96a3c6db2d216b01f4775b3a6e3ae60e#npm:29.7.0"],\
             ["babel-loader", "virtual:28790f3e04c80de5c53ae29b07c7820bd9b3af3e0728f63e653ba6aa2d937fad7b52a5123853e30e625f027e5d4df4de96a3c6db2d216b01f4775b3a6e3ae60e#npm:9.1.3"],\
             ["copy-webpack-plugin", "virtual:28790f3e04c80de5c53ae29b07c7820bd9b3af3e0728f63e653ba6aa2d937fad7b52a5123853e30e625f027e5d4df4de96a3c6db2d216b01f4775b3a6e3ae60e#npm:10.2.4"],\
+            ["cross-env", "npm:7.0.3"],\
             ["css-loader", "virtual:28790f3e04c80de5c53ae29b07c7820bd9b3af3e0728f63e653ba6aa2d937fad7b52a5123853e30e625f027e5d4df4de96a3c6db2d216b01f4775b3a6e3ae60e#npm:6.10.0"],\
             ["d3", "npm:7.9.0"],\
             ["date-fns", "npm:3.6.0"],\

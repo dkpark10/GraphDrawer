@@ -22,9 +22,6 @@ jobs:
           node-version: 18.x
           cache: 'yarn'
 
-      - name: Remove Build Folder
-        run: yarn prebuild
-
       - name: Build
         run: yarn build
 
