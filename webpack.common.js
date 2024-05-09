@@ -1,9 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const { resolve } = require('path');
-
 const rootPath = resolve();
 
 const webpackCommonConfig = {
@@ -63,14 +61,6 @@ const webpackCommonConfig = {
      * 다음 플러그인은 타입검사를 별도로 실행하는 웹팩 플러그인
      */
     new ForkTsCheckerWebpackPlugin(),
-    // 파일, 폴더 복사 플러그인
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: './public',
-        },
-      ],
-    }),
   ],
 };
 
