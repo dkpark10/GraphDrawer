@@ -1,7 +1,4 @@
 /* eslint-disable consistent-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import type { SimulationNodeDatum, Selection, BaseType, D3DragEvent, Simulation, SimulationLinkDatum } from 'd3';
@@ -121,7 +118,7 @@ export default function App() {
             <>
               <path
                 id={pathId}
-                d={`M ${source.x} ${source.y} L ${target.x} ${target.y} z`}
+                d={`M ${source.x} ${source.y} L ${target.x} ${target.y}`}
                 strokeWidth="2"
                 stroke={MAIN_COLOR}
                 markerEnd={isArrow === true ? `url(#${arrowMarkId})` : ''}
