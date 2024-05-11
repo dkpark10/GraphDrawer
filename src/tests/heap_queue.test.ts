@@ -1,5 +1,11 @@
 import { HeapQueue } from '@/utils';
 
+interface Person {
+  height: number;
+  weight: number;
+  grade: number;
+}
+
 /**
  * @see {@link http://siever.info/cs351/hw/prj2/PQTestCases.html}
  */
@@ -209,12 +215,6 @@ describe('우선순위 큐 테스트', () => {
   });
 
   test('객체 테스트', () => {
-    interface Person {
-      height: number;
-      weight: number;
-      grade: number;
-    }
-
     const p1: Person = {
       height: 3222,
       weight: 22,
@@ -257,5 +257,17 @@ describe('우선순위 큐 테스트', () => {
     expect(pq.top()).toBe(p1);
     pq.pop();
     expect(pq.top()).toBe(p2);
+  });
+
+  test('타입이 객체일 경우 comparator 함수가 등록되어 있지 않다면 에러를 반환한다.', () => {
+    const pq = new HeapQueue<Person>();
+    const p1: Person = {
+      height: 3222,
+      weight: 22,
+      grade: 1,
+    };
+
+    const fn = pq.push.bind(pq);
+    expect(() => fn(p1)).toThrow();
   });
 });

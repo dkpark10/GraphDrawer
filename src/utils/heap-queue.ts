@@ -1,3 +1,5 @@
+import { isObject } from '@/utils/is-object';
+
 export type Comparator<T> = boolean | ((a: T, b: T) => number);
 
 export class HeapQueue<T> {
@@ -11,7 +13,7 @@ export class HeapQueue<T> {
     this.comparator = comparator || false;
   }
 
-  private swap(idx1: number, idx2: number) {
+  private swap(idx1: number, idx2: number): void {
     [this.list[idx1], this.list[idx2]] = [this.list[idx2], this.list[idx1]];
   }
 
@@ -22,18 +24,19 @@ export class HeapQueue<T> {
       }
       return current < target;
     }
-
     return this.comparator(current, target) < 1;
   }
 
-  public push(item: T) {
+  public push(item: T): void {
+    if (isObject(item) && !this.comparator) {
+      throw new Error('When the data type is an object, a comparator function must be registered.');
+    }
+
     this.list.push(item);
     let idx = this.list.length - 1;
     let parentNodeIndex = Math.ceil(idx / 2) - 1;
 
-    if (this.list.length === 1) {
-      return;
-    }
+    if (this.list.length === 1) return;
 
     while (idx > 0 && this.compare(item, this.list[parentNodeIndex])) {
       this.swap(idx, parentNodeIndex);
@@ -42,7 +45,7 @@ export class HeapQueue<T> {
     }
   }
 
-  public pop() {
+  public pop(): T {
     if (this.isEmpty()) throw new Error('Empty Queue');
 
     const topData = this.list[0];
