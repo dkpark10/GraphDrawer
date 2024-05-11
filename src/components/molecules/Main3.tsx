@@ -169,18 +169,10 @@ export default function App() {
                 stroke={MAIN_COLOR}
                 key={node.index}
                 onMouseEnter={(e) => {
-                  if (!isShortestVertex) {
-                    e.currentTarget.setAttribute('fill', SECOND_COLOR);
-                  } else {
-                    e.currentTarget.setAttribute('fill', MAIN_COLOR);
-                  }
+                  e.currentTarget.setAttribute('fill', isShortestVertex ? MAIN_COLOR : SECOND_COLOR);
                 }}
                 onMouseOut={(e) => {
-                  if (!isShortestVertex) {
-                    e.currentTarget.setAttribute('fill', MAIN_COLOR);
-                  } else {
-                    e.currentTarget.setAttribute('fill', SECOND_COLOR);
-                  }
+                  e.currentTarget.setAttribute('fill', isShortestVertex ? SECOND_COLOR : MAIN_COLOR);
                 }}
               />
               <text

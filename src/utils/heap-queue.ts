@@ -43,9 +43,7 @@ export class HeapQueue<T> {
   }
 
   public pop() {
-    if (this.isEmpty()) {
-      return null;
-    }
+    if (this.isEmpty()) throw new Error('Empty Queue');
 
     const topData = this.list[0];
     // eslint-disable-next-line prefer-destructuring
@@ -97,6 +95,7 @@ export class HeapQueue<T> {
   }
 
   public top(): T {
+    if (this.isEmpty()) throw new Error('Empty Queue');
     return this.list[0];
   }
 }
