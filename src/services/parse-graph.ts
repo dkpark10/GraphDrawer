@@ -1,7 +1,7 @@
 import { ConnectedInfo } from 'global-type';
 import { GraphData, Edge } from '@/types/graph';
 
-export type VertexString = `${string} ${string} ${string}`;
+export type VertexString = `${string} ${string} ${number}`;
 
 /**
  * @description 중복 및 정점 갯수를 정리하는 함수
@@ -12,7 +12,7 @@ export const getVertexList = (inputValue: string[]): Array<VertexString> => {
   return inputValue
     .map((item): VertexString => {
       const [vertex1, vertex2, cost] = item.split(' ');
-      return vertex1 < vertex2 ? `${vertex1} ${vertex2} ${cost}` : `${vertex2} ${vertex1} ${cost}`;
+      return vertex1 < vertex2 ? `${vertex1} ${vertex2} ${Number(cost)}` : `${vertex2} ${vertex1} ${Number(cost)}`;
     })
     .reduce((acc, item) => {
       const [vertex1, vertex2] = item.split(' ');
