@@ -8,7 +8,7 @@
     "dev": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
     "build:local": "cross-env LOCAL_BUILD=true webpack --config webpack.prod.js",
-    "prebuild": "rimraf build",
+    "prebuild": "rimraf dist",
     "lint": "eslint './src/**/*.{ts,tsx,js,jsx}'",
     "lint:fix": "eslint --fix \"./src/**/*.{ts,tsx,js,jsx}\"",
     "predeploy": "yarn run build",
