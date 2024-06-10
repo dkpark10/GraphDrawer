@@ -15,12 +15,12 @@ export default function App() {
           Graph Painter
         </h1>
       </header>
-      <section className="w-full space-x-7 flex justify-center min-w-[1000px] h-[700px] m-auto">
-        <aside>
+      <section className="w-full space-x-7 flex justify-center min-w-[1000px] h-[542px] m-auto">
+        <aside className="flex flex-col content-between justify-between">
           <Textarea />
           <Config />
         </aside>
-        <main className="w-[600px] h-[600px] border border-main-color rounded-xl">
+        <main className="w-[542px] h-[100%] border border-main-color rounded-xl">
           <Main />
         </main>
       </section>

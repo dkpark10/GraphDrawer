@@ -13,8 +13,8 @@ import { isShortestEdge } from '@/services';
 type DragEvent = D3DragEvent<Element, SimulationNodeDatum, SimulationNodeDatum>;
 
 const arrowMarkId = 'arrow';
-const WIDTH = 600;
-const HEIGHT = 600;
+const WIDTH = 542;
+const HEIGHT = 542;
 
 /** @todo 선언형으로 바꿔보자.. */
 export default function App() {
@@ -38,10 +38,10 @@ export default function App() {
       .append('marker')
       .attr('id', arrowMarkId)
       .attr('viewBox', '0 0 10 10')
-      .attr('refX', 23)
+      .attr('refX', 24)
       .attr('refY', 5)
-      .attr('markerWidth', 8)
-      .attr('markerHeight', 8)
+      .attr('markerWidth', 6)
+      .attr('markerHeight', 6)
       .attr('orient', 'auto-start-reverse');
 
     const marker = d3.select(`#${arrowMarkId}`);
@@ -68,7 +68,7 @@ export default function App() {
       .append('g')
       .attr('class', 'pointer-events-none')
       .attr('fill', MAIN_COLOR)
-      .attr('fontSize', 14)
+      .attr('fontSize', 12)
       .selectAll('.cost-text')
       .data(links)
       .join('text')
@@ -92,7 +92,7 @@ export default function App() {
       .selectAll('circle')
       .data(nodes)
       .join('circle')
-      .attr('r', 20)
+      .attr('r', 17.5)
       .on('mouseenter', function hover() {
         d3.select(this).attr('fill', SECOND_COLOR);
       })

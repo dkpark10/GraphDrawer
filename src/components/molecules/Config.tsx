@@ -52,7 +52,7 @@ export default function Config() {
   };
 
   return (
-    <div className="mt-[20px] w-[200px] h-[292px] p-2.5 flex items-center border border-main-color flex-col">
+    <div className="mt-[20px] w-[200px] h-[50%] p-2.5 flex items-center border border-main-color flex-col">
       <div className="m-3 text-sm">arrow marker</div>
       <Switch
         checked={isArrow}

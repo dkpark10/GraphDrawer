@@ -20,7 +20,7 @@ export default function TextArea(): JSX.Element {
 
   return (
     <textarea
-      className="resize-none w-[200px] h-[40%] p-2.5 text-white bg-slate-950"
+      className="resize-none w-[200px] h-[50%] p-2.5 text-white bg-slate-950"
       value={textAreaValue}
       onChange={(e) => {
         setTextAreaValue(e.target.value);
