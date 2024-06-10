@@ -108,7 +108,7 @@ export default function App() {
         d3
           .drag()
           .on('start', function dragStarted(e: DragEvent) {
-            if (!e.active) simulation.alphaTarget(0.3).restart();
+            if (!e.active) simulation.alphaTarget(0.3);
             e.subject.fx = e.subject.x;
             e.subject.fy = e.subject.y;
           })
