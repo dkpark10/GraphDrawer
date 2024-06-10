@@ -3,15 +3,12 @@ import { devtools } from 'zustand/middleware';
 
 export interface ArrowState {
   isArrow: boolean;
-}
-
-export interface ArrowStateDispatcher {
   setArrowDirect: () => void;
 }
 
-const arrowStore: StateCreator<ArrowState & ArrowStateDispatcher> = (set) => ({
+const arrowStore: StateCreator<ArrowState> = (set) => ({
   isArrow: false,
   setArrowDirect: () => set(({ isArrow }) => ({ isArrow: !isArrow })),
 });
 
-export const useArrowStore = create<ArrowState & ArrowStateDispatcher>()(devtools(arrowStore));
+export const useArrowStore = create<ArrowState>()(devtools(arrowStore));
