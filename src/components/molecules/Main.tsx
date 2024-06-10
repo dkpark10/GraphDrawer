@@ -18,6 +18,8 @@ const HEIGHT = 600;
 
 /** @todo 선언형으로 바꿔보자.. */
 export default function App() {
+  const simulationRef = useRef<d3.Simulation<d3.SimulationNodeDatum & Vertex, undefined>>();
+
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   const nodes = useGraphStore((state) => state.nodes, shallow);
@@ -108,7 +110,7 @@ export default function App() {
         d3
           .drag()
           .on('start', function dragStarted(e: DragEvent) {
-            if (!e.active) simulation.alphaTarget(0.3);
+            if (!e.active) simulationRef.current?.alphaTarget(0.3);
             e.subject.fx = e.subject.x;
             e.subject.fy = e.subject.y;
           })
@@ -117,7 +119,7 @@ export default function App() {
             e.subject.fy = e.y;
           })
           .on('end', function dragEnded(e: DragEvent) {
-            if (!e.active) simulation.alphaTarget(0);
+            if (!e.active) simulationRef.current?.alphaTarget(0);
             e.subject.fx = null;
             e.subject.fy = null;
           }) as (
@@ -137,7 +139,7 @@ export default function App() {
       .attr('dy', 6)
       .text((d) => d.value);
 
-    const simulation = d3
+    simulationRef.current = d3
       .forceSimulation(nodes as Array<SimulationNodeDatum & Vertex>)
       .force(
         'link',
